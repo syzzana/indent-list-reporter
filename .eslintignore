@@ -1,0 +1,13 @@
+/**/node_modules/*
+node_modules/
+test-results/
+playwright-report
+dist/
+
+# IDE
+.idea
+
+# System Files
+.DS_Store
+Thumbs.db
+{"mode":"full","isActive":false}

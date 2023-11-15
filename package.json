@@ -1,0 +1,38 @@
+{
+  "name": "indent-list-reporter",
+  "version": "1.0.0",
+  "description": "Playwright list reporter for terminal with colors and indentation'",
+  "main": "./dist/index.js",
+  "type": "module",
+  "homepage": "https://github.com/syzzana/indent-list-reporter/blob/main/README.md",
+  "scripts": {
+    "test": "npx playwright test",
+    "compile": "tsc",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "prettier": "prettier . --check",
+    "prettier:fix": "prettier . --write",
+    "prepare": "npm run compile",
+    "pretest": "npm run compile",
+    "posttest": "npm run lint"
+  },
+  "keywords": [
+    "reporter"
+  ],
+  "author": "Syzana Bicaj",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "^1.39.0",
+    "@playwright/test": "^1.39.0",
+    "@types/node": "^20.6.1",
+    "@typescript-eslint/eslint-plugin": "^6.9.1",
+    "@typescript-eslint/parser": "^6.9.1",
+    "chalk": "^5.3.0",
+    "dotenv": "^16.3.1",
+    "eslint": "^8.52.0",
+    "eslint-config-prettier": "^9.0.0",
+    "node-fetch": "^3.3.2",
+    "prettier": "^3.0.3",
+    "typescript": "^5.2.2"
+  }
+}

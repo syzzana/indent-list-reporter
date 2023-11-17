@@ -12,7 +12,7 @@ test.describe("Demo", async () => {
   });
 });
 
-test.describe("Showcase decmo", async () => {
+test.describe("Showcase demo", async () => {
   test("second demo", () => {
     const status = 200;
     expect(status).toBe(200);

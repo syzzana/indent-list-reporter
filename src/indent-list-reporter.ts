@@ -13,14 +13,21 @@ import chalk from "chalk";
 import { TestStatus } from "@playwright/test";
 import { TestError } from "playwright/types/testReporter";
 
-type TerminalColors = {
+interface TerminalColors {
   specFileName: string;
   suiteDescription: string;
 }
 
-type IndentListReporterOptions = {
+interface Error {
+  message: string;
+  stack: string;
+  value: string;
+  codeSnippet: string;
+}
+
+interface IndentListReporterOptions {
   isDimmed: boolean;
-  baseColors: TerminalColors
+  baseColors: TerminalColors;
   isJenkins: boolean; //TODO implement colors for jenkins terminal
   isGithubActions: boolean; //TODO implement colors for github actions terminal
 }
@@ -33,7 +40,6 @@ class IndentListReporter implements Reporter {
   skipped = 0;
   interrupted = 0;
   timedOut = 0;
-
 
   constructor(options: IndentListReporterOptions) {
     this._options = options;
@@ -83,16 +89,36 @@ class IndentListReporter implements Reporter {
     };
     logSummary(result.duration, statusCounter);
   }
-    onError(error: TestError) {
-        const message = error.message;
-        const stack = error.stack;
-        const { file, line, column } = error.location;
-        const location = `${file}:${line}:${column}`;
-        const header = `${chalk.red('Error:')} ${message} (${location})`;
-        const stackTrace = stack ? `\n${stack}` : '';
-        const text = `${header}${stackTrace}\n`;
-        console.log(text)
+
+  onStdOut = (chunk: string | Buffer, test: void | TestCase, result: void | TestResult): void => {
+    if(result instanceof Object) {
+      if(result.status === "failed") {
+        const error = result.error
+        process.stdout.write(error.message)
+        process.stdout.write(error.stack)
+        process.stdout.write(error.value)
+        process.stdout.write(error.snippet)
+      }
     }
+  };
+
+  onStdErr(chunk, test: TestCase, result: TestResult) {
+    if(test !== undefined && test.results[0].status === "failed") {
+      const error = result.error
+      process.stdout.write(error.message)
+      process.stdout.write(error.stack)
+      process.stdout.write(error.value)
+      process.stdout.write(error.snippet)
+    }
+  }
+
+  onError(error: TestError) {
+    if (!error) {
+      console.error("[ERROR] An error has occurred, but no info is available!");
+    } else {
+      console.error(`[ERROR] An error has occurred: ${JSON.stringify(error)}`);
+    }
+  }
 
   increaseTestStatusCounter(test: TestStatus) {
     if (test === "passed") {

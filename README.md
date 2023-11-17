@@ -1,2 +1,3 @@
 # indent-list-reporter
-Playwright list reporter with colorful terminal  and indentation
+
+Playwright list reporter with colorful terminal and indentation

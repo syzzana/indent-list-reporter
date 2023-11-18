@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test.describe("API", async () => {
   test("authentication", async () => {
     const status = 200;
-    expect(status).toBe(201);
+    expect(status).toBe(200);
   });
 
   test("unauthorized", async () => {

@@ -27,6 +27,11 @@ interface IndentListReporterOptions {
   isGithubActions: boolean; //TODO implement colors for github actions terminal
 }
 
+export type TestCaseError = {
+  error: TestError;
+  titlePath: string[];
+}
+
 class IndentListReporter implements Reporter {
   private _options: IndentListReporterOptions;
   allTests: TestsPerSpecFile[] = [];
@@ -35,7 +40,7 @@ class IndentListReporter implements Reporter {
   skipped = 0;
   interrupted = 0;
   timedOut = 0;
-  failedTests: TestError[] = [];
+  failedTests: TestCaseError[] = [];
   constructor(options: IndentListReporterOptions) {
     this._options = options;
   }
@@ -71,7 +76,11 @@ class IndentListReporter implements Reporter {
     this.allTests.push(testsPerSpecFile);
     this.increaseTestStatusCounter(result.status);
     if (result.status === "failed") {
-      this.failedTests.push(result.error);
+      const testCaseError: TestCaseError = {
+        error: result.error,
+        titlePath: test.titlePath(),
+      }
+      this.failedTests.push(testCaseError);
     }
   }
 
@@ -91,29 +100,6 @@ class IndentListReporter implements Reporter {
     }
     log(lineBreak);
     logSummary(result.duration, statusCounter);
-  }
-
-  onStdOut = (chunk: string | Buffer, test: void | TestCase, result: void | TestResult): void => {
-    if (result instanceof Object) {
-      if (result.status === "failed") {
-        const error = result.error;
-        process.stdout.write(error.message);
-        process.stdout.write(error.stack);
-        process.stdout.write(error.value);
-        process.stdout.write(error.snippet);
-      }
-    }
-  };
-
-  onStdErr(chunk, test: TestCase, result: TestResult) {
-    if (test !== undefined && test.results[0].status === "failed") {
-      const error = result.error;
-      process.stdout.write(error.message);
-      process.stdout.write(error.stack);
-      process.stdout.write(error.value);
-      process.stdout.write(error.snippet);
-      this.printsToStdio();
-    }
   }
 
   increaseTestStatusCounter(test: TestStatus) {

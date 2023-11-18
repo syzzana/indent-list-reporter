@@ -1,7 +1,7 @@
 import { TestStatus } from "@playwright/test/reporter";
 import chalk from "chalk";
 import { SuiteTestCases, TestCaseData, TestsPerSpecFile } from "./TestsPerSpecFile";
-import { TestError } from "playwright/types/testReporter";
+import {TestCaseError} from "./indent-list-reporter";
 
 export interface StatusCounter {
   passed: number;
@@ -10,7 +10,7 @@ export interface StatusCounter {
   interrupted: number;
   timedOut: number;
 }
-export const lineBreak: string = chalk.cyan("-----------------------------------------------------------");
+export const lineBreak: string = chalk.magenta.dim("─────────────────────────────────────────────────────────────────────");
 
 export const log = (text: string) => {
   console.log(text);
@@ -172,22 +172,25 @@ export const filterSuiteDescription = (suites: SuiteTestCases[]) => {
   return uniqueSuites;
 };
 
-export const logFailedTests = (failedTests: TestError[]) => {
+export const logFailedTests = (failedTests: TestCaseError[]) => {
   let counter = 0;
   failedTests.forEach((failedTest) => {
     log(lineBreak);
-    log(chalk.red(`${++counter}) test title path here`));
-    log(failedTest.message);
-    if (failedTest.value !== undefined) {
-      log(failedTest.value);
+    const error = failedTest.error;
+    const titlePath = failedTest.titlePath;
+    const title = `${titlePath[2]} > ${titlePath[3]} > ${titlePath[4]} ───────────────`;
+    log(chalk.red(`${++counter}) ${title}`));
+    log(`${error.message}`);
+    if (error.value !== undefined) {
+      log(error.value);
     }
-    log(chalk.italic.underline.blueBright("Code snippet:") + "\n");
-    log(removeAnsiChars(failedTest.snippet));
-    log("at" + failedTest.location.file + ":" + failedTest.location.line + ":" + failedTest.location.column);
+    log(chalk.italic.underline.blueBright(`Code snippet:\n`));
+    log(removeAnsiChars(`${error.snippet}`));
+    log(`\t${chalk.gray('at')} ${error.location.file}:${error.location.line}:${error.location.column}`);
   });
 };
 
-const ansiRegex = new RegExp(
+export const ansiRegex = new RegExp(
   "([\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~])))",
   "g"
 );

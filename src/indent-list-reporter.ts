@@ -14,6 +14,7 @@ import {
 import color from "colors";
 import { TestStatus } from "@playwright/test";
 import { TestError } from "playwright/types/testReporter";
+import {logInfo} from "../action-template/action-colors";
 
 interface TerminalColors {
   specFileName: string;
@@ -95,6 +96,7 @@ class IndentListReporter implements Reporter {
       interrupted: this.interrupted,
       timedOut: this.timedOut,
     };
+    logInfo(`Code snippet:\n`);
     if (this.failedTests.length > 0) {
       log(color.bgBlack("FAILED TESTS:").red);
       logFailedTests(this.failedTests);

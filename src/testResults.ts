@@ -181,7 +181,6 @@ export const logFailedTests = (failedTests: TestCaseError[]) => {
     const titlePath = failedTest.titlePath;
     const title = `${titlePath[2]} > ${titlePath[3]} > ${titlePath[4]} ───────────────`;
     log(color.red(`${++counter}) ${title}`));
-    logInfo(`Code snippet:\n`);
     log(`${error.message}`);
     if (error.value !== undefined) {
       log(error.value);

@@ -13,8 +13,7 @@
     "prettier": "prettier . --check",
     "prettier:fix": "prettier . --write",
     "prepare": "npm run compile",
-    "pretest": "npm run compile",
-    "posttest": "npm run lint"
+    "pretest": "npm run compile"
   },
   "keywords": [
     "reporter"

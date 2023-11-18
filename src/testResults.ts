@@ -1,5 +1,5 @@
 import { TestStatus } from "@playwright/test/reporter";
-import chalk from "chalk";
+import color from "colors";
 import { SuiteTestCases, TestCaseData, TestsPerSpecFile } from "./TestsPerSpecFile";
 import {TestCaseError} from "./indent-list-reporter";
 
@@ -10,7 +10,7 @@ export interface StatusCounter {
   interrupted: number;
   timedOut: number;
 }
-export const lineBreak: string = chalk.magenta.dim("─────────────────────────────────────────────────────────────────────");
+export const lineBreak: string = color.magenta("─────────────────────────────────────────────────────────────────────").dim;
 
 export const log = (text: string) => {
   console.log(text);
@@ -18,58 +18,58 @@ export const log = (text: string) => {
 
 export const howToReadTestResults = () => {
   log(lineBreak);
-  log(`${chalk.cyanBright("How to read test results:")}`);
-  const passed = `${chalk.green("✓")}=passed`;
-  const skipped = `${chalk.yellow("!")}️=skipped`;
-  const failed = `${chalk.red("✘")}=failed`;
-  const interrupted = `${chalk.yellow("!?")}=interrupted`;
+  log(`${color.cyan("How to read test results:")}`);
+  const passed = `${color.green("✓")}=passed`;
+  const skipped = `${color.yellow("!")}️=skipped`;
+  const failed = `${color.red("✘")}=failed`;
+  const interrupted = `${color.yellow("!?")}=interrupted`;
   const timedOut = `⏰ =timedOut`;
   log(`${passed}, ${skipped}, ${failed}, ${interrupted}, ${timedOut}`);
   log(lineBreak);
 };
 
 export const logSpecFileName = (specFileName: string) => {
-  log(`${chalk.cyan.bold(specFileName)}:`);
+  log(`${color.cyan(specFileName)}:`);
 };
 
 export const logSuiteDescription = (suiteName: string) => {
-  log(`  ${chalk.underline.cyan(suiteName)}`);
+  log(`  ${color.cyan(suiteName).underline}`);
 };
 
 export const logTestCaseData = (count: number, test: TestCaseData) => {
   const status = setIconAndColorPerTestStatus(test.status);
-  const duration = chalk.gray.dim(`(${test.duration}ms)`);
-  const counter = `${chalk.gray.dim(`${count}.`)}`;
+  const duration = color.gray(`(${test.duration}ms)`).dim;
+  const counter = `${color.gray(`${count}.`)}`;
   let title;
   if (test.status === "failed") {
-    title = chalk.red(test.title);
+    title = color.red(test.title);
   } else if (test.status === "skipped") {
-    title = chalk.yellow(test.title);
+    title = color.yellow(test.title);
   } else {
-    title = chalk.whiteBright(test.title);
+    title = color.white(test.title);
   }
 
-  const rowAndCol = `${chalk.gray.dim(`[${test.line}:${test.column}]`)}`;
+  const rowAndCol = `${color.gray(`[${test.line}:${test.column}]`)}`;
   log(`   ${counter} ${status} ${title} ${rowAndCol}${duration}`);
 };
 
 export const logSummary = (durationInMs: number, statusCounter: StatusCounter) => {
-  log(chalk.bgBlack.italic.cyan("SUMMARY:"));
+  log(color.bgBlack("SUMMARY:").cyan);
 
   if (statusCounter.passed != 0) {
-    log(chalk.italic.greenBright(`  ${statusCounter.passed} passed`));
+    log(color.green(`  ${statusCounter.passed} passed`));
   }
   if (statusCounter.interrupted != 0) {
-    log(chalk.italic.grey(`  ${statusCounter.interrupted} interrupted`));
+    log(color.grey(`  ${statusCounter.interrupted} interrupted`));
   }
   if (statusCounter.skipped != 0) {
-    log(chalk.italic.yellowBright(`  ${statusCounter.skipped} skipped`));
+    log(color.yellow(`  ${statusCounter.skipped} skipped`));
   }
   if (statusCounter.failed != 0) {
-    log(chalk.italic.redBright(`  ${statusCounter.failed} failed`));
+    log(color.red(`  ${statusCounter.failed} failed`));
   }
   if (statusCounter.timedOut != 0) {
-    log(chalk.italic.black(`  ${statusCounter.timedOut} timedOut`));
+    log(color.black(`  ${statusCounter.timedOut} timedOut`));
   }
 
   log("---------");
@@ -94,24 +94,24 @@ export const logTestResults = (allTests: TestsPerSpecFile[]) => {
 };
 
 export const logTestsDuration = (durationInMS: number) => {
-  log(chalk.italic.magentaBright.dim(`Duration: (${durationInMS}ms)`));
+  log(color.magenta(`Duration: (${durationInMS}ms)`));
 };
 
 export const setIconAndColorPerTestStatus = (status: TestStatus) => {
   if (status === "skipped") {
-    return `${chalk.bold.yellow(`!`)}`;
+    return `${color.yellow(`!`)}`;
   }
   if (status === "failed") {
-    return `${chalk.bold.red(`✘`)}`;
+    return `${color.red(`✘`)}`;
   }
   if (status === "timedOut") {
     return `⏰`;
   }
   if (status === "interrupted") {
-    return `${chalk.bold.gray(`!?`)}`;
+    return `${color.gray(`!?`)}`;
   }
   if (status === "passed") {
-    return `${chalk.bold.green(`✓`)}`;
+    return `${color.green(`✓`)}`;
   }
 };
 
@@ -179,14 +179,14 @@ export const logFailedTests = (failedTests: TestCaseError[]) => {
     const error = failedTest.error;
     const titlePath = failedTest.titlePath;
     const title = `${titlePath[2]} > ${titlePath[3]} > ${titlePath[4]} ───────────────`;
-    log(chalk.red(`${++counter}) ${title}`));
+    log(color.red(`${++counter}) ${title}`));
     log(`${error.message}`);
     if (error.value !== undefined) {
       log(error.value);
     }
-    log(chalk.italic.underline.blueBright(`Code snippet:\n`));
+    log(color.blue(`Code snippet:\n`));
     log(removeAnsiChars(`${error.snippet}`));
-    log(`\t${chalk.gray('at')} ${error.location.file}:${error.location.line}:${error.location.column}`);
+    log(`\t${color.gray('at')} ${error.location.file}:${error.location.line}:${error.location.column}`);
   });
 };
 

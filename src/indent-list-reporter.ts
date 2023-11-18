@@ -11,7 +11,7 @@ import {
   logTestResults,
   StatusCounter,
 } from "./testResults";
-import chalk from "chalk";
+import color from "colors";
 import { TestStatus } from "@playwright/test";
 import { TestError } from "playwright/types/testReporter";
 
@@ -51,11 +51,12 @@ class IndentListReporter implements Reporter {
 
   onBegin(config: FullConfig, suite: Suite) {
     howToReadTestResults();
-    log(`${chalk.cyanBright.bgBlack("TEST RESULTS\n")}`);
-    const numberOfTests = chalk.whiteBright(suite.allTests().length);
-    const numberOfWorkers = chalk.whiteBright(config.workers.valueOf());
+    log(`${color.cyan.bgBlack("TEST RESULTS\n")}`);
+    const number = suite.allTests().length
+    const numberOfTests = color.white(number.toString());
+    const numberOfWorkers = color.white(config.workers.valueOf().toString());
     const testInfo = `Running ${numberOfTests} tests using ${numberOfWorkers} workers\n`;
-    console.log(chalk.gray(testInfo));
+    console.log(color.gray(testInfo));
   }
 
   onTestEnd(test: TestCase, result: TestResult) {
@@ -95,7 +96,7 @@ class IndentListReporter implements Reporter {
       timedOut: this.timedOut,
     };
     if (this.failedTests.length > 0) {
-      log(chalk.bgBlack.italic.red("FAILED TESTS:"));
+      log(color.bgBlack("FAILED TESTS:").red);
       logFailedTests(this.failedTests);
     }
     log(lineBreak);

@@ -2,6 +2,7 @@ import { TestStatus } from "@playwright/test/reporter";
 import color from "colors";
 import { SuiteTestCases, TestCaseData, TestsPerSpecFile } from "./TestsPerSpecFile";
 import {TestCaseError} from "./indent-list-reporter";
+import { logInfo } from "../action-template/action-colors";
 
 export interface StatusCounter {
   passed: number;
@@ -184,7 +185,7 @@ export const logFailedTests = (failedTests: TestCaseError[]) => {
     if (error.value !== undefined) {
       log(error.value);
     }
-    log(color.blue(`Code snippet:\n`));
+    logInfo(`Code snippet:\n`);
     log(removeAnsiChars(`${error.snippet}`));
     log(`\t${color.gray('at')} ${error.location.file}:${error.location.line}:${error.location.column}`);
   });

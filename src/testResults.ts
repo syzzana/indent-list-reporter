@@ -1,7 +1,7 @@
 import { TestStatus } from "@playwright/test/reporter";
 import chalk from "chalk";
 import { SuiteTestCases, TestCaseData, TestsPerSpecFile } from "./TestsPerSpecFile";
-import {TestError} from "playwright/types/testReporter";
+import { TestError } from "playwright/types/testReporter";
 
 export interface StatusCounter {
   passed: number;
@@ -172,24 +172,25 @@ export const filterSuiteDescription = (suites: SuiteTestCases[]) => {
   return uniqueSuites;
 };
 
-
 export const logFailedTests = (failedTests: TestError[]) => {
   let counter = 0;
-  failedTests.forEach(failedTest => {
-    log(lineBreak)
-    log(chalk.red(`${++counter}) test title path here`))
+  failedTests.forEach((failedTest) => {
+    log(lineBreak);
+    log(chalk.red(`${++counter}) test title path here`));
     log(failedTest.message);
-    if(failedTest.value !== undefined) {
+    if (failedTest.value !== undefined) {
       log(failedTest.value);
     }
     log(chalk.italic.underline.blueBright("Code snippet:") + "\n");
     log(removeAnsiChars(failedTest.snippet));
-    log("at" + failedTest.location.file + ":" + failedTest.location.line + ":" + failedTest.location.column)
-  })
-}
+    log("at" + failedTest.location.file + ":" + failedTest.location.line + ":" + failedTest.location.column);
+  });
+};
 
-
-const ansiRegex = new RegExp('([\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~])))', 'g');
-export const  removeAnsiChars = (str: string): string => {
-  return str.replace(ansiRegex, '');
-}
+const ansiRegex = new RegExp(
+  "([\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~])))",
+  "g"
+);
+export const removeAnsiChars = (str: string): string => {
+  return str.replace(ansiRegex, "");
+};

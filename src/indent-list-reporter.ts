@@ -3,8 +3,10 @@ import { SuiteTestCases, TestCaseData, TestsPerSpecFile } from "./TestsPerSpecFi
 import {
   filterDuplicateSpecNames,
   getFileNameOrParentSuite,
-  howToReadTestResults, lineBreak,
-  log, logFailedTests,
+  howToReadTestResults,
+  lineBreak,
+  log,
+  logFailedTests,
   logSummary,
   logTestResults,
   StatusCounter,
@@ -16,13 +18,6 @@ import { TestError } from "playwright/types/testReporter";
 interface TerminalColors {
   specFileName: string;
   suiteDescription: string;
-}
-
-interface Error {
-  message: string;
-  stack: string;
-  value: string;
-  codeSnippet: string;
 }
 
 interface IndentListReporterOptions {
@@ -75,8 +70,8 @@ class IndentListReporter implements Reporter {
     testsPerSpecFile.addTestCases(suiteTestCases);
     this.allTests.push(testsPerSpecFile);
     this.increaseTestStatusCounter(result.status);
-    if(result.status === "failed") {
-      this.failedTests.push(result.error)
+    if (result.status === "failed") {
+      this.failedTests.push(result.error);
     }
   }
 
@@ -90,34 +85,34 @@ class IndentListReporter implements Reporter {
       interrupted: this.interrupted,
       timedOut: this.timedOut,
     };
-    if(this.failedTests.length > 0) {
+    if (this.failedTests.length > 0) {
       log(chalk.bgBlack.italic.red("FAILED TESTS:"));
-      logFailedTests(this.failedTests)
+      logFailedTests(this.failedTests);
     }
     log(lineBreak);
     logSummary(result.duration, statusCounter);
   }
 
   onStdOut = (chunk: string | Buffer, test: void | TestCase, result: void | TestResult): void => {
-    if(result instanceof Object) {
-      if(result.status === "failed") {
-        const error = result.error
-        process.stdout.write(error.message)
-        process.stdout.write(error.stack)
-        process.stdout.write(error.value)
-        process.stdout.write(error.snippet)
+    if (result instanceof Object) {
+      if (result.status === "failed") {
+        const error = result.error;
+        process.stdout.write(error.message);
+        process.stdout.write(error.stack);
+        process.stdout.write(error.value);
+        process.stdout.write(error.snippet);
       }
     }
   };
 
   onStdErr(chunk, test: TestCase, result: TestResult) {
-    if(test !== undefined && test.results[0].status === "failed") {
-      const error = result.error
-      process.stdout.write(error.message)
-      process.stdout.write(error.stack)
-      process.stdout.write(error.value)
-      process.stdout.write(error.snippet)
-      this.printsToStdio()
+    if (test !== undefined && test.results[0].status === "failed") {
+      const error = result.error;
+      process.stdout.write(error.message);
+      process.stdout.write(error.stack);
+      process.stdout.write(error.value);
+      process.stdout.write(error.snippet);
+      this.printsToStdio();
     }
   }
 

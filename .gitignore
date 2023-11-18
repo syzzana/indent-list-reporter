@@ -1,0 +1,9 @@
+.idea
+node_modules/
+dist/
+/test-results/
+/playwright-report/
+/playwright/.cache/
+package-lock.json
+.DS_Store
+/test-results

@@ -3,8 +3,8 @@ import { SuiteTestCases, TestCaseData, TestsPerSpecFile } from "./TestsPerSpecFi
 import {
   filterDuplicateSpecNames,
   getFileNameOrParentSuite,
-  howToReadTestResults,
-  log,
+  howToReadTestResults, lineBreak,
+  log, logFailedTests,
   logSummary,
   logTestResults,
   StatusCounter,
@@ -40,7 +40,7 @@ class IndentListReporter implements Reporter {
   skipped = 0;
   interrupted = 0;
   timedOut = 0;
-
+  failedTests: TestError[] = [];
   constructor(options: IndentListReporterOptions) {
     this._options = options;
   }
@@ -75,6 +75,9 @@ class IndentListReporter implements Reporter {
     testsPerSpecFile.addTestCases(suiteTestCases);
     this.allTests.push(testsPerSpecFile);
     this.increaseTestStatusCounter(result.status);
+    if(result.status === "failed") {
+      this.failedTests.push(result.error)
+    }
   }
 
   onEnd(result: FullResult) {
@@ -87,6 +90,11 @@ class IndentListReporter implements Reporter {
       interrupted: this.interrupted,
       timedOut: this.timedOut,
     };
+    if(this.failedTests.length > 0) {
+      log(chalk.bgBlack.italic.red("FAILED TESTS:"));
+      logFailedTests(this.failedTests)
+    }
+    log(lineBreak);
     logSummary(result.duration, statusCounter);
   }
 
@@ -109,14 +117,7 @@ class IndentListReporter implements Reporter {
       process.stdout.write(error.stack)
       process.stdout.write(error.value)
       process.stdout.write(error.snippet)
-    }
-  }
-
-  onError(error: TestError) {
-    if (!error) {
-      console.error("[ERROR] An error has occurred, but no info is available!");
-    } else {
-      console.error(`[ERROR] An error has occurred: ${JSON.stringify(error)}`);
+      this.printsToStdio()
     }
   }
 

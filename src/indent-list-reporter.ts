@@ -96,7 +96,6 @@ class IndentListReporter implements Reporter {
       interrupted: this.interrupted,
       timedOut: this.timedOut,
     };
-    logInfo(`Code snippet:\n`);
     if (this.failedTests.length > 0) {
       log(color.bgBlack("FAILED TESTS:").red);
       logFailedTests(this.failedTests);

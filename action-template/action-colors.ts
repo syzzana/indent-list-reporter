@@ -22,7 +22,7 @@ enum ForegroundColor {
 
 
 export function logInfo(message: string): void {
-    const textFormat = `${TextEffect.Underscore}${ForegroundColor.Cyan}`;
+    const textFormat = `${ForegroundColor.Cyan}`;
     console.log(`${textFormat}${message}${ColorReset}`);
 }
 

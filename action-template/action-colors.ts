@@ -1,5 +1,13 @@
 const ColorReset = "\x1b[0m";
 
+export type ColorOptions = {
+    isDimmed?: boolean;
+    backgroundColor?: BackgroundColor;
+    foregroundColor?: ForegroundColor;
+    isBold?: boolean;
+    isUnderlined?: boolean;
+    isBlinking?: boolean;
+};
 enum TextEffect {
     Bright = "\x1b[1m",
     Dim = "\x1b[2m",
@@ -20,13 +28,33 @@ enum ForegroundColor {
     White = "\x1b[37m"
 }
 
-
-export function logInfo(message: string): void {
-    const textFormat = `${ForegroundColor.Cyan}`;
-    console.log(`${textFormat}${message}${ColorReset}`);
+enum BackgroundColor { //TODO implement background colors
+    Black =  "",
+    Red = "",
+    Green = "",
+    Yellow = "",
+    Blue = "",
+    Magenta = "",
+    Cyan = "",
+    White = ""
 }
 
-export function logError(message: string): void {
-    const textFormat = `${TextEffect.Bright}${ForegroundColor.Red}`;
-    console.log(`${textFormat}${message}${ColorReset}`);
+export const color = (text: string, options?: ColorOptions) => {
+    let myStyledText = "";
+    if (options?.foregroundColor) {
+        myStyledText += options.foregroundColor;
+    }
+    if (options?.backgroundColor) {
+        myStyledText += options.backgroundColor;
+    }
+    if (options?.isBold) {
+        myStyledText += TextEffect.Bright;
+    }
+    if (options?.isDimmed) {
+        myStyledText += TextEffect.Dim;
+    }
+    if (options?.isUnderlined) {
+        myStyledText += TextEffect.Underscore;
+    }
+ return `${myStyledText}${text}${ColorReset}`;
 }

@@ -14,7 +14,6 @@ import {
 import color from "colors";
 import { TestStatus } from "@playwright/test";
 import { TestError } from "playwright/types/testReporter";
-import {logInfo} from "../action-template/action-colors";
 
 interface TerminalColors {
   specFileName: string;

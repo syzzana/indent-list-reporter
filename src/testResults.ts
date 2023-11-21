@@ -1,7 +1,8 @@
-import { TestStatus } from "@playwright/test/reporter";
-import color from "colors";
-import { SuiteTestCases, TestCaseData, TestsPerSpecFile } from "./TestsPerSpecFile";
+import {TestStatus} from "@playwright/test/reporter";
+import {SuiteTestCases, TestCaseData, TestsPerSpecFile} from "./TestsPerSpecFile";
 import {TestCaseError} from "./indent-list-reporter";
+import color from "colors";
+import Color from "../color-text/Color";
 
 export interface StatusCounter {
   passed: number;
@@ -10,7 +11,8 @@ export interface StatusCounter {
   interrupted: number;
   timedOut: number;
 }
-export const lineBreak: string = color.magenta("─────────────────────────────────────────────────────────────────────").dim;
+export const line = "─────────────────────────────────────────────────────────────────────"
+export const lineBreak: any = Color.text(line).magenta().dim().valueOf();
 
 export const log = (text: string) => {
   console.log(text);
@@ -18,58 +20,58 @@ export const log = (text: string) => {
 
 export const howToReadTestResults = () => {
   log(lineBreak);
-  log(`${color.cyan("How to read test results:")}`);
-  const passed = `${color.green("✓")}=passed`;
-  const skipped = `${color.yellow("!")}️=skipped`;
-  const failed = `${color.red("✘")}=failed`;
-  const interrupted = `${color.yellow("!?")}=interrupted`;
+  log(`${Color.text("How to read test results:").cyan().valueOf()}`);
+  const passed = `${Color.text("✓").green().valueOf()}=passed`;
+  const skipped = `${Color.text("!").yellow().valueOf()}️=skipped`;
+  const failed = `${Color.text("✘").red().valueOf()}=failed`;
+  const interrupted = `${Color.text("!?").yellow().valueOf()}=interrupted`;
   const timedOut = `⏰ =timedOut`;
   log(`${passed}, ${skipped}, ${failed}, ${interrupted}, ${timedOut}`);
   log(lineBreak);
 };
 
 export const logSpecFileName = (specFileName: string) => {
-  log(`${color.cyan(specFileName)}:`);
+  log(`${Color.text(specFileName).cyan().valueOf()}:`);
 };
 
 export const logSuiteDescription = (suiteName: string) => {
-  log(`  ${color.cyan(suiteName).underline}`);
+  log(`  ${Color.text(suiteName).cyan().underscore().valueOf()}`);
 };
 
 export const logTestCaseData = (count: number, test: TestCaseData) => {
   const status = setIconAndColorPerTestStatus(test.status);
-  const duration = color.gray(`(${test.duration}ms)`).dim;
-  const counter = `${color.gray(`${count}.`)}`;
+  const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
+  const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
   let title;
   if (test.status === "failed") {
-    title = color.red(test.title);
+    title = Color.text(test.title).red().valueOf();
   } else if (test.status === "skipped") {
-    title = color.yellow(test.title);
+    title = Color.text(test.title).yellow().valueOf();
   } else {
-    title = color.white(test.title);
+    title = Color.text(test.title).white().valueOf();
   }
 
-  const rowAndCol = `${color.gray(`[${test.line}:${test.column}]`)}`;
+  const rowAndCol = `${Color.text(`[${test.line}:${test.column}]`).gray().valueOf()}`;
   log(`   ${counter} ${status} ${title} ${rowAndCol}${duration}`);
 };
 
 export const logSummary = (durationInMs: number, statusCounter: StatusCounter) => {
-  log(color.bgBlack("SUMMARY:").cyan);
+  log(Color.text("SUMMARY:").bgBlack().cyan().valueOf());
 
   if (statusCounter.passed != 0) {
-    log(color.green(`  ${statusCounter.passed} passed`));
+    log(Color.text(`  ${statusCounter.passed} passed`).green().valueOf());
   }
   if (statusCounter.interrupted != 0) {
-    log(color.grey(`  ${statusCounter.interrupted} interrupted`));
+    log(Color.text(`  ${statusCounter.interrupted} interrupted`).gray().valueOf());
   }
   if (statusCounter.skipped != 0) {
-    log(color.yellow(`  ${statusCounter.skipped} skipped`));
+    log(Color.text(`  ${statusCounter.skipped} skipped`).yellow().valueOf());
   }
   if (statusCounter.failed != 0) {
-    log(color.red(`  ${statusCounter.failed} failed`));
+    log(Color.text(`  ${statusCounter.failed} failed`).red().valueOf());
   }
   if (statusCounter.timedOut != 0) {
-    log(color.black(`  ${statusCounter.timedOut} timedOut`));
+    log(Color.text(`  ${statusCounter.timedOut} timedOut`).red().valueOf());
   }
 
   log("---------");
@@ -94,24 +96,24 @@ export const logTestResults = (allTests: TestsPerSpecFile[]) => {
 };
 
 export const logTestsDuration = (durationInMS: number) => {
-  log(color.magenta(`Duration: (${durationInMS}ms)`));
+  log(Color.text(`Duration: (${durationInMS}ms)`).magenta().valueOf());
 };
 
 export const setIconAndColorPerTestStatus = (status: TestStatus) => {
   if (status === "skipped") {
-    return `${color.yellow(`!`)}`;
+    return `${Color.text(`!`).yellow().valueOf()}`;
   }
   if (status === "failed") {
-    return `${color.red(`✘`)}`;
+    return `${Color.text(`✘`).red().valueOf()}`;
   }
   if (status === "timedOut") {
     return `⏰`;
   }
   if (status === "interrupted") {
-    return `${color.gray(`!?`)}`;
+    return `${Color.text(`!?`).gray()}`;
   }
   if (status === "passed") {
-    return `${color.green(`✓`)}`;
+    return `${Color.text(`✓`).green().valueOf()}`;
   }
 };
 
@@ -184,7 +186,7 @@ export const logFailedTests = (failedTests: TestCaseError[]) => {
     if (error.value !== undefined) {
       log(error.value);
     }
-    log(`\t${color.gray('at')} ${error.location.file}:${error.location.line}:${error.location.column}`);
+    log(`\t${Color.text('at').gray().valueOf()} ${error.location.file}:${error.location.line}:${error.location.column}`);
   });
 };
 

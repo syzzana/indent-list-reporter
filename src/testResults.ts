@@ -31,11 +31,11 @@ export const howToReadTestResults = () => {
 };
 
 export const logSpecFileName = (specFileName: string) => {
-  log(`${Color.text(specFileName).cyan().valueOf()}:`);
+  log(`${Color.text(specFileName).cyan().dim().valueOf()}:`);
 };
 
 export const logSuiteDescription = (suiteName: string) => {
-  log(`  ${Color.text(suiteName).cyan().underscore().valueOf()}`);
+  log(`  ${Color.text(suiteName).cyan().underscore().dim().valueOf()}`);
 };
 
 export const logTestCaseData = (count: number, test: TestCaseData) => {

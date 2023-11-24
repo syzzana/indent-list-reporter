@@ -1,14 +1,12 @@
 const ColorReset = "\x1b[0m";
 
 export type ColorOptions = {
-    isDimmed?: boolean;
     backgroundColor?: BackgroundColor;
     foregroundColor?: ForegroundColor;
-    isBold?: boolean;
-    isUnderlined?: boolean;
-    isBlinking?: boolean;
+    withTextEffectBg?: TextEffect
+    withTextEffectFg?: TextEffect
 };
-enum TextEffect {
+export enum TextEffect {
     Bright = "\x1b[1m",
     Dim = "\x1b[2m",
     Underscore = "\x1b[4m",
@@ -17,7 +15,7 @@ enum TextEffect {
     Hidden = "\x1b[8m"
 }
 
-enum ForegroundColor {
+export enum ForegroundColor {
     Black = "\x1b[30m",
     Red = "\x1b[31m",
     Green = "\x1b[32m",
@@ -27,34 +25,33 @@ enum ForegroundColor {
     Cyan = "\x1b[36m",
     White = "\x1b[37m"
 }
-
-enum BackgroundColor { //TODO implement background colors
-    Black =  "",
-    Red = "",
-    Green = "",
-    Yellow = "",
-    Blue = "",
-    Magenta = "",
-    Cyan = "",
-    White = ""
+export enum BackgroundColor { //TODO implement background colors
+    Black =  "\x1b[40m",
+    Red = "\x1b[41m",
+    Green = "\x1b[42m",
+    Yellow = "\x1b[43m",
+    Blue = "\x1b[44m",
+    Magenta = "\x1b[45m",
+    Cyan = "\x1b[46m",
+    White = "\x1b[47m"
 }
 
 export const color = (text: string, options?: ColorOptions) => {
+    let bgStyle = "";
+    let fgStyle = "";
     let myStyledText = "";
     if (options?.foregroundColor) {
-        myStyledText += options.foregroundColor;
+        fgStyle += options.foregroundColor;
     }
     if (options?.backgroundColor) {
-        myStyledText += options.backgroundColor;
+        bgStyle += options.backgroundColor;
     }
-    if (options?.isBold) {
-        myStyledText += TextEffect.Bright;
+    if (options?.withTextEffectFg) {
+        fgStyle += options.withTextEffectFg;
     }
-    if (options?.isDimmed) {
-        myStyledText += TextEffect.Dim;
+    if (options?.withTextEffectBg) {
+        bgStyle += options.withTextEffectBg;
     }
-    if (options?.isUnderlined) {
-        myStyledText += TextEffect.Underscore;
-    }
+    myStyledText = `${fgStyle}${bgStyle}`;
  return `${myStyledText}${text}${ColorReset}`;
 }

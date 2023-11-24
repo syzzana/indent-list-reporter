@@ -85,6 +85,24 @@ class IndentListReporter implements Reporter {
     }
   }
 
+ onError(error: TestError) {
+    log(color.bgBlack("ERROR:").red);
+    log(color.red(error.message));
+ }
+
+ async onExit(): Promise<void> {
+   await Promise.resolve();
+   process.exit(0);
+ }
+
+ onStdErr(chunk: Buffer | string, test:void|TestCase, result: void|TestResult) {
+   log(chunk.toString());
+ }
+
+ onStdOut(chunk: Buffer | string, test:void|TestCase, result: void|TestResult) {
+    log(chunk.toString());
+ }
+
   onEnd(result: FullResult) {
     const myTests = filterDuplicateSpecNames(this.allTests);
     logTestResults(myTests);

@@ -12,14 +12,14 @@ test.describe.serial("SUB API", async () => {
   });
 });
 
+const status = 200;
+const testM3e = "test me";
 test.describe("SUB SUB API 22", async () => {
   test("sub 22 authentication", async () => {
-    const status = 200;
     expect(status).toBe(200);
   });
 
   test("sub 23 unauthorized", async () => {
-    const status = 200;
     expect(status).toBe(200);
   });
 });

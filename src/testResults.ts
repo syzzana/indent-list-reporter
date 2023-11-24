@@ -187,7 +187,8 @@ export const logFailedTests = (failedTests: TestCaseError[]) => {
       log(error.value);
     }
     if(error.snippet !== undefined) {
-        log(error.snippet);
+      const highlightedError = highlightErrorInCode(error.value);
+      log(highlightedError);
     }
     log(`\t${Color.text('at').gray().valueOf()} ${error.location.file}:${error.location.line}:${error.location.column}`);
   });
@@ -199,7 +200,17 @@ export const highlightErrorInCode = (codeSnippet: string): string => {
     const errorIndicator = lines.find((line) => line.includes("^"));
     const indexOfLineWithError = lines.indexOf(lineWithError);
     const indexOfErrorIndicator = lines.indexOf(errorIndicator);
-  return "";
+    lines[indexOfLineWithError] = Color.text(lineWithError).red().valueOf();
+    lines[indexOfErrorIndicator] = Color.text(lineWithError).red().valueOf();
+
+  return lines.join("\n");
+}
+
+export const setColorRed = (char: string): string => {
+    if (char === "^" || char === "<") {
+        return Color.text(char).blue().valueOf();
+    }
+    return char;
 }
 
 export const ansiRegex = new RegExp(

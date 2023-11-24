@@ -186,9 +186,21 @@ export const logFailedTests = (failedTests: TestCaseError[]) => {
     if (error.value !== undefined) {
       log(error.value);
     }
+    if(error.snippet !== undefined) {
+        log(error.snippet);
+    }
     log(`\t${Color.text('at').gray().valueOf()} ${error.location.file}:${error.location.line}:${error.location.column}`);
   });
 };
+
+export const highlightErrorInCode = (codeSnippet: string): string => {
+  const lines = codeSnippet.split("\n");
+    const lineWithError = lines.find((line) => line.includes(">"));
+    const errorIndicator = lines.find((line) => line.includes("^"));
+    const indexOfLineWithError = lines.indexOf(lineWithError);
+    const indexOfErrorIndicator = lines.indexOf(errorIndicator);
+  return "";
+}
 
 export const ansiRegex = new RegExp(
   "([\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~])))",

@@ -8,7 +8,7 @@ test.describe.serial("SUB API", async () => {
 
   test("sub unauthorized", async () => {
     const status = 200;
-    expect(status).toBe(200);
+    expect(status).toBe(203);
   });
 });
 

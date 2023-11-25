@@ -200,8 +200,7 @@ export const highlightErrorIndicator = (codeSnippet: string): string => {
     if (line.includes("^")) {
       return Color.text(line).red().valueOf();
     } else if(line.includes(">") && !line.includes("=")) {
-      const lineChar = Color.text(line.charAt(13)).blue().valueOf();
-      line.replace(line.charAt(13), lineChar);
+      line.replace(">", Color.text(">").red().valueOf());
       return line;
     } else {
       return line;

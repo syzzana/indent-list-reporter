@@ -41,7 +41,7 @@ export const logTestCaseData = (count: number, test: TestCaseData) => {
   const status = setIconAndColorPerTestStatus(test.status);
   const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
   const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
-  let title;
+  let title: string;
   if (test.status === "failed") {
     title = Color.text(test.title).red().valueOf();
   } else if (test.status === "skipped") {

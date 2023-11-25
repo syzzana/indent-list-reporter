@@ -200,18 +200,11 @@ export const highlightErrorInCode = (codeSnippet: string): string => {
     const errorIndicator = lines.find((line) => line.includes("^"));
     const indexOfLineWithError = lines.indexOf(lineWithError);
     const indexOfErrorIndicator = lines.indexOf(errorIndicator);
-    lines[indexOfLineWithError] = Color.text(lineWithError).blue().valueOf();
-    lines[indexOfErrorIndicator] = Color.text(lineWithError).blue().valueOf();
+    lines[indexOfLineWithError+1] = Color.text(lineWithError).red().valueOf();
+    lines[indexOfErrorIndicator+1] = Color.text(errorIndicator).red().valueOf();
 
   return lines.join("\n");
-}
-
-export const setColorRed = (char: string): string => {
-    if (char === "^" || char === "<") {
-        return Color.text(char).red().valueOf();
-    }
-    return char;
-}
+};
 
 export const ansiRegex = new RegExp(
   "([\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~])))",

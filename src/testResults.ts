@@ -2,6 +2,10 @@ import {Location, TestStatus} from "@playwright/test/reporter";
 import {SuiteTestCases, TestCaseData, TestsPerSpecFile} from "./TestsPerSpecFile";
 import {TestCaseError} from "./indent-list-reporter";
 import Color from "../color-text/Color";
+import defineConfig from "../playwright.config";
+import { ReporterDescription } from "@playwright/test";
+import { LiteralUnion } from "prettier";
+
 
 export interface StatusCounter {
   passed: number;
@@ -29,7 +33,28 @@ export const howToReadTestResults = () => {
   log(lineBreak);
 };
 
+export const isIndentedListReporter = (configuredReporters:  any[] | any): [boolean, number] => {
+  configuredReporters.forEach((reporter, index) => {
+    if(reporter[index] === "indent-list-reporter") {
+      return [true, index];
+    }
+  });
+  return [false, 0];
+}
+
+const getReporterOptions = (reporters: any[] | any): any => {
+  const details = isIndentedListReporter(reporters);
+    if(isIndentedListReporter(reporters)) {
+      return reporters[details[1]][1];
+    }
+}
 export const logSpecFileName = (specFileName: string) => {
+  const reporter = getReporterOptions(defineConfig.reporter);
+  console.log('reporter', reporter)
+  const specFileNameColor = reporter.baseColors.specFileNameColor;
+  //TODO check how to convert a string value so that we can call a method with the same name
+  console.log('specFileNameColor', specFileNameColor)
+  //TODO refactor
   log(`${Color.text(specFileName).cyan().valueOf()}:`);
 };
 
@@ -214,7 +239,6 @@ export const ansiRegex = new RegExp(
 export const removeAnsiChars = (str: string): string => {
   return str.replace(ansiRegex, "");
 };
-
 
 export const styleFileLocation = (errorLocation: Location): any => {
   const file = errorLocation.file

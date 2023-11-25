@@ -4,7 +4,6 @@ import {
   filterDuplicateSpecNames,
   getFileNameOrParentSuite,
   howToReadTestResults,
-  lineBreak,
   log,
   logFailedTests,
   logSummary,
@@ -16,16 +15,23 @@ import { TestStatus } from "@playwright/test";
 import { TestError } from "playwright/types/testReporter";
 import Color from "../color-text/Color";
 
-interface TerminalColors {
-  specFileName: string;
-  suiteDescription: string;
+const defaultListTestsWithColors: IndentListReporterOptions = {
+ ignoreColors: false,
+ baseColors: {
+   specFileNameColor: "cyan",
+   suiteDescriptionColor: "cyan",
+ },
+}
+
+interface ListTestsWithColors {
+  specFileNameColor: string;
+  suiteDescriptionColor: string;
+  isDimmed?: boolean;
 }
 
 interface IndentListReporterOptions {
-  isDimmed: boolean;
-  baseColors: TerminalColors;
-  isJenkins: boolean; //TODO implement colors for jenkins terminal
-  isGithubActions: boolean; //TODO implement colors for github actions terminal
+  ignoreColors: boolean;
+  baseColors: ListTestsWithColors;
 }
 
 export type TestCaseError = {
@@ -34,7 +40,7 @@ export type TestCaseError = {
 }
 
 class IndentListReporter implements Reporter {
-  private _options: IndentListReporterOptions;
+  private options: IndentListReporterOptions;
   allTests: TestsPerSpecFile[] = [];
   passed = 0;
   failed = 0;
@@ -43,7 +49,11 @@ class IndentListReporter implements Reporter {
   timedOut = 0;
   failedTests: TestCaseError[] = [];
   constructor(options: IndentListReporterOptions) {
-    this._options = options;
+    if(!options) {
+      this.options = defaultListTestsWithColors
+    } else {
+      this.options = options;
+    }
   }
 
   printsToStdio() {

@@ -117,7 +117,6 @@ class IndentListReporter implements Reporter {
       log(color.bgBlack("FAILED TESTS:").red);
       logFailedTests(this.failedTests);
     }
-    log(lineBreak);
     logSummary(result.duration, statusCounter);
   }
 

@@ -199,9 +199,9 @@ export const highlightErrorIndicator = (codeSnippet: string): string => {
   const styledLines = lines.map((line) => {
     if (line.includes("^")) {
       return Color.text(line).red().valueOf();
-    } else if(line.includes(">")) {
-      const lineChar = Color.text(line.charAt(0)).red().valueOf();
-      line.replace(line.charAt(0), lineChar);
+    } else if(line.includes(">") && !line.includes("=")) {
+      const lineChar = Color.text(line.charAt(13)).blue().valueOf();
+      line.replace(line.charAt(13), lineChar);
       return line;
     } else {
       return line;

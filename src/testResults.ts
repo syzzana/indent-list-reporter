@@ -176,7 +176,6 @@ export const filterSuiteDescription = (suites: SuiteTestCases[]) => {
 export const logFailedTests = (failedTests: TestCaseError[]) => {
   let counter = 0;
   failedTests.forEach((failedTest) => {
-    log(lineBreak);
     const error = failedTest.error;
     const titlePath = failedTest.titlePath;
     const title = `${titlePath[2]} > ${titlePath[3]} > ${titlePath[4]} ───────────────`;

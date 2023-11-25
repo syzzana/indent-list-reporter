@@ -52,7 +52,7 @@ class IndentListReporter implements Reporter {
 
   onBegin(config: FullConfig, suite: Suite) {
     howToReadTestResults();
-    log(`${Color.text("TEST RESULTS\n").cyan().bgBlack().valueOf()}`);
+    log(`${Color.text("TEST RESULTS:").cyan().bgBlack().valueOf()}`);
     const number = suite.allTests().length
     const numberOfTests = color.white(number.toString());
     const numberOfWorkers = color.white(config.workers.valueOf().toString());

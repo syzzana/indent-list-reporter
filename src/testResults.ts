@@ -1,7 +1,6 @@
 import {Location, TestStatus} from "@playwright/test/reporter";
 import {SuiteTestCases, TestCaseData, TestsPerSpecFile} from "./TestsPerSpecFile";
 import {TestCaseError} from "./indent-list-reporter";
-import color from "colors";
 import Color from "../color-text/Color";
 
 export interface StatusCounter {
@@ -14,28 +13,28 @@ export interface StatusCounter {
 export const line = "─────────────────────────────────────────────────────────────────────"
 export const lineBreak: any = Color.text(line).magenta().dim().valueOf();
 
-export const log = (text: string) => {
-  console.log(text);
+export const log = (...data: any[]) => {
+  console.log(...data);
 };
 
 export const howToReadTestResults = () => {
   log(lineBreak);
   log(`${Color.text("How to read test results:").cyan().valueOf()}`);
-  const passed = `${Color.text("✓").green().valueOf()}=passed`;
-  const skipped = `${Color.text("!").yellow().valueOf()}️=skipped`;
-  const failed = `${Color.text("✘").red().valueOf()}=failed`;
-  const interrupted = `${Color.text("!?").yellow().valueOf()}=interrupted`;
+  const passed = `${Color.text("✓").bold().green().valueOf()}=passed`;
+  const skipped = `${Color.text("!").bold().yellow().valueOf()}️=skipped`;
+  const failed = `${Color.text("✘").bold().red().valueOf()}=failed`;
+  const interrupted = `${Color.text("!?").bold().yellow().valueOf()}=interrupted`;
   const timedOut = `⏰ =timedOut`;
   log(`${passed}, ${skipped}, ${failed}, ${interrupted}, ${timedOut}`);
   log(lineBreak);
 };
 
 export const logSpecFileName = (specFileName: string) => {
-  log(`${Color.text(specFileName).cyan().dim().valueOf()}:`);
+  log(`${Color.text(specFileName).cyan().valueOf()}:`);
 };
 
 export const logSuiteDescription = (suiteName: string) => {
-  log(`  ${Color.text(suiteName).cyan().underscore().dim().valueOf()}`);
+  log(`  ${Color.text(suiteName).cyan().underscore().valueOf()}`);
 };
 
 export const logTestCaseData = (count: number, test: TestCaseData) => {
@@ -191,7 +190,7 @@ export const logFailedTests = (failedTests: TestCaseError[]) => {
       log(highlightedError);
     }
     const fileLocationStyle = styleFileLocation(error.location);
-    console.log(`\t${Color.text('at').gray().valueOf()} ${fileLocationStyle}`);
+    log(`\t${Color.text('at').gray().valueOf()} ${fileLocationStyle}`);
   });
 };
 

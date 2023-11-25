@@ -187,21 +187,18 @@ export const logFailedTests = (failedTests: TestCaseError[]) => {
       log(error.value);
     }
     if(error.snippet !== undefined) {
-      const highlightedError = highlightErrorInCode(error.snippet);
+      const highlightedError = highlightErrorIndicator(error.snippet);
       log(highlightedError);
     }
     log(`\t${Color.text('at').gray().valueOf()} ${error.location.file}:${error.location.line}:${error.location.column}`);
   });
 };
 
-export const highlightErrorInCode = (codeSnippet: string): string => {
+export const highlightErrorIndicator = (codeSnippet: string): string => {
   const lines = codeSnippet.split("\n");
-    const lineWithError = lines.find((line) => line.includes(">"));
-    const errorIndicator = lines.find((line) => line.includes("^"));
-    const indexOfLineWithError = lines.indexOf(lineWithError);
-    const indexOfErrorIndicator = lines.indexOf(errorIndicator);
-    lines[indexOfLineWithError+1] = Color.text(lineWithError).red().valueOf();
-    lines[indexOfErrorIndicator+1] = Color.text(errorIndicator).red().valueOf();
+  const errorIndicator = lines.find((line) => line.includes("^"));
+  const indexOfErrorIndicator = lines.indexOf(errorIndicator);
+  lines[indexOfErrorIndicator+1] = Color.text(errorIndicator).red().valueOf();
 
   return lines.join("\n");
 };

@@ -196,11 +196,20 @@ export const logFailedTests = (failedTests: TestCaseError[]) => {
 
 export const highlightErrorIndicator = (codeSnippet: string): string => {
   const lines = codeSnippet.split("\n");
-  const errorIndicator = lines.find((line) => line.includes("^"));
-  const indexOfErrorIndicator = lines.indexOf(errorIndicator);
-  lines[indexOfErrorIndicator+1] = Color.text(errorIndicator).red().valueOf();
+  const styledLines = lines.map((line) => {
+    if (line.includes("^")) {
+      return Color.text(line).red().valueOf();
+    } else if(line.includes(">")) {
+      const lineChar = Color.text(line.charAt(0)).red().valueOf();
+      line.replace(line.charAt(0), lineChar);
+      return line;
+    } else {
+      return line;
+    }
+  });
+  lines.map((line) => line.trim());
 
-  return lines.join("\n");
+  return styledLines.join("\n");
 };
 
 export const ansiRegex = new RegExp(

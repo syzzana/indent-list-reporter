@@ -181,13 +181,13 @@ export const logFailedTests = (failedTests: TestCaseError[]) => {
     const error = failedTest.error;
     const titlePath = failedTest.titlePath;
     const title = `${titlePath[2]} > ${titlePath[3]} > ${titlePath[4]} ───────────────`;
-    log(color.red(`${++counter}) ${title}`));
+    log(Color.text(`${++counter}) ${title}`).red().valueOf());
     log(`${error.message}`);
     if (error.value !== undefined) {
       log(error.value);
     }
     if(error.snippet !== undefined) {
-      const highlightedError = highlightErrorInCode(error.value);
+      const highlightedError = highlightErrorInCode(error.snippet);
       log(highlightedError);
     }
     log(`\t${Color.text('at').gray().valueOf()} ${error.location.file}:${error.location.line}:${error.location.column}`);
@@ -200,15 +200,15 @@ export const highlightErrorInCode = (codeSnippet: string): string => {
     const errorIndicator = lines.find((line) => line.includes("^"));
     const indexOfLineWithError = lines.indexOf(lineWithError);
     const indexOfErrorIndicator = lines.indexOf(errorIndicator);
-    lines[indexOfLineWithError] = Color.text(lineWithError).red().valueOf();
-    lines[indexOfErrorIndicator] = Color.text(lineWithError).red().valueOf();
+    lines[indexOfLineWithError] = Color.text(lineWithError).blue().valueOf();
+    lines[indexOfErrorIndicator] = Color.text(lineWithError).blue().valueOf();
 
   return lines.join("\n");
 }
 
 export const setColorRed = (char: string): string => {
     if (char === "^" || char === "<") {
-        return Color.text(char).blue().valueOf();
+        return Color.text(char).red().valueOf();
     }
     return char;
 }

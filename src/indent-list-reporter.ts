@@ -14,6 +14,7 @@ import {
 import color from "colors";
 import { TestStatus } from "@playwright/test";
 import { TestError } from "playwright/types/testReporter";
+import Color from "../color-text/Color";
 
 interface TerminalColors {
   specFileName: string;
@@ -51,7 +52,7 @@ class IndentListReporter implements Reporter {
 
   onBegin(config: FullConfig, suite: Suite) {
     howToReadTestResults();
-    log(`${color.cyan.bgBlack("TEST RESULTS\n")}`);
+    log(`${Color.text("TEST RESULTS\n").cyan().bgBlack().valueOf()}`);
     const number = suite.allTests().length
     const numberOfTests = color.white(number.toString());
     const numberOfWorkers = color.white(config.workers.valueOf().toString());
@@ -114,7 +115,7 @@ class IndentListReporter implements Reporter {
       timedOut: this.timedOut,
     };
     if (this.failedTests.length > 0) {
-      log(color.bgBlack("FAILED TESTS:").red);
+      log(Color.text("FAILED TESTS:").red().bgBlack().valueOf());
       logFailedTests(this.failedTests);
     }
     logSummary(result.duration, statusCounter);

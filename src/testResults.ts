@@ -190,8 +190,8 @@ export const logFailedTests = (failedTests: TestCaseError[]) => {
     }
     const fileLocationStyle = styleFileLocation(error.location);
     log(`\t${Color.text('at').gray().valueOf()} ${fileLocationStyle}`);
+    log(lineBreak);
   });
-  log(lineBreak);
 };
 
 export const highlightErrorIndicator = (codeSnippet: string): string => {

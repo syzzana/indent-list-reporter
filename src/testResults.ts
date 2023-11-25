@@ -1,4 +1,4 @@
-import {TestStatus} from "@playwright/test/reporter";
+import {Location, TestStatus} from "@playwright/test/reporter";
 import {SuiteTestCases, TestCaseData, TestsPerSpecFile} from "./TestsPerSpecFile";
 import {TestCaseError} from "./indent-list-reporter";
 import color from "colors";
@@ -190,7 +190,8 @@ export const logFailedTests = (failedTests: TestCaseError[]) => {
       const highlightedError = highlightErrorIndicator(error.snippet);
       log(highlightedError);
     }
-    log(`\t${Color.text('at').gray().valueOf()} ${error.location.file}:${error.location.line}:${error.location.column}`);
+    const fileLocationStyle = styleFileLocation(error.location);
+    console.log(`\t${Color.text('at').gray().valueOf()} ${fileLocationStyle}`);
   });
 };
 
@@ -207,7 +208,6 @@ export const highlightErrorIndicator = (codeSnippet: string): string => {
       return line;
     }
   });
-  lines.map((line) => line.trim());
 
   return styledLines.join("\n");
 };
@@ -219,3 +219,11 @@ export const ansiRegex = new RegExp(
 export const removeAnsiChars = (str: string): string => {
   return str.replace(ansiRegex, "");
 };
+
+
+export const styleFileLocation = (errorLocation: Location): any => {
+  const file = errorLocation.file
+  const line = errorLocation.line
+  const column = errorLocation.column
+  return Color.text(`${file}:${line}:${column}`).blue().underscore().valueOf();
+}

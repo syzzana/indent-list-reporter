@@ -11,7 +11,7 @@ export interface StatusCounter {
   timedOut: number;
 }
 export const line = "─────────────────────────────────────────────────────────────────────"
-export const lineBreak: any = Color.text(line).magenta().dim().valueOf();
+export const lineBreak: any = Color.text(line).magenta().valueOf();
 
 export const log = (...data: any[]) => {
   console.log(...data);

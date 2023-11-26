@@ -1,7 +1,11 @@
-import { TestStatus } from "@playwright/test/reporter";
-import chalk from "chalk";
-import { SuiteTestCases, TestCaseData, TestsPerSpecFile } from "./TestsPerSpecFile";
+import {Location, TestStatus} from "@playwright/test/reporter";
+import {SuiteTestCases, TestCaseData, TestsPerSpecFile} from "./TestsPerSpecFile";
 import {TestCaseError} from "./indent-list-reporter";
+import Color from "../color-text/Color";
+import defineConfig from "../playwright.config";
+import { ReporterDescription } from "@playwright/test";
+import { LiteralUnion } from "prettier";
+
 
 export interface StatusCounter {
   passed: number;
@@ -10,66 +14,100 @@ export interface StatusCounter {
   interrupted: number;
   timedOut: number;
 }
-export const lineBreak: string = chalk.magenta.dim("─────────────────────────────────────────────────────────────────────");
+export const line = "─────────────────────────────────────────────────────────────────────"
+export const lineBreak: any = Color.text(line).magenta().valueOf();
 
-export const log = (text: string) => {
-  console.log(text);
+export const log = (...data: any[]) => {
+  console.log(...data);
 };
 
 export const howToReadTestResults = () => {
   log(lineBreak);
-  log(`${chalk.cyanBright("How to read test results:")}`);
-  const passed = `${chalk.green("✓")}=passed`;
-  const skipped = `${chalk.yellow("!")}️=skipped`;
-  const failed = `${chalk.red("✘")}=failed`;
-  const interrupted = `${chalk.yellow("!?")}=interrupted`;
+  log(`${Color.text("How to read test results:").cyan().valueOf()}`);
+  const passed = `${Color.text("✓").bold().green().valueOf()}=passed`;
+  const skipped = `${Color.text("!").bold().yellow().valueOf()}️=skipped`;
+  const failed = `${Color.text("✘").bold().red().valueOf()}=failed`;
+  const interrupted = `${Color.text("!?").bold().yellow().valueOf()}=interrupted`;
   const timedOut = `⏰ =timedOut`;
   log(`${passed}, ${skipped}, ${failed}, ${interrupted}, ${timedOut}`);
   log(lineBreak);
 };
 
+export const isIndentedListReporter = (configuredReporters:  any[] | any): [boolean, number] => {
+  configuredReporters.forEach((reporter, index) => {
+    if(reporter[index] === "indent-list-reporter") {
+      return [true, index];
+    }
+  });
+  return [false, 0];
+}
+
+const getReporterOptions = (reporters: any[] | any): any => {
+  const details = isIndentedListReporter(reporters);
+    if(isIndentedListReporter(reporters)) {
+      return reporters[details[1]][1];
+    }
+}
 export const logSpecFileName = (specFileName: string) => {
-  log(`${chalk.cyan.bold(specFileName)}:`);
+  const reporter = getReporterOptions(defineConfig.reporter);
+  const specFileNameColor = reporter.baseColors?.specFileNameColor? reporter.baseColors.specFileNameColor : undefined;
+  if(reporter.ignoreColors) {
+    log(`${specFileName}:`);
+  } else if(specFileNameColor !== undefined) {
+    log(`${Color.text(specFileName)[specFileNameColor]().valueOf()}:`);
+  }
+  else {
+    log(`${Color.text(specFileName).cyan().valueOf()}:`);
+  }
 };
 
 export const logSuiteDescription = (suiteName: string) => {
-  log(`  ${chalk.underline.cyan(suiteName)}`);
+  const reporter = getReporterOptions(defineConfig.reporter);
+    const suiteDescriptionColor = reporter.baseColors?.suiteDescriptionColor? reporter.baseColors.suiteDescriptionColor : undefined;
+    if(reporter.ignoreColors) {
+        log(`  ${suiteName}`);
+    } else if (suiteDescriptionColor !== undefined) {
+        log(`  ${Color.text(suiteName)[suiteDescriptionColor]().valueOf()}`);
+    }
+    else {
+      log(`  ${Color.text(suiteName).cyan().underscore().valueOf()}`);
+    }
 };
 
 export const logTestCaseData = (count: number, test: TestCaseData) => {
   const status = setIconAndColorPerTestStatus(test.status);
-  const duration = chalk.gray.dim(`(${test.duration}ms)`);
-  const counter = `${chalk.gray.dim(`${count}.`)}`;
-  let title;
+  const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
+  const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
+  let title: string;
   if (test.status === "failed") {
-    title = chalk.red(test.title);
+    title = Color.text(test.title).red().valueOf();
   } else if (test.status === "skipped") {
-    title = chalk.yellow(test.title);
+    title = Color.text(test.title).yellow().valueOf();
   } else {
-    title = chalk.whiteBright(test.title);
+    title = Color.text(test.title).white().valueOf();
   }
 
-  const rowAndCol = `${chalk.gray.dim(`[${test.line}:${test.column}]`)}`;
+  const rowAndCol = `${Color.text(`[${test.line}:${test.column}]`).gray().valueOf()}`;
   log(`   ${counter} ${status} ${title} ${rowAndCol}${duration}`);
 };
 
 export const logSummary = (durationInMs: number, statusCounter: StatusCounter) => {
-  log(chalk.bgBlack.italic.cyan("SUMMARY:"));
+  log(Color.text("SUMMARY:").bgBlack().cyan().valueOf());
 
   if (statusCounter.passed != 0) {
-    log(chalk.italic.greenBright(`  ${statusCounter.passed} passed`));
+    log(Color.text(`  ${statusCounter.passed} passed`).green().valueOf());
   }
   if (statusCounter.interrupted != 0) {
-    log(chalk.italic.grey(`  ${statusCounter.interrupted} interrupted`));
+    log(Color.text(`  ${statusCounter.interrupted} interrupted`).gray().valueOf());
   }
   if (statusCounter.skipped != 0) {
-    log(chalk.italic.yellowBright(`  ${statusCounter.skipped} skipped`));
+    log(Color.text(`  ${statusCounter.skipped} skipped`).yellow().valueOf());
   }
   if (statusCounter.failed != 0) {
-    log(chalk.italic.redBright(`  ${statusCounter.failed} failed`));
+    log(Color.text(`  ${statusCounter.failed} failed`).red().valueOf());
   }
   if (statusCounter.timedOut != 0) {
-    log(chalk.italic.black(`  ${statusCounter.timedOut} timedOut`));
+    log(Color.text(`  ${statusCounter.timedOut} timedOut`).red().valueOf());
   }
 
   log("---------");
@@ -94,24 +132,24 @@ export const logTestResults = (allTests: TestsPerSpecFile[]) => {
 };
 
 export const logTestsDuration = (durationInMS: number) => {
-  log(chalk.italic.magentaBright.dim(`Duration: (${durationInMS}ms)`));
+  log(Color.text(`Duration: (${durationInMS}ms)`).magenta().valueOf());
 };
 
 export const setIconAndColorPerTestStatus = (status: TestStatus) => {
   if (status === "skipped") {
-    return `${chalk.bold.yellow(`!`)}`;
+    return `${Color.text(`!`).yellow().valueOf()}`;
   }
   if (status === "failed") {
-    return `${chalk.bold.red(`✘`)}`;
+    return `${Color.text(`✘`).red().valueOf()}`;
   }
   if (status === "timedOut") {
     return `⏰`;
   }
   if (status === "interrupted") {
-    return `${chalk.bold.gray(`!?`)}`;
+    return `${Color.text(`!?`).gray()}`;
   }
   if (status === "passed") {
-    return `${chalk.bold.green(`✓`)}`;
+    return `${Color.text(`✓`).green().valueOf()}`;
   }
 };
 
@@ -175,19 +213,35 @@ export const filterSuiteDescription = (suites: SuiteTestCases[]) => {
 export const logFailedTests = (failedTests: TestCaseError[]) => {
   let counter = 0;
   failedTests.forEach((failedTest) => {
-    log(lineBreak);
     const error = failedTest.error;
     const titlePath = failedTest.titlePath;
     const title = `${titlePath[2]} > ${titlePath[3]} > ${titlePath[4]} ───────────────`;
-    log(chalk.red(`${++counter}) ${title}`));
+    log(Color.text(`${++counter}) ${title}`).red().valueOf());
     log(`${error.message}`);
     if (error.value !== undefined) {
       log(error.value);
     }
-    log(chalk.italic.underline.blueBright(`Code snippet:\n`));
-    log(removeAnsiChars(`${error.snippet}`));
-    log(`\t${chalk.gray('at')} ${error.location.file}:${error.location.line}:${error.location.column}`);
+    if(error.snippet !== undefined) {
+      const highlightedError = highlightErrorIndicator(error.snippet);
+      log(highlightedError);
+    }
+    const fileLocationStyle = styleFileLocation(error.location);
+    log(`\t${Color.text('at').gray().valueOf()} ${fileLocationStyle}`);
+    log(lineBreak);
   });
+};
+
+export const highlightErrorIndicator = (codeSnippet: string): string => {
+  const lines = codeSnippet.split("\n");
+  const styledLines = lines.map((line) => {
+    if (line.includes("^")) {
+      return Color.text(line).red().valueOf();
+    } else {
+      return line;
+    }
+  });
+
+  return styledLines.join("\n");
 };
 
 export const ansiRegex = new RegExp(
@@ -197,3 +251,10 @@ export const ansiRegex = new RegExp(
 export const removeAnsiChars = (str: string): string => {
   return str.replace(ansiRegex, "");
 };
+
+export const styleFileLocation = (errorLocation: Location): any => {
+  const file = errorLocation.file
+  const line = errorLocation.line
+  const column = errorLocation.column
+  return Color.text(`${file}:${line}:${column}`).blue().underscore().valueOf();
+}

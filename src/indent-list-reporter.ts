@@ -4,27 +4,34 @@ import {
   filterDuplicateSpecNames,
   getFileNameOrParentSuite,
   howToReadTestResults,
-  lineBreak,
   log,
   logFailedTests,
   logSummary,
   logTestResults,
   StatusCounter,
 } from "./testResults";
-import chalk from "chalk";
+import color from "colors";
 import { TestStatus } from "@playwright/test";
 import { TestError } from "playwright/types/testReporter";
+import Color from "../color-text/Color";
 
-interface TerminalColors {
-  specFileName: string;
-  suiteDescription: string;
+const defaultListTestsWithColors: IndentListReporterOptions = {
+ ignoreColors: false,
+ baseColors: {
+   specFileNameColor: "cyan",
+   suiteDescriptionColor: "cyan",
+ },
+}
+
+interface ListTestsWithColors {
+  specFileNameColor: string;
+  suiteDescriptionColor: string;
+  isDimmed?: boolean;
 }
 
 interface IndentListReporterOptions {
-  isDimmed: boolean;
-  baseColors: TerminalColors;
-  isJenkins: boolean; //TODO implement colors for jenkins terminal
-  isGithubActions: boolean; //TODO implement colors for github actions terminal
+  ignoreColors: boolean;
+  baseColors: ListTestsWithColors;
 }
 
 export type TestCaseError = {
@@ -33,7 +40,7 @@ export type TestCaseError = {
 }
 
 class IndentListReporter implements Reporter {
-  private _options: IndentListReporterOptions;
+  private options: IndentListReporterOptions;
   allTests: TestsPerSpecFile[] = [];
   passed = 0;
   failed = 0;
@@ -42,7 +49,11 @@ class IndentListReporter implements Reporter {
   timedOut = 0;
   failedTests: TestCaseError[] = [];
   constructor(options: IndentListReporterOptions) {
-    this._options = options;
+    if(!options) {
+      this.options = defaultListTestsWithColors
+    } else {
+      this.options = options;
+    }
   }
 
   printsToStdio() {
@@ -51,11 +62,12 @@ class IndentListReporter implements Reporter {
 
   onBegin(config: FullConfig, suite: Suite) {
     howToReadTestResults();
-    log(`${chalk.cyanBright.bgBlack("TEST RESULTS\n")}`);
-    const numberOfTests = chalk.whiteBright(suite.allTests().length);
-    const numberOfWorkers = chalk.whiteBright(config.workers.valueOf());
+    log(`${Color.text("TEST RESULTS:").cyan().bgBlack().valueOf()}`);
+    const number = suite.allTests().length
+    const numberOfTests = color.white(number.toString());
+    const numberOfWorkers = color.white(config.workers.valueOf().toString());
     const testInfo = `Running ${numberOfTests} tests using ${numberOfWorkers} workers\n`;
-    console.log(chalk.gray(testInfo));
+    console.log(color.gray(testInfo));
   }
 
   onTestEnd(test: TestCase, result: TestResult) {
@@ -84,6 +96,24 @@ class IndentListReporter implements Reporter {
     }
   }
 
+ onError(error: TestError) {
+    log(color.bgBlack("ERROR:").red);
+    log(color.red(error.message));
+ }
+
+ async onExit(): Promise<void> {
+   await Promise.resolve();
+   process.exit(0);
+ }
+
+ onStdErr(chunk: Buffer | string, test:void|TestCase, result: void|TestResult) {
+   log(chunk.toString());
+ }
+
+ onStdOut(chunk: Buffer | string, test:void|TestCase, result: void|TestResult) {
+    log(chunk.toString());
+ }
+
   onEnd(result: FullResult) {
     const myTests = filterDuplicateSpecNames(this.allTests);
     logTestResults(myTests);
@@ -95,10 +125,9 @@ class IndentListReporter implements Reporter {
       timedOut: this.timedOut,
     };
     if (this.failedTests.length > 0) {
-      log(chalk.bgBlack.italic.red("FAILED TESTS:"));
+      log(Color.text("FAILED TESTS:").red().bgBlack().valueOf());
       logFailedTests(this.failedTests);
     }
-    log(lineBreak);
     logSummary(result.duration, statusCounter);
   }
 

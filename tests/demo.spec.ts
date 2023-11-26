@@ -12,10 +12,10 @@ test.describe("Demo", async () => {
   });
 });
 
-test.describe("Showcase demo", async () => {
-  test("second demo", () => {
+test.describe.skip("Showcase demo", async () => {
+  test("fail me demo", () => {
     const status = 200;
-    expect(status).toBe(200);
+    expect(status).toBe(202);
   });
 
   test.skip("skip me", () => {

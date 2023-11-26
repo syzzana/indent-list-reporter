@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Run dummy tests on GitHub Actions
 
 # Controls when the workflow will run
 on:
@@ -33,6 +33,6 @@ jobs:
         run: npm install
       - name: Run tests with dummy data
         run: npm test
-      - name: Fail on test failure
-        if: failure()
+      - name: Tests failed
+        if: ${{ failure() }}
         run: exit 1

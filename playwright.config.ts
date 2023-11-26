@@ -6,7 +6,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 0 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [["./dist/indent-list-reporter.js", {
+  reporter: [["./dist/src/indent-list-reporter.js", {
     ignoreColors: false,
     baseColors: {
       specFileNameColor: "blue",

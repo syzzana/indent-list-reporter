@@ -33,3 +33,6 @@ jobs:
         run: npm install
       - name: Run tests with dummy data
         run: npm test
+      - name: Fail on test failure
+        if: failure()
+        run: exit 1

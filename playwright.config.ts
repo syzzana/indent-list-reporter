@@ -8,6 +8,10 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: [["./src/indent-list-reporter.ts", {
     ignoreColors: false,
+    baseColors: {
+      specFileNameColor: "blue",
+      suiteDescriptionColor: "blue",
+    }
   }]],
   use: {
     ignoreHTTPSErrors: true,

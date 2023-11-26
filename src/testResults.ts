@@ -50,16 +50,28 @@ const getReporterOptions = (reporters: any[] | any): any => {
 }
 export const logSpecFileName = (specFileName: string) => {
   const reporter = getReporterOptions(defineConfig.reporter);
-  console.log('reporter', reporter)
-  const specFileNameColor = reporter.baseColors.specFileNameColor;
-  //TODO check how to convert a string value so that we can call a method with the same name
-  console.log('specFileNameColor', specFileNameColor)
-  //TODO refactor
-  log(`${Color.text(specFileName).cyan().valueOf()}:`);
+  const specFileNameColor = reporter.baseColors?.specFileNameColor? reporter.baseColors.specFileNameColor : undefined;
+  if(reporter.ignoreColors) {
+    log(`${specFileName}:`);
+  } else if(specFileNameColor !== undefined) {
+    log(`${Color.text(specFileName)[specFileNameColor]().valueOf()}:`);
+  }
+  else {
+    log(`${Color.text(specFileName).cyan().valueOf()}:`);
+  }
 };
 
 export const logSuiteDescription = (suiteName: string) => {
-  log(`  ${Color.text(suiteName).cyan().underscore().valueOf()}`);
+  const reporter = getReporterOptions(defineConfig.reporter);
+    const suiteDescriptionColor = reporter.baseColors?.suiteDescriptionColor? reporter.baseColors.suiteDescriptionColor : undefined;
+    if(reporter.ignoreColors) {
+        log(`  ${suiteName}`);
+    } else if (suiteDescriptionColor !== undefined) {
+        log(`  ${Color.text(suiteName)[suiteDescriptionColor]().valueOf()}`);
+    }
+    else {
+      log(`  ${Color.text(suiteName).cyan().underscore().valueOf()}`);
+    }
 };
 
 export const logTestCaseData = (count: number, test: TestCaseData) => {

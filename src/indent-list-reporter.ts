@@ -23,9 +23,10 @@ const defaultListTestsWithColors: IndentListReporterOptions = {
  },
 }
 
+type ForegroundColor = "black" | "red" | "green" | "yellow" | "blue" | "magenta" | "cyan" | "white" | "gray";
 interface ListTestsWithColors {
-  specFileNameColor: string;
-  suiteDescriptionColor: string;
+  specFileNameColor: ForegroundColor;
+  suiteDescriptionColor: ForegroundColor;
   isDimmed?: boolean;
 }
 

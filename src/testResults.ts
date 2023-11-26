@@ -3,8 +3,6 @@ import {SuiteTestCases, TestCaseData, TestsPerSpecFile} from "./TestsPerSpecFile
 import {TestCaseError} from "./indent-list-reporter";
 import Color from "../color-text/Color";
 import defineConfig from "../playwright.config";
-import { ReporterDescription } from "@playwright/test";
-import { LiteralUnion } from "prettier";
 
 
 export interface StatusCounter {

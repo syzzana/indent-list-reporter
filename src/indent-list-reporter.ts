@@ -39,7 +39,7 @@ export type TestCaseError = {
   titlePath: string[];
 }
 
-class IndentListReporter implements Reporter {
+export class IndentListReporter implements Reporter {
   private options: IndentListReporterOptions;
   allTests: TestsPerSpecFile[] = [];
   passed = 0;

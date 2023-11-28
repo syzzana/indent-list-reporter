@@ -34,7 +34,8 @@ export const howToReadTestResults = () => {
 export const isIndentedListReporter = (configuredReporters:  any[] | any): [boolean, number] | boolean => {
   let isIndentedListReporter: [boolean, number] | boolean = false;
   configuredReporters.forEach((reporter, index) => {
-    if(reporter[0] === "indent-list-reporter") {
+    // or ./src/.. is for local testing before publishing the plugin in npm
+    if(reporter[0] === "indent-list-reporter" || reporter[0] === "./src/indent-list-reporter.ts") {
       isIndentedListReporter = [true, index];
     }
   });

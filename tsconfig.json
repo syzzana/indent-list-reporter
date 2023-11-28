@@ -9,6 +9,6 @@
     "rootDir": ".",
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "color-text/**/*"],
   "exclude": ["node_modules", "dist/**/*"]
 }

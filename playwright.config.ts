@@ -2,7 +2,7 @@ import { defineConfig } from "@playwright/test";
 
 export default defineConfig({
   testDir: "playwright-tests",
-  testMatch: "playwright-tests/?(*.)+(spec).[tj]s?(x)",
+  testMatch: "playwright-tests/**/*",
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 0 : 0,

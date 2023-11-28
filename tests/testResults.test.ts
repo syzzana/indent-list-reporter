@@ -1,14 +1,21 @@
 import { isIndentedListReporter } from '../src/testResults';
 
-//TODO verify reporter is indent-list-reporter when we have more then one reporter in the array of reporters
 test('verify reporter is indent-list-reporter', () => {
-    expect(isIndentedListReporter(["indent-list-reporter"])).toBe([true, 0]);
+    const reporter = isIndentedListReporter([["indent-list-reporter"]])
+    expect(reporter).toStrictEqual([true, 0]);
+});
+
+test('verify reporter is indent-list-reporter with more then one reporter', () => {
+    const reporter = isIndentedListReporter([["line"],["indent-list-reporter"], ["html"]])
+    expect(reporter).toStrictEqual([true, 1]);
 });
 
 test('verify reporter is not indent-list-reporter', () => {
-    expect(isIndentedListReporter(["list"])).toBe([false, 0]);
+    const reporter = isIndentedListReporter([["list"]])
+    expect(isIndentedListReporter([["list"]])).toStrictEqual([false, -1]);
 });
 
-test('verify reporter is not indent-list-reporter', () => {
-    expect(isIndentedListReporter(["list", "indent-list-reporter"])).toBe([false, 0]);
+test('verify reporter is not indent-list-reporter with more then 1 reporter', () => {
+    const reporter = isIndentedListReporter([["list"], ["html"]])
+    expect(reporter).toStrictEqual([false, -1]);
 });

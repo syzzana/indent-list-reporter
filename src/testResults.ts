@@ -32,12 +32,13 @@ export const howToReadTestResults = () => {
 };
 
 export const isIndentedListReporter = (configuredReporters:  any[] | any): [boolean, number] => {
+  let isIndentedListReporter: [boolean, number] = [false, -1];
   configuredReporters.forEach((reporter, index) => {
-    if(reporter[index] === "indent-list-reporter") {
-      return [true, index];
+    if(reporter[0] === "indent-list-reporter") {
+      isIndentedListReporter = [true, index];
     }
   });
-  return [false, 0];
+  return isIndentedListReporter
 }
 
 const getReporterOptions = (reporters: any[] | any): any => {

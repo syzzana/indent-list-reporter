@@ -31,8 +31,8 @@ export const howToReadTestResults = () => {
   log(lineBreak);
 };
 
-export const isIndentedListReporter = (configuredReporters:  any[] | any): [boolean, number] => {
-  let isIndentedListReporter: [boolean, number] = [false, -1];
+export const isIndentedListReporter = (configuredReporters:  any[] | any): [boolean, number] | boolean => {
+  let isIndentedListReporter: [boolean, number] | boolean = false;
   configuredReporters.forEach((reporter, index) => {
     if(reporter[0] === "indent-list-reporter") {
       isIndentedListReporter = [true, index];
@@ -41,15 +41,15 @@ export const isIndentedListReporter = (configuredReporters:  any[] | any): [bool
   return isIndentedListReporter
 }
 
-const getReporterOptions = (reporters: any[] | any): any => {
-  const details = isIndentedListReporter(reporters);
+export const getReporterOptions = (reporters: any[] | any): any => {
+  const reporterIndex = isIndentedListReporter(reporters);
     if(isIndentedListReporter(reporters)) {
-      return reporters[details[1]][1];
+      return reporters[reporterIndex[1]][1];
     }
 }
 export const logSpecFileName = (specFileName: string) => {
   const reporter = getReporterOptions(defineConfig.reporter);
-  const specFileNameColor = reporter.baseColors?.specFileNameColor? reporter.baseColors.specFileNameColor : undefined;
+  const specFileNameColor = reporter.baseColors?.specFileNameColor ? reporter.baseColors.specFileNameColor : undefined;
   if(reporter.ignoreColors) {
     log(`${specFileName}:`);
   } else if(specFileNameColor !== undefined) {
@@ -62,7 +62,7 @@ export const logSpecFileName = (specFileName: string) => {
 
 export const logSuiteDescription = (suiteName: string) => {
   const reporter = getReporterOptions(defineConfig.reporter);
-    const suiteDescriptionColor = reporter.baseColors?.suiteDescriptionColor? reporter.baseColors.suiteDescriptionColor : undefined;
+    const suiteDescriptionColor = reporter.baseColors?.suiteDescriptionColor ? reporter.baseColors.suiteDescriptionColor : undefined;
     if(reporter.ignoreColors) {
         log(`  ${suiteName}`);
     } else if (suiteDescriptionColor !== undefined) {

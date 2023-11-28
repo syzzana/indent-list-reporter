@@ -99,6 +99,7 @@ class IndentListReporter implements Reporter {
  onError(error: TestError) {
     log(color.bgBlack("ERROR:").red);
     log(color.red(error.message));
+    throw new Error(error.message);
  }
 
  async onExit(): Promise<void> {

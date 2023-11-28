@@ -7,13 +7,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 0 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [["./src/indent-list-reporter.ts", {
-    ignoreColors: false,
-    baseColors: {
-      specFileNameColor: "blue",
-      suiteDescriptionColor: "blue",
-    }
-  }]],
+  reporter: [["./src/indent-list-reporter.ts"]],
   use: {
     ignoreHTTPSErrors: true,
     trace: "off",

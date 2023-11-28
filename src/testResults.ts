@@ -49,9 +49,9 @@ export const getReporterOptions = (reporters: any[] | any): any => {
     }
 }
 export const logSpecFileName = (specFileName: string) => {
-  const reporter = getReporterOptions(defineConfig.reporter);
-  const specFileNameColor = reporter.baseColors?.specFileNameColor ? reporter.baseColors.specFileNameColor : undefined;
-  if(reporter.ignoreColors) {
+  const reporterOptions = getReporterOptions(defineConfig.reporter);
+  const specFileNameColor = reporterOptions?.baseColors?.specFileNameColor ? reporterOptions.baseColors.specFileNameColor : undefined;
+  if(reporterOptions?.ignoreColors) {
     log(`${specFileName}:`);
   } else if(specFileNameColor !== undefined) {
     log(`${Color.text(specFileName)[specFileNameColor]().valueOf()}:`);
@@ -62,9 +62,9 @@ export const logSpecFileName = (specFileName: string) => {
 };
 
 export const logSuiteDescription = (suiteName: string) => {
-  const reporter = getReporterOptions(defineConfig.reporter);
-    const suiteDescriptionColor = reporter.baseColors?.suiteDescriptionColor ? reporter.baseColors.suiteDescriptionColor : undefined;
-    if(reporter.ignoreColors) {
+  const reporterOptions = getReporterOptions(defineConfig.reporter);
+    const suiteDescriptionColor = reporterOptions?.baseColors?.suiteDescriptionColor ? reporterOptions.baseColors.suiteDescriptionColor : undefined;
+    if(reporterOptions?.ignoreColors) {
         log(`  ${suiteName}`);
     } else if (suiteDescriptionColor !== undefined) {
         log(`  ${Color.text(suiteName)[suiteDescriptionColor]().valueOf()}`);

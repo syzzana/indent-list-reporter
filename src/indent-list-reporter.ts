@@ -97,13 +97,16 @@ class IndentListReporter implements Reporter {
   }
 
  onError(error: TestError) {
-    log(color.bgBlack("ERROR:").red);
-    log(color.red(error.message));
+   try {
+     throw new Error(`ERROR: ${error.message}`);
+   }
+   catch(e) {
+     console.log(e);
+   }
  }
 
  async onExit(): Promise<void> {
    await Promise.resolve();
-   process.exit(0);
  }
 
  onStdErr(chunk: Buffer | string, test:void|TestCase, result: void|TestResult) {

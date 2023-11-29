@@ -3,8 +3,6 @@ import {SuiteTestCases, TestCaseData, TestsPerSpecFile} from "./TestsPerSpecFile
 import {TestCaseError} from "./indent-list-reporter";
 import Color from "../color-text/Color";
 import defineConfig from "../playwright.config";
-import { ReporterDescription } from "@playwright/test";
-import { LiteralUnion } from "prettier";
 
 
 export interface StatusCounter {
@@ -33,25 +31,27 @@ export const howToReadTestResults = () => {
   log(lineBreak);
 };
 
-export const isIndentedListReporter = (configuredReporters:  any[] | any): [boolean, number] => {
+export const isIndentedListReporter = (configuredReporters:  any[] | any): [boolean, number] | boolean => {
+  let isIndentedListReporter: [boolean, number] | boolean = false;
   configuredReporters.forEach((reporter, index) => {
-    if(reporter[index] === "indent-list-reporter") {
-      return [true, index];
+    // or ./src/.. is for local testing before publishing the plugin in npm
+    if(reporter[0] === "indent-list-reporter" || reporter[0] === "./src/indent-list-reporter.ts") {
+      isIndentedListReporter = [true, index];
     }
   });
-  return [false, 0];
+  return isIndentedListReporter
 }
 
-const getReporterOptions = (reporters: any[] | any): any => {
-  const details = isIndentedListReporter(reporters);
+export const getReporterOptions = (reporters: any[] | any): any => {
+  const reporterIndex = isIndentedListReporter(reporters);
     if(isIndentedListReporter(reporters)) {
-      return reporters[details[1]][1];
+      return reporters[reporterIndex[1]][1];
     }
 }
 export const logSpecFileName = (specFileName: string) => {
-  const reporter = getReporterOptions(defineConfig.reporter);
-  const specFileNameColor = reporter.baseColors?.specFileNameColor? reporter.baseColors.specFileNameColor : undefined;
-  if(reporter.ignoreColors) {
+  const reporterOptions = getReporterOptions(defineConfig.reporter);
+  const specFileNameColor = reporterOptions?.baseColors?.specFileNameColor ? reporterOptions.baseColors.specFileNameColor : undefined;
+  if(reporterOptions?.ignoreColors) {
     log(`${specFileName}:`);
   } else if(specFileNameColor !== undefined) {
     log(`${Color.text(specFileName)[specFileNameColor]().valueOf()}:`);
@@ -62,9 +62,9 @@ export const logSpecFileName = (specFileName: string) => {
 };
 
 export const logSuiteDescription = (suiteName: string) => {
-  const reporter = getReporterOptions(defineConfig.reporter);
-    const suiteDescriptionColor = reporter.baseColors?.suiteDescriptionColor? reporter.baseColors.suiteDescriptionColor : undefined;
-    if(reporter.ignoreColors) {
+  const reporterOptions = getReporterOptions(defineConfig.reporter);
+    const suiteDescriptionColor = reporterOptions?.baseColors?.suiteDescriptionColor ? reporterOptions.baseColors.suiteDescriptionColor : undefined;
+    if(reporterOptions?.ignoreColors) {
         log(`  ${suiteName}`);
     } else if (suiteDescriptionColor !== undefined) {
         log(`  ${Color.text(suiteName)[suiteDescriptionColor]().valueOf()}`);

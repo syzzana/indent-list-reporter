@@ -7,6 +7,8 @@
   "homepage": "https://github.com/syzzana/indent-list-reporter/blob/main/README.md",
   "scripts": {
     "test": "npx playwright test",
+    "test:debug": "npx playwright test --debug",
+    "jest": "jest",
     "compile": "tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
@@ -21,7 +23,6 @@
   "author": "Syzana Bicaj",
   "license": "MIT",
   "dependencies": {
-    "playwright": "^1.40.0",
     "@playwright/test": "^1.39.0",
     "@types/node": "^20.6.1",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
@@ -31,7 +32,13 @@
     "eslint": "^8.52.0",
     "eslint-config-prettier": "^9.0.0",
     "node-fetch": "^3.3.2",
+    "playwright": "^1.40.0",
     "prettier": "^3.0.3",
     "typescript": "^5.2.2"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.10",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1"
   }
 }

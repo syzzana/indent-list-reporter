@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test.describe.serial("SUB API", async () => {
   test("sub authentication", async () => {
     const status = 200;
-    expect(status).toBe(200);
+    expect(status).toBe(203);
   });
 
   test("sub unauthorized", async () => {

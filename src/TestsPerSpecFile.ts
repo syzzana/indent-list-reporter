@@ -7,6 +7,7 @@ export interface TestCaseData {
   line: number;
   column: number;
   duration: number;
+  retries: number;
 }
 
 export class SuiteTestCases {

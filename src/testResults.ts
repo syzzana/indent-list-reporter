@@ -80,6 +80,9 @@ export const logTestCaseData = (count: number, test: TestCaseData) => {
   const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
   let title: string;
   if (test.status === "failed") {
+    if(test.retries > 0) {
+        title = Color.text(test.title).red().dim().valueOf();
+    }
     title = Color.text(test.title).red().valueOf();
   } else if (test.status === "skipped") {
     title = Color.text(test.title).yellow().valueOf();
@@ -122,6 +125,7 @@ export const logTestResults = (allTests: TestsPerSpecFile[]) => {
     specFile.getSuiteTests().forEach((suite) => {
       logSuiteDescription(suite.getSuiteDescription());
       suite.getTests().forEach((test) => {
+        //TODO: filter getTests() here failes tests that were retried and failed again
         testCounter++;
         logTestCaseData(testCounter, test);
       });
@@ -209,6 +213,23 @@ export const filterSuiteDescription = (suites: SuiteTestCases[]) => {
 
   return uniqueSuites;
 };
+
+/**
+ * Filter out duplicate test cases
+ * We need to filter out duplicate test cases, because when a test is retried and fails again
+ * It is logged twice or more times depending on how many times it is retried
+ * @param tests
+ */
+export const filterDuplicateTestCases = (tests: TestCaseData[]): TestCaseData[] => {
+  const removeDuplicateFailedTests: TestCaseData[] = [];
+
+  tests.forEach((test) => {
+
+    const existingTestsCase = removeDuplicateFailedTests.find((myTest) => test.id === myTest.id);
+  });
+
+  return  removeDuplicateFailedTests;
+}
 
 export const logFailedTests = (failedTests: TestCaseError[]) => {
   let counter = 0;

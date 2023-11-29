@@ -12,8 +12,8 @@ test.describe("Demo", async () => {
   });
 });
 
-test.describe.skip("Showcase demo", async () => {
-  test("fail me demo", () => {
+test.describe("Showcase demo", async () => {
+  test("fail me demo ", () => {
     const status = 200;
     expect(status).toBe(202);
   });

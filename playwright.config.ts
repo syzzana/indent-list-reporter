@@ -8,7 +8,6 @@ export default defineConfig({
   retries: process.env.CI ? 0 : 0,
   workers: process.env.CI ? 1 : undefined,
   reporter: [["./src/indent-list-reporter.ts"]],
-  // reporter: [["dot"]],
   use: {
     ignoreHTTPSErrors: true,
     trace: "off",

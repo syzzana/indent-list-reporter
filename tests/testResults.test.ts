@@ -36,7 +36,7 @@ test('verify reporter is indent-list-reporter with more then one reporter', () =
 
 test('verify reporter is not indent-list-reporter', () => {
     const reporter = isIndentedListReporter([["list"]])
-    expect(isIndentedListReporter([["list"]])).toStrictEqual(false);
+    expect(reporter).toStrictEqual(false);
 });
 
 test('verify reporter is not indent-list-reporter with more then 1 reporter', () => {

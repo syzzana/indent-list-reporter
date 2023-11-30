@@ -1,7 +1,7 @@
 import { TestCase, TestResult, Reporter, FullResult, Suite, FullConfig } from "@playwright/test/reporter";
 import { SuiteTestCases, TestCaseData, TestsPerSpecFile } from "./TestsPerSpecFile";
 import {
-  filterDuplicateSpecNames,
+  filterUniqueSpecsBySpecName,
   getFileNameOrParentSuite,
   howToReadTestResults,
   log,
@@ -118,7 +118,7 @@ class IndentListReporter implements Reporter {
  }
 
   onEnd(result: FullResult) {
-    const myTests = filterDuplicateSpecNames(this.allTests);
+    const myTests = filterUniqueSpecsBySpecName(this.allTests);
     logTestResults(myTests);
     const statusCounter: StatusCounter = {
       passed: this.passed,

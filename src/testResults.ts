@@ -80,9 +80,6 @@ export const logTestCaseData = (count: number, test: TestCaseData) => {
   const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
   let title: string;
   if (test.status === "failed") {
-    if(test.retries > 0) {
-        title = Color.text(test.title).red().dim().valueOf();
-    }
     title = Color.text(test.title).red().valueOf();
   } else if (test.status === "skipped") {
     title = Color.text(test.title).yellow().valueOf();
@@ -125,7 +122,7 @@ export const logTestResults = (allTests: TestsPerSpecFile[]) => {
     specFile.getSuiteTests().forEach((suite) => {
       logSuiteDescription(suite.getSuiteDescription());
       suite.getTests().forEach((test) => {
-        //TODO: filter getTests() here failes tests that were retried and failed again
+        //TODO: filter getTests() here failed tests that were retried and failed again
         testCounter++;
         logTestCaseData(testCounter, test);
       });
@@ -165,54 +162,57 @@ export const getFileNameOrParentSuite = (titlePath: string[], parentSuite?: bool
     return titlePath[2];
   }
 };
-
-export const filterDuplicateSpecNames = (allTests: TestsPerSpecFile[]): TestsPerSpecFile[] => {
+export const filterUniqueSpecsBySpecName = (allTests: TestsPerSpecFile[]): TestsPerSpecFile[] => {
   const uniqueSpecs: TestsPerSpecFile[] = [];
 
-  allTests.forEach((item) => {
-    const specName: string = item.getSpecName();
-    const suiteTests: SuiteTestCases[] = item.getSuiteTests();
+  allTests.forEach((currentTest) => {
+    const currentSpecName: string = currentTest.getSpecName();
+    const suiteTests: SuiteTestCases[] = currentTest.getSuiteTests();
 
-    const existingSpec = uniqueSpecs.find((spec) => spec.getSpecName() === specName);
+    const existingSpec = uniqueSpecs.find((spec) => spec.getSpecName() === currentSpecName);
 
     if (existingSpec) {
-      // If specName is already in uniqueSpecs, merge the suiteTests
+      // If currentSpecName is already in uniqueSpecs, merge the suiteTests
       existingSpec.setTestCases(existingSpec.getSuiteTests().concat(suiteTests));
     } else {
-      // If specName is not in uniqueSpecs, add it with its data
-      const mySpec: TestsPerSpecFile = new TestsPerSpecFile(specName);
-      mySpec.setTestCases(suiteTests);
-      uniqueSpecs.push(mySpec);
+      // If currentSpecName is not in uniqueSpecs, add it with its data
+      const newUniqueSpec: TestsPerSpecFile = new TestsPerSpecFile(currentSpecName);
+      newUniqueSpec.setTestCases(suiteTests);
+      uniqueSpecs.push(newUniqueSpec);
     }
   });
 
   uniqueSpecs.forEach((spec) => {
-    const mySuites = filterSuiteDescription(spec.getSuiteTests());
-    spec.setTestCases(mySuites);
+    const uniqueSuites = filterUniqueSuitesByDescription(spec.getSuiteTests());
+    spec.setTestCases(uniqueSuites);
   });
+
   return uniqueSpecs;
 };
 
-export const filterSuiteDescription = (suites: SuiteTestCases[]) => {
+export const filterUniqueSuitesByDescription = (inputSuites: SuiteTestCases[]) => {
   const uniqueSuites: SuiteTestCases[] = [];
 
-  suites.forEach((suite) => {
-    const suiteDescription = suite.getSuiteDescription();
-    const testCases = suite.getTests();
+  inputSuites.forEach((currentSuite) => {
+    const currentSuiteDescription = currentSuite.getSuiteDescription();
+    const testCases = currentSuite.getTests();
 
-    const existingSuiteDescription = uniqueSuites.find((suite) => suite.getSuiteDescription() === suiteDescription);
+    const existingSuite = uniqueSuites.find(
+        (uniqueSuite) => uniqueSuite.getSuiteDescription() === currentSuiteDescription
+    );
 
-    if (existingSuiteDescription) {
-      existingSuiteDescription.setTests(existingSuiteDescription.getTests().concat(testCases));
+    if (existingSuite) {
+      existingSuite.setTests(existingSuite.getTests().concat(testCases));
     } else {
-      const mySuite: SuiteTestCases = new SuiteTestCases(suiteDescription);
-      mySuite.setTests(testCases);
-      uniqueSuites.push(mySuite);
+      const newUniqueSuite: SuiteTestCases = new SuiteTestCases(currentSuiteDescription);
+      newUniqueSuite.setTests(testCases);
+      uniqueSuites.push(newUniqueSuite);
     }
   });
 
   return uniqueSuites;
 };
+
 
 /**
  * Filter out duplicate test cases

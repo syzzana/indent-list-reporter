@@ -4,7 +4,6 @@ import {
   filterDuplicateSpecNames,
   getFileNameOrParentSuite,
   howToReadTestResults,
-  lineBreak,
   log,
   logFailedTests,
   logSummary,
@@ -40,12 +39,6 @@ export type TestCaseError = {
   titlePath: string[];
 }
 
-export type RetriedTestCase = {
-    testCase: TestCase;
-    result: TestResult;
-    retries: number;
-}
-
 class IndentListReporter implements Reporter {
   private options: IndentListReporterOptions;
   allTests: TestsPerSpecFile[] = [];
@@ -55,7 +48,6 @@ class IndentListReporter implements Reporter {
   interrupted = 0;
   timedOut = 0;
   failedTests: TestCaseError[] = [];
-  retries = 0;
   constructor(options: IndentListReporterOptions) {
     if(!options) {
       this.options = defaultListTestsWithColors
@@ -79,7 +71,6 @@ class IndentListReporter implements Reporter {
   }
 
   onTestEnd(test: TestCase, result: TestResult) {
-    this.retries = result.retry;
     const currentFileName = getFileNameOrParentSuite(test.titlePath(), false, true);
     const currentParentSuite = getFileNameOrParentSuite(test.titlePath(), true, false);
     const testCase: TestCaseData = {
@@ -89,24 +80,19 @@ class IndentListReporter implements Reporter {
       column: test.location.column,
       status: result.status,
       duration: result.duration,
-      retries: test.retries,
     };
     const testsPerSpecFile = new TestsPerSpecFile(currentFileName);
     const suiteTestCases = new SuiteTestCases(currentParentSuite);
     suiteTestCases.addTestCase(testCase);
     testsPerSpecFile.addTestCases(suiteTestCases);
     this.allTests.push(testsPerSpecFile);
-    this.increaseTestStatusCounter(result.status, this.retries);
+    this.increaseTestStatusCounter(result.status);
     if (result.status === "failed") {
       const testCaseError: TestCaseError = {
         error: result.error,
         titlePath: test.titlePath(),
       }
-      if(this.retries === 0) {
-        this.failedTests.push(testCaseError);
-      } else {
-
-      }
+      this.failedTests.push(testCaseError);
     }
   }
 
@@ -146,16 +132,13 @@ class IndentListReporter implements Reporter {
       logFailedTests(this.failedTests);
     }
     logSummary(result.duration, statusCounter);
-    log(lineBreak);
   }
 
-  increaseTestStatusCounter(test: TestStatus, retries: number) {
+  increaseTestStatusCounter(test: TestStatus) {
     if (test === "passed") {
       this.passed++;
     } else if (test === "failed") {
-      if(retries === 0) {
-        this.failed++;
-      }
+      this.failed++;
     } else if (test === "timedOut") {
       this.timedOut++;
     } else if (test === "skipped") {

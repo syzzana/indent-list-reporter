@@ -1,0 +1,1 @@
+//TODO to be refactored, all logic for reporter configuration should be in this file

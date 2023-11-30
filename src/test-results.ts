@@ -1,6 +1,5 @@
 import {Location, TestStatus} from "@playwright/test/reporter";
-import {SuiteTestCases, TestCaseData, TestsPerSpecFile} from "./TestsPerSpecFile";
-import {TestCaseError} from "./indent-list-reporter";
+import {SuiteTestCases, TestCaseData, TestsPerSpecFile, TestCaseError} from "./TestsPerSpecFile";
 import Color from "../color-text/Color";
 import defineConfig from "../playwright.config";
 
@@ -218,24 +217,36 @@ export const filterUniqueSuitesByDescription = (inputSuites: SuiteTestCases[]) =
  * Filter out duplicate test cases
  * We need to filter out duplicate test cases, because when a test is retried and fails again
  * It is logged twice or more times depending on how many times it is retried
- * @param tests
+ * @param failedTests
  */
-export const filterDuplicateTestCases = (tests: TestCaseData[]): TestCaseData[] => {
-  const removeDuplicateFailedTests: TestCaseData[] = [];
+export const filterOutDuplicateFailedTests = (failedTests: TestCaseError[]): TestCaseError[] => {
+    const removeDuplicateFailedTests: TestCaseError[] = [];
 
-  tests.forEach((test) => {
+    failedTests.forEach((failedTest) => {
+        const existingTestsCase = removeDuplicateFailedTests
+            .find((myTest) => failedTest.testData.id === myTest.testData.id);
+        if(existingTestsCase === undefined) {
+          removeDuplicateFailedTests.push(failedTest);
+        }
+    });
 
-    const existingTestsCase = removeDuplicateFailedTests.find((myTest) => test.id === myTest.id);
-  });
+    return  removeDuplicateFailedTests;
 
-  return  removeDuplicateFailedTests;
 }
 
-export const logFailedTests = (failedTests: TestCaseError[]) => {
+
+export const logFilteredFailedTests = (failedTests: TestCaseError[], retries: number) => {
+  if(retries > 0) {
+    const filteredFailedTests = filterOutDuplicateFailedTests(failedTests);
+    logTestError(filteredFailedTests);
+  }
+}
+export const logTestError = (failedTests: TestCaseError[]) => {
   let counter = 0;
   failedTests.forEach((failedTest) => {
     const error = failedTest.error;
-    const titlePath = failedTest.titlePath;
+    //TODO fix me - issue on the log of the file location - it is not correct
+    const titlePath = failedTest.testData.title;
     const title = `${titlePath[2]} > ${titlePath[3]} > ${titlePath[4]} ───────────────`;
     log(Color.text(`${++counter}) ${title}`).red().valueOf());
     log(`${error.message}`);

@@ -1,15 +1,15 @@
 import { TestCase, TestResult, Reporter, FullResult, Suite, FullConfig } from "@playwright/test/reporter";
-import { SuiteTestCases, TestCaseData, TestsPerSpecFile } from "./TestsPerSpecFile";
+import { SuiteTestCases, TestCaseData, TestCaseError, TestsPerSpecFile } from "./TestsPerSpecFile";
 import {
   filterUniqueSpecsBySpecName,
   getFileNameOrParentSuite,
   howToReadTestResults,
   log,
-  logFailedTests,
+  logTestError,
   logSummary,
   logTestResults,
-  StatusCounter,
-} from "./testResults";
+  StatusCounter, filterOutDuplicateFailedTests, lineBreak, logFilteredFailedTests,
+} from "./test-results";
 import color from "colors";
 import { TestStatus } from "@playwright/test";
 import { TestError } from "playwright/types/testReporter";
@@ -34,11 +34,6 @@ interface IndentListReporterOptions {
   baseColors: ListTestsWithColors;
 }
 
-export type TestCaseError = {
-  error: TestError;
-  titlePath: string[];
-}
-
 class IndentListReporter implements Reporter {
   private options: IndentListReporterOptions;
   allTests: TestsPerSpecFile[] = [];
@@ -47,6 +42,7 @@ class IndentListReporter implements Reporter {
   skipped = 0;
   interrupted = 0;
   timedOut = 0;
+  retries = 0;
   failedTests: TestCaseError[] = [];
   constructor(options: IndentListReporterOptions) {
     if(!options) {
@@ -81,6 +77,7 @@ class IndentListReporter implements Reporter {
       status: result.status,
       duration: result.duration,
     };
+    this.retries = result.retry;
     const testsPerSpecFile = new TestsPerSpecFile(currentFileName);
     const suiteTestCases = new SuiteTestCases(currentParentSuite);
     suiteTestCases.addTestCase(testCase);
@@ -90,7 +87,7 @@ class IndentListReporter implements Reporter {
     if (result.status === "failed") {
       const testCaseError: TestCaseError = {
         error: result.error,
-        titlePath: test.titlePath(),
+        testData: testCase,
       }
       this.failedTests.push(testCaseError);
     }
@@ -129,9 +126,11 @@ class IndentListReporter implements Reporter {
     };
     if (this.failedTests.length > 0) {
       log(Color.text("FAILED TESTS:").red().bgBlack().valueOf());
-      logFailedTests(this.failedTests);
+      logTestError(this.failedTests);
     }
     logSummary(result.duration, statusCounter);
+    log(lineBreak)
+    logFilteredFailedTests(filterOutDuplicateFailedTests(this.failedTests), this.retries)
   }
 
   increaseTestStatusCounter(test: TestStatus) {

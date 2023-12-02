@@ -5,7 +5,7 @@ export default defineConfig({
     testMatch: "playwright-tests/**/*",
     fullyParallel: true,
     forbidOnly: !!process.env.CI,
-    retries: process.env.CI ? 2 : 3,
+    retries: process.env.CI ? 0 : 3,
     workers: process.env.CI ? 1 : undefined,
     reporter: [["./src/indent-list-reporter.ts"]],
     use: {

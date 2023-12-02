@@ -109,7 +109,7 @@ export const logTestResults = (allTests: TestsPerSpecFile[]) => {
         logSpecFileName(specFile.getSpecName());
         specFile.getSuiteTests().forEach((suite) => {
             logSuiteDescription(suite.getSuiteDescription());
-            suite.getTests().forEach((test) => {
+            suite.getTestCases().forEach((test) => {
                 //TODO: filter getTests() here failed tests that were retried and failed again
                 testCounter++;
                 logTestCaseData(testCounter, test);

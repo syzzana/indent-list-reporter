@@ -117,7 +117,7 @@ class IndentListReporter implements Reporter {
     }
 
     onEnd(result: FullResult) {
-        const myTests = filterUniqueSpecsBySpecName(this.allTests);
+        const myTests = filterUniqueSpecsBySpecName(this.allTests, this.retries > 0);
         //TODO filter out duplicate failed tests on retry here or maybe inside filterUniqueSpecsBySpecName
         logTestResults(myTests);
         const statusCounter: StatusCounter = {
@@ -135,6 +135,7 @@ class IndentListReporter implements Reporter {
         log(lineBreak);
     }
 
+    //TODO: fix the counter for failed on retries
     increaseTestStatusCounter(test: TestStatus) {
         if (test === "passed") {
             this.passed++;

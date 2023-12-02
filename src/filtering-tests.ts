@@ -54,30 +54,62 @@ export const filterOutDuplicateFailedTestsOnRetry = (failedTests: TestCaseError[
  * Add explination later //TODO
  * @param allTests
  */
-export const filterUniqueSpecsBySpecName = (allTests: TestsPerSpecFile[]): TestsPerSpecFile[] => {
-    const uniqueSpecs: TestsPerSpecFile[] = [];
+export const filterUniqueSpecsBySpecName = (allTests: TestsPerSpecFile[], areRetried: boolean): TestsPerSpecFile[] => {
+    //TODO maybe rename uniqueSpecs to uniqueSpecFiles or something
+    const uniqueSpecFiles: TestsPerSpecFile[] = [];
 
     allTests.forEach((currentTest) => {
         const currentSpecName: string = currentTest.getSpecName();
         const suiteTests: SuiteTestCases[] = currentTest.getSuiteTests();
 
-        const existingSpec = uniqueSpecs.find((spec) => spec.getSpecName() === currentSpecName);
+        const existingSpec = uniqueSpecFiles.find((spec) => spec.getSpecName() === currentSpecName);
 
         if (existingSpec) {
-            // If currentSpecName is already in uniqueSpecs, merge the suiteTests
+            // If currentSpecName is already in uniqueSpecFiles, merge the suiteTests
             existingSpec.setSuiteTests(existingSpec.getSuiteTests().concat(suiteTests));
         } else {
-            // If currentSpecName is not in uniqueSpecs, add it with its data
+            // If currentSpecName is not in uniqueSpecFiles, add it with its data
             const newUniqueSpec: TestsPerSpecFile = new TestsPerSpecFile(currentSpecName);
             newUniqueSpec.setSuiteTests(suiteTests);
-            uniqueSpecs.push(newUniqueSpec);
+            uniqueSpecFiles.push(newUniqueSpec);
         }
     });
 
-    uniqueSpecs.forEach((spec) => {
+    uniqueSpecFiles.forEach((spec) => {
         const uniqueSuites = filterUniqueSuitesByDescription(spec.getSuiteTests());
         spec.setSuiteTests(uniqueSuites);
     });
 
-    return uniqueSpecs;
+    if(areRetried) {
+        const uniqueSuites = uniqueSpecFiles.map((suite) => {
+            suite.getSuiteTests().map((suiteTestCases) => {
+                const testCasesError : TestCaseError[] = suiteTestCases.getTestCases().map((testCase) => {
+                    const testCaseError : TestCaseError = {
+                        error: testCase.error,
+                        testData: testCase,
+                        titlePath: testCase.titlePath
+                    }
+                    return testCaseError;
+                })
+
+                const testCasesWithErrors = filterOutDuplicateFailedTestsOnRetry(testCasesError)
+                const testCases = testCasesWithErrors.map((testCase) => {
+                    return testCase.testData;
+                });
+                suiteTestCases.setTestCases(testCases);
+            })
+        })
+    }
+
+    return uniqueSpecFiles;
 };
+
+//TODO do I need to get the retry value from configuration file in here somehow?
+// const filterOutDuplicateFailedTestCasesOnRetry = uniqueSpecs.forEach(spec => {
+//     spec.getSuiteTests().map((suite) => {
+//         const testCases = suite.getTestCases();
+//         const filteredTestCases = filterOutDuplicateFailedTestsOnRetry(testCases);
+//         suite.setTestCases(filteredTestCases);
+//         return suite;
+//     })
+// });

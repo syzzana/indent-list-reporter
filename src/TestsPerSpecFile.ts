@@ -9,6 +9,8 @@ export interface TestCaseData {
     column: number;
     duration: number;
     retries?: number;
+    error?: TestError;
+    titlePath?: string[];
 }
 
 export type TestCaseError = {

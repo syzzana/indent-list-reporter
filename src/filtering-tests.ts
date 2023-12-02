@@ -80,7 +80,7 @@ export const filterUniqueSpecsBySpecName = (allTests: TestsPerSpecFile[], areRet
     });
 
     //TODO analyse and test what this code block does in more detail, and document it
-    if (areRetried) {
+    if (areRetried || process.env.CI) {
         const specFilteredOutFailedTestCases = uniqueSpecFiles.map((suite) => {
             suite.getSuiteTests().map((suiteTestCases) => {
                 const testCasesError: TestCaseError[] = suiteTestCases.getTestCases().map((testCase) => {

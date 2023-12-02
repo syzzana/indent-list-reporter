@@ -1,15 +1,15 @@
 import { TestCase, TestResult, Reporter, FullResult, Suite, FullConfig } from "@playwright/test/reporter";
 import { SuiteTestCases, TestCaseData, TestCaseError, TestsPerSpecFile } from "./TestsPerSpecFile";
 import {
-  filterUniqueSpecsBySpecName,
   getFileNameOrParentSuite,
   howToReadTestResults,
   log,
   logTestError,
   logSummary,
   logTestResults,
-  StatusCounter, filterOutDuplicateFailedTests, lineBreak, logFilteredFailedTests,
+  StatusCounter, lineBreak, logFilteredFailedTests,
 } from "./test-results";
+import { filterOutDuplicateFailedTests, filterUniqueSpecsBySpecName } from "./filtering-tests";
 import color from "colors";
 import { TestStatus } from "@playwright/test";
 import { TestError } from "playwright/types/testReporter";

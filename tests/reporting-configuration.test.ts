@@ -1,4 +1,4 @@
-import { isIndentedListReporter, getReporterOptions } from '../src/testResults';
+import { isIndentedListReporter, getReporterOptions } from '../src/test-results';
 
 test('verify reporter is indent-list-reporter', () => {
     const reporter = isIndentedListReporter([["indent-list-reporter"]])

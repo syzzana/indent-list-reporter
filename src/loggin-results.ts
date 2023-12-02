@@ -2,10 +2,9 @@ import defineConfig from "../playwright.config";
 import Color from "../color-text/Color";
 import { getReporterOptions } from "./reporter-configuration";
 import { TestCaseData, TestCaseError, TestsPerSpecFile } from "./TestsPerSpecFile";
-import {lineBreak, setIconAndColorPerTestStatus } from "../color-text/styling-terminal";
+import { lineBreak, setIconAndColorPerTestStatus } from "../color-text/styling-terminal";
 import { filterOutDuplicateFailedTests } from "./filtering-tests";
 import { logTestError } from "./loggin-error-message";
-
 
 /**
  * Log the results of the function
@@ -14,7 +13,7 @@ import { logTestError } from "./loggin-error-message";
  * @param data
  */
 export const log = (...data: any[]) => {
-    console.log(...data);
+  console.log(...data);
 };
 
 /**
@@ -33,16 +32,17 @@ export const log = (...data: any[]) => {
  * @param specFileName
  */
 export const logSpecFileName = (specFileName: string) => {
-    const reporterOptions = getReporterOptions(defineConfig.reporter);
-    const specFileNameColor = reporterOptions?.baseColors?.specFileNameColor ? reporterOptions.baseColors.specFileNameColor : undefined;
-    if(reporterOptions?.ignoreColors) {
-        log(`${specFileName}:`);
-    } else if(specFileNameColor !== undefined) {
-        log(`${Color.text(specFileName)[specFileNameColor]().valueOf()}:`);
-    }
-    else {
-        log(`${Color.text(specFileName).cyan().valueOf()}:`);
-    }
+  const reporterOptions = getReporterOptions(defineConfig.reporter);
+  const specFileNameColor = reporterOptions?.baseColors?.specFileNameColor
+    ? reporterOptions.baseColors.specFileNameColor
+    : undefined;
+  if (reporterOptions?.ignoreColors) {
+    log(`${specFileName}:`);
+  } else if (specFileNameColor !== undefined) {
+    log(`${Color.text(specFileName)[specFileNameColor]().valueOf()}:`);
+  } else {
+    log(`${Color.text(specFileName).cyan().valueOf()}:`);
+  }
 };
 
 /**
@@ -57,16 +57,17 @@ export const logSpecFileName = (specFileName: string) => {
  * @param suiteName
  */
 export const logSuiteDescription = (suiteName: string) => {
-    const reporterOptions = getReporterOptions(defineConfig.reporter);
-    const suiteDescriptionColor = reporterOptions?.baseColors?.suiteDescriptionColor ? reporterOptions.baseColors.suiteDescriptionColor : undefined;
-    if(reporterOptions?.ignoreColors) {
-        log(`  ${suiteName}`);
-    } else if (suiteDescriptionColor !== undefined) {
-        log(`  ${Color.text(suiteName)[suiteDescriptionColor]().valueOf()}`);
-    }
-    else {
-        log(`  ${Color.text(suiteName).cyan().underscore().valueOf()}`);
-    }
+  const reporterOptions = getReporterOptions(defineConfig.reporter);
+  const suiteDescriptionColor = reporterOptions?.baseColors?.suiteDescriptionColor
+    ? reporterOptions.baseColors.suiteDescriptionColor
+    : undefined;
+  if (reporterOptions?.ignoreColors) {
+    log(`  ${suiteName}`);
+  } else if (suiteDescriptionColor !== undefined) {
+    log(`  ${Color.text(suiteName)[suiteDescriptionColor]().valueOf()}`);
+  } else {
+    log(`  ${Color.text(suiteName).cyan().underscore().valueOf()}`);
+  }
 };
 
 /**
@@ -77,20 +78,20 @@ export const logSuiteDescription = (suiteName: string) => {
  * @param test
  */
 export const logTestCaseData = (count: number, test: TestCaseData) => {
-    const status = setIconAndColorPerTestStatus(test.status);
-    const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
-    const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
-    let title: string;
-    if (test.status === "failed") {
-        title = Color.text(test.title).red().valueOf();
-    } else if (test.status === "skipped") {
-        title = Color.text(test.title).yellow().valueOf();
-    } else {
-        title = Color.text(test.title).white().valueOf();
-    }
+  const status = setIconAndColorPerTestStatus(test.status);
+  const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
+  const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
+  let title: string;
+  if (test.status === "failed") {
+    title = Color.text(test.title).red().valueOf();
+  } else if (test.status === "skipped") {
+    title = Color.text(test.title).yellow().valueOf();
+  } else {
+    title = Color.text(test.title).white().valueOf();
+  }
 
-    const rowAndCol = `${Color.text(`[${test.line}:${test.column}]`).gray().valueOf()}`;
-    log(`   ${counter} ${status} ${title} ${rowAndCol}${duration}`);
+  const rowAndCol = `${Color.text(`[${test.line}:${test.column}]`).gray().valueOf()}`;
+  log(`   ${counter} ${status} ${title} ${rowAndCol}${duration}`);
 };
 
 /**
@@ -98,21 +99,21 @@ export const logTestCaseData = (count: number, test: TestCaseData) => {
  * @param allTests
  */
 export const logTestResults = (allTests: TestsPerSpecFile[]) => {
-    let testCounter = 0;
+  let testCounter = 0;
 
-    allTests.forEach((specFile) => {
-        logSpecFileName(specFile.getSpecName());
-        specFile.getSuiteTests().forEach((suite) => {
-            logSuiteDescription(suite.getSuiteDescription());
-            suite.getTests().forEach((test) => {
-                //TODO: filter getTests() here failed tests that were retried and failed again
-                testCounter++;
-                logTestCaseData(testCounter, test);
-            });
-        });
+  allTests.forEach((specFile) => {
+    logSpecFileName(specFile.getSpecName());
+    specFile.getSuiteTests().forEach((suite) => {
+      logSuiteDescription(suite.getSuiteDescription());
+      suite.getTests().forEach((test) => {
+        //TODO: filter getTests() here failed tests that were retried and failed again
+        testCounter++;
+        logTestCaseData(testCounter, test);
+      });
     });
+  });
 
-    log(lineBreak);
+  log(lineBreak);
 };
 
 /**
@@ -121,8 +122,8 @@ export const logTestResults = (allTests: TestsPerSpecFile[]) => {
  * @param retries
  */
 export const logFailedTestsOnlyOnceOnRetry = (failedTests: TestCaseError[], retries: number) => {
-    if(retries > 0) {
-        const filteredFailedTests = filterOutDuplicateFailedTests(failedTests);
-        logTestError(filteredFailedTests);
-    }
-}
+  if (retries > 0) {
+    const filteredFailedTests = filterOutDuplicateFailedTests(failedTests);
+    logTestError(filteredFailedTests);
+  }
+};

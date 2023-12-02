@@ -1,27 +1,22 @@
 import { TestCase, TestResult, Reporter, FullResult, Suite, FullConfig } from "@playwright/test/reporter";
 import { SuiteTestCases, TestCaseData, TestCaseError, TestsPerSpecFile } from "./TestsPerSpecFile";
-import {
-  getFileNameOrParentSuite,
-  howToReadTestResults,
-  logSummary,
-  StatusCounter,
-} from "./test-results";
+import { getFileNameOrParentSuite, howToReadTestResults, logSummary, StatusCounter } from "./test-results";
 import { filterOutDuplicateFailedTests, filterUniqueSpecsBySpecName } from "./filtering-tests";
 import color from "colors";
 import { TestStatus } from "@playwright/test";
 import { TestError } from "playwright/types/testReporter";
 import Color from "../color-text/Color";
-import {log, logFailedTestsOnlyOnceOnRetry, logTestResults} from "./loggin-results";
+import { log, logFailedTestsOnlyOnceOnRetry, logTestResults } from "./loggin-results";
 import { lineBreak } from "../color-text/styling-terminal";
 import { logTestError } from "./loggin-error-message";
 
 const defaultListTestsWithColors: IndentListReporterOptions = {
- ignoreColors: false,
- baseColors: {
-   specFileNameColor: "cyan",
-   suiteDescriptionColor: "cyan",
- },
-}
+  ignoreColors: false,
+  baseColors: {
+    specFileNameColor: "cyan",
+    suiteDescriptionColor: "cyan",
+  },
+};
 
 interface ListTestsWithColors {
   specFileNameColor: string;
@@ -44,9 +39,14 @@ class IndentListReporter implements Reporter {
   timedOut = 0;
   retries = 0;
   failedTests: TestCaseError[] = [];
+
+  /**
+   * Constructor to pass on custom options for the reporter
+   * @param options
+   */
   constructor(options: IndentListReporterOptions) {
-    if(!options) {
-      this.options = defaultListTestsWithColors
+    if (!options) {
+      this.options = defaultListTestsWithColors;
     } else {
       this.options = options;
     }
@@ -59,7 +59,7 @@ class IndentListReporter implements Reporter {
   onBegin(config: FullConfig, suite: Suite) {
     howToReadTestResults();
     log(`${Color.text("TEST RESULTS:").cyan().bgBlack().valueOf()}`);
-    const number = suite.allTests().length
+    const number = suite.allTests().length;
     const numberOfTests = color.white(number.toString());
     const numberOfWorkers = color.white(config.workers.valueOf().toString());
     const testInfo = `Running ${numberOfTests} tests using ${numberOfWorkers} workers\n`;
@@ -88,31 +88,30 @@ class IndentListReporter implements Reporter {
       const testCaseError: TestCaseError = {
         error: result.error,
         testData: testCase,
-      }
+      };
       this.failedTests.push(testCaseError);
     }
   }
 
- onError(error: TestError) {
-   try {
-     throw new Error(`ERROR: ${error.message}`);
-   }
-   catch(e) {
-     console.log(e);
-   }
- }
+  onError(error: TestError) {
+    try {
+      throw new Error(`ERROR: ${error.message}`);
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
- async onExit(): Promise<void> {
-   await Promise.resolve();
- }
+  async onExit(): Promise<void> {
+    await Promise.resolve();
+  }
 
- onStdErr(chunk: Buffer | string, test:void|TestCase, result: void|TestResult) {
-   log(chunk.toString());
- }
-
- onStdOut(chunk: Buffer | string, test:void|TestCase, result: void|TestResult) {
+  onStdErr(chunk: Buffer | string, test: void | TestCase, result: void | TestResult) {
     log(chunk.toString());
- }
+  }
+
+  onStdOut(chunk: Buffer | string, test: void | TestCase, result: void | TestResult) {
+    log(chunk.toString());
+  }
 
   onEnd(result: FullResult) {
     const myTests = filterUniqueSpecsBySpecName(this.allTests);
@@ -129,8 +128,8 @@ class IndentListReporter implements Reporter {
       logTestError(this.failedTests);
     }
     logSummary(result.duration, statusCounter);
-    log(lineBreak)
-    logFailedTestsOnlyOnceOnRetry(filterOutDuplicateFailedTests(this.failedTests), this.retries)
+    log(lineBreak);
+    logFailedTestsOnlyOnceOnRetry(filterOutDuplicateFailedTests(this.failedTests), this.retries);
   }
 
   increaseTestStatusCounter(test: TestStatus) {

@@ -10,17 +10,17 @@ export const filterUniqueSuitesByDescription = (inputSuites: SuiteTestCases[]) =
 
     inputSuites.forEach((currentSuite) => {
         const currentSuiteDescription = currentSuite.getSuiteDescription();
-        const testCases = currentSuite.getTests();
+        const testCases = currentSuite.getTestCases();
 
         const existingSuite = uniqueSuites.find(
             (uniqueSuite) => uniqueSuite.getSuiteDescription() === currentSuiteDescription
         );
 
         if (existingSuite) {
-            existingSuite.setTests(existingSuite.getTests().concat(testCases));
+            existingSuite.setTestCases(existingSuite.getTestCases().concat(testCases));
         } else {
             const newUniqueSuite: SuiteTestCases = new SuiteTestCases(currentSuiteDescription);
-            newUniqueSuite.setTests(testCases);
+            newUniqueSuite.setTestCases(testCases);
             uniqueSuites.push(newUniqueSuite);
         }
     });
@@ -65,18 +65,18 @@ export const filterUniqueSpecsBySpecName = (allTests: TestsPerSpecFile[]): Tests
 
         if (existingSpec) {
             // If currentSpecName is already in uniqueSpecs, merge the suiteTests
-            existingSpec.setTestCases(existingSpec.getSuiteTests().concat(suiteTests));
+            existingSpec.setSuiteTests(existingSpec.getSuiteTests().concat(suiteTests));
         } else {
             // If currentSpecName is not in uniqueSpecs, add it with its data
             const newUniqueSpec: TestsPerSpecFile = new TestsPerSpecFile(currentSpecName);
-            newUniqueSpec.setTestCases(suiteTests);
+            newUniqueSpec.setSuiteTests(suiteTests);
             uniqueSpecs.push(newUniqueSpec);
         }
     });
 
     uniqueSpecs.forEach((spec) => {
         const uniqueSuites = filterUniqueSuitesByDescription(spec.getSuiteTests());
-        spec.setTestCases(uniqueSuites);
+        spec.setSuiteTests(uniqueSuites);
     });
 
     return uniqueSpecs;

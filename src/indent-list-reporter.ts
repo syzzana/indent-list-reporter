@@ -1,7 +1,7 @@
 import {TestCase, TestResult, Reporter, FullResult, Suite, FullConfig} from "@playwright/test/reporter";
 import {SuiteTestCases, TestCaseData, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile";
 import {getFileNameOrParentSuite, howToReadTestResults, logSummary, StatusCounter} from "./general-tests-info";
-import {filterOutDuplicateFailedTestsOnRetry, filterUniqueSpecsBySpecName} from "./filtering-tests";
+import {filterUniqueSpecsBySpecName} from "./filtering-tests";
 import color from "colors";
 import {TestStatus} from "@playwright/test";
 import {TestError} from "playwright/types/testReporter";
@@ -118,6 +118,7 @@ class IndentListReporter implements Reporter {
 
     onEnd(result: FullResult) {
         const myTests = filterUniqueSpecsBySpecName(this.allTests);
+        //TODO filter out duplicate failed tests on retry here or maybe inside filterUniqueSpecsBySpecName
         logTestResults(myTests);
         const statusCounter: StatusCounter = {
             passed: this.passed,

@@ -34,11 +34,11 @@ export class SuiteTestCases {
         this.suiteDescription = suiteDescription;
     }
 
-    getTests() {
+    getTestCases() {
         return this.tests;
     }
 
-    setTests(tests: TestCaseData[]) {
+    setTestCases(tests: TestCaseData[]) {
         this.tests = tests;
     }
 
@@ -56,7 +56,7 @@ export class TestsPerSpecFile {
         this.suiteTests = [];
     }
 
-    setTestCases(testCases: SuiteTestCases[]) {
+    setSuiteTests(testCases: SuiteTestCases[]) {
         this.suiteTests = testCases;
     }
 

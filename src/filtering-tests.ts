@@ -55,7 +55,6 @@ export const filterOutDuplicateFailedTestsOnRetry = (failedTests: TestCaseError[
  * @param allTests
  */
 export const filterUniqueSpecsBySpecName = (allTests: TestsPerSpecFile[], areRetried: boolean): TestsPerSpecFile[] => {
-    //TODO maybe rename uniqueSpecs to uniqueSpecFiles or something
     const uniqueSpecFiles: TestsPerSpecFile[] = [];
 
     allTests.forEach((currentTest) => {
@@ -80,8 +79,9 @@ export const filterUniqueSpecsBySpecName = (allTests: TestsPerSpecFile[], areRet
         spec.setSuiteTests(uniqueSuites);
     });
 
+    //TODO analyse and test what this code block does in more detail, and document it
     if (areRetried) {
-        const uniqueSuites = uniqueSpecFiles.map((suite) => {
+        const specFilteredOutFailedTestCases = uniqueSpecFiles.map((suite) => {
             suite.getSuiteTests().map((suiteTestCases) => {
                 const testCasesError: TestCaseError[] = suiteTestCases.getTestCases().map((testCase) => {
                     const testCaseError: TestCaseError = {
@@ -98,7 +98,9 @@ export const filterUniqueSpecsBySpecName = (allTests: TestsPerSpecFile[], areRet
                 });
                 suiteTestCases.setTestCases(testCases);
             })
+            return suite;
         })
+      return specFilteredOutFailedTestCases;
     }
 
     return uniqueSpecFiles;

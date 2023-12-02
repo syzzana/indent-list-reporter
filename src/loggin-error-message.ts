@@ -1,8 +1,19 @@
+import {Location} from "playwright/types/testReporter";
 import Color from "../color-text/Color";
-import { lineBreak } from "../color-text/styling-terminal";
-import { TestCaseError } from "./TestsPerSpecFile";
-import { log } from "./loggin-results";
-import { styleFileLocation } from "./test-results";
+import {lineBreak} from "../color-text/styling-terminal";
+import {TestCaseError} from "./TestsPerSpecFile";
+import {log} from "./loggin-tests-data";
+
+/**
+ * Style the error file location
+ * @param errorLocation
+ */
+export const styleErrorFileLocation = (errorLocation: Location): any => {
+    const file = errorLocation.file;
+    const line = errorLocation.line;
+    const column = errorLocation.column;
+    return Color.text(`${file}:${line}:${column}`).blue().underscore().valueOf();
+};
 
 /**
  * Highlight the error indicator in the code snippet
@@ -21,7 +32,6 @@ export const highlightErrorIndicator = (codeSnippet: string): string => {
     return styledLines.join("\n");
 };
 
-
 /**
  * Log the test error message,
  * with a code snippet and a file location link
@@ -39,12 +49,12 @@ export const logTestError = (failedTests: TestCaseError[]) => {
         if (error.value !== undefined) {
             log(error.value);
         }
-        if(error.snippet !== undefined) {
+        if (error.snippet !== undefined) {
             const highlightedError = highlightErrorIndicator(error.snippet);
             log(highlightedError);
         }
-        const fileLocationStyle = styleFileLocation(error.location);
-        log(`\t${Color.text('at').gray().valueOf()} ${fileLocationStyle}`);
+        const fileLocationStyle = styleErrorFileLocation(error.location);
+        log(`\t${Color.text("at").gray().valueOf()} ${fileLocationStyle}`);
         log(lineBreak);
     });
 };

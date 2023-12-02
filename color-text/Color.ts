@@ -1,10 +1,10 @@
-export default  class Color {
+export default class Color {
     private colors: string[] = [];
-    private text: string
+    private text: string;
 
     /*
-    *  Foreground Colors
-    */
+     *  Foreground Colors
+     */
     private static Black = "\x1b[30m";
     private static Red = "\x1b[31m";
     private static Green = "\x1b[32m";
@@ -16,8 +16,8 @@ export default  class Color {
     private static Gray = "\x1b[90m";
 
     /*
-    *  Background Colors
-    */
+     *  Background Colors
+     */
     private static BgBlack = "\x1b[40m";
     private static BgRed = "\x1b[41m";
     private static BgGreen = "\x1b[42m";
@@ -28,8 +28,8 @@ export default  class Color {
     private static BgWhite = "\x1b[47m";
 
     /*
-    * Text Effects
-    */
+     * Text Effects
+     */
     private static Bright = "\x1b[1m";
     private static Dim = "\x1b[2m";
     private static Underscore = "\x1b[4m";
@@ -62,6 +62,7 @@ export default  class Color {
     public gray(): Color {
         return this.addColor(Color.Gray);
     }
+
     public yellow(): Color {
         return this.addColor(Color.Yellow);
     }
@@ -129,6 +130,7 @@ export default  class Color {
     public bold(): Color {
         return this.addColor(Color.Bold);
     }
+
     public blink(): Color {
         return this.addColor(Color.Blink);
     }
@@ -140,9 +142,10 @@ export default  class Color {
     public hidden(): Color {
         return this.addColor(Color.Hidden);
     }
+
     //TODO implement rgb custom colors
     public valueOf(): string {
-        const reset = '\x1b[0m';
+        const reset = "\x1b[0m";
         return this.colors.reduce((text, color) => `${color}${text}`, this.text) + reset;
     }
 }

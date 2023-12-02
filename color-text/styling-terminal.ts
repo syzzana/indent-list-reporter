@@ -1,4 +1,4 @@
-import { TestStatus } from "playwright/test";
+import {TestStatus} from "playwright/test";
 import Color from "./Color";
 
 /**
@@ -16,8 +16,8 @@ export const lineBreak: any = Color.text(line).magenta().valueOf();
  * TODO recheck and add explination
  */
 export const ansiRegex = new RegExp(
-  "([\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~])))",
-  "g"
+    "([\\u001B\\u009B][[\\]()#;?]*(?:(?:(?:[a-zA-Z\\d]*(?:;[-a-zA-Z\\d\\/#&.:=?%@~_]*)*)?\\u0007)|(?:(?:\\d{1,4}(?:;\\d{0,4})*)?[\\dA-PR-TZcf-ntqry=><~])))",
+    "g"
 );
 
 /**
@@ -25,7 +25,7 @@ export const ansiRegex = new RegExp(
  * @param str
  */
 export const removeAnsiChars = (str: string): string => {
-  return str.replace(ansiRegex, "");
+    return str.replace(ansiRegex, "");
 };
 
 /**
@@ -33,19 +33,19 @@ export const removeAnsiChars = (str: string): string => {
  * @param status
  */
 export const setIconAndColorPerTestStatus = (status: TestStatus) => {
-  if (status === "skipped") {
-    return `${Color.text(`!`).yellow().valueOf()}`;
-  }
-  if (status === "failed") {
-    return `${Color.text(`✘`).red().valueOf()}`;
-  }
-  if (status === "timedOut") {
-    return `⏰`;
-  }
-  if (status === "interrupted") {
-    return `${Color.text(`!?`).gray()}`;
-  }
-  if (status === "passed") {
-    return `${Color.text(`✓`).green().valueOf()}`;
-  }
+    if (status === "skipped") {
+        return `${Color.text(`!`).yellow().valueOf()}`;
+    }
+    if (status === "failed") {
+        return `${Color.text(`✘`).red().valueOf()}`;
+    }
+    if (status === "timedOut") {
+        return `⏰`;
+    }
+    if (status === "interrupted") {
+        return `${Color.text(`!?`).gray()}`;
+    }
+    if (status === "passed") {
+        return `${Color.text(`✓`).green().valueOf()}`;
+    }
 };

@@ -1,5 +1,4 @@
-import { SuiteTestCases, TestCaseError, TestsPerSpecFile } from "./TestsPerSpecFile";
-
+import {SuiteTestCases, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile";
 
 /**
  * Filter out duplicate suites
@@ -29,7 +28,6 @@ export const filterUniqueSuitesByDescription = (inputSuites: SuiteTestCases[]) =
     return uniqueSuites;
 };
 
-
 /**
  * Filter out duplicate test cases
  * We need to filter out duplicate test cases, because when a test is retried and fails again
@@ -40,17 +38,16 @@ export const filterOutDuplicateFailedTests = (failedTests: TestCaseError[]): Tes
     const removeDuplicateFailedTests: TestCaseError[] = [];
 
     failedTests.forEach((failedTest) => {
-        const existingTestsCase = removeDuplicateFailedTests
-            .find((myTest) => failedTest.testData.id === myTest.testData.id);
-        if(existingTestsCase === undefined) {
+        const existingTestsCase = removeDuplicateFailedTests.find(
+            (myTest) => failedTest.testData.id === myTest.testData.id
+        );
+        if (existingTestsCase === undefined) {
             removeDuplicateFailedTests.push(failedTest);
         }
     });
 
-    return  removeDuplicateFailedTests;
-
-}
-
+    return removeDuplicateFailedTests;
+};
 
 /**
  * Filter out duplicate specs
@@ -84,5 +81,3 @@ export const filterUniqueSpecsBySpecName = (allTests: TestsPerSpecFile[]): Tests
 
     return uniqueSpecs;
 };
-
-

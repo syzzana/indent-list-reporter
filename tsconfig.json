@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
-    "lib": ["ES2022"],
+    "lib": [
+      "ES2022"
+    ],
     "module": "ES2022",
     "moduleResolution": "node",
     "target": "ES2022",
@@ -9,6 +11,12 @@
     "rootDir": ".",
     "skipLibCheck": true
   },
-  "include": ["src/**/*.ts", "color-text/**/*"],
-  "exclude": ["node_modules", "dist/**/*"]
+  "include": [
+    "src/**/*.ts",
+    "color-text/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist/**/*"
+  ]
 }

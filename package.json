@@ -12,8 +12,6 @@
     "compile": "tsc",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "prettier": "prettier . --check",
-    "prettier:fix": "prettier . --write",
     "prepare": "npm run compile",
     "pretest": "npm run compile"
   },
@@ -33,7 +31,6 @@
     "eslint-config-prettier": "^9.0.0",
     "node-fetch": "^3.3.2",
     "playwright": "^1.40.0",
-    "prettier": "^3.0.3",
     "typescript": "^5.2.2"
   },
   "devDependencies": {

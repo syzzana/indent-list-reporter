@@ -31,10 +31,10 @@ export const filterUniqueSuitesByDescription = (inputSuites: SuiteTestCases[]) =
 /**
  * Filter out duplicate test cases
  * We need to filter out duplicate test cases, because when a test is retried and fails again
- * It is logged twice or more times depending on how many times it is retried
+ * It is logged twice or more times on the console, depending on how many times it is retried
  * @param failedTests
  */
-export const filterOutDuplicateFailedTests = (failedTests: TestCaseError[]): TestCaseError[] => {
+export const filterOutDuplicateFailedTestsOnRetry = (failedTests: TestCaseError[]): TestCaseError[] => {
     const removeDuplicateFailedTests: TestCaseError[] = [];
 
     failedTests.forEach((failedTest) => {

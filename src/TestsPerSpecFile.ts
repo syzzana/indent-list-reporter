@@ -8,11 +8,13 @@ export interface TestCaseData {
     line: number;
     column: number;
     duration: number;
+    retries?: number;
 }
 
 export type TestCaseError = {
     error: TestError;
     testData: TestCaseData;
+    titlePath?: string[];
 };
 
 export class SuiteTestCases {

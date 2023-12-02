@@ -3,7 +3,7 @@ import Color from "../color-text/Color";
 import {getReporterOptions} from "./reporter-configuration";
 import {TestCaseData, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile";
 import {lineBreak, setIconAndColorPerTestStatus} from "../color-text/styling-terminal";
-import {filterOutDuplicateFailedTests} from "./filtering-tests";
+import {filterOutDuplicateFailedTestsOnRetry} from "./filtering-tests";
 import {logTestError} from "./loggin-error-message";
 
 /**
@@ -83,7 +83,11 @@ export const logTestCaseData = (count: number, test: TestCaseData) => {
     const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
     let title: string;
     if (test.status === "failed") {
-        title = Color.text(test.title).red().valueOf();
+        if(test.retries) {
+            title = Color.text(test.title).red().valueOf() + Color.text(` (${test.retries} retries)`).magenta().valueOf();
+        } else {
+            title = Color.text(test.title).red().valueOf();
+        }
     } else if (test.status === "skipped") {
         title = Color.text(test.title).yellow().valueOf();
     } else {
@@ -123,7 +127,7 @@ export const logTestResults = (allTests: TestsPerSpecFile[]) => {
  */
 export const logFailedTestsOnlyOnceOnRetry = (failedTests: TestCaseError[], retries: number) => {
     if (retries > 0) {
-        const filteredFailedTests = filterOutDuplicateFailedTests(failedTests);
-        logTestError(filteredFailedTests);
+        const filteredFailedTests = filterOutDuplicateFailedTestsOnRetry(failedTests);
+        logTestError(filteredFailedTests, retries > 0);
     }
 };

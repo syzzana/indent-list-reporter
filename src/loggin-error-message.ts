@@ -3,6 +3,7 @@ import Color from "../color-text/Color";
 import {lineBreak} from "../color-text/styling-terminal";
 import {TestCaseError} from "./TestsPerSpecFile";
 import {log} from "./loggin-tests-data";
+import { filterOutDuplicateFailedTestsOnRetry } from "./filtering-tests";
 
 /**
  * Style the error file location
@@ -37,13 +38,17 @@ export const highlightErrorIndicator = (codeSnippet: string): string => {
  * with a code snippet and a file location link
  * @param codeSnippet
  */
-export const logTestError = (failedTests: TestCaseError[]) => {
+export const logTestError = (failedTests: TestCaseError[], isRetried: boolean) => {
     let counter = 0;
+
+    if(isRetried) {
+       failedTests = filterOutDuplicateFailedTestsOnRetry(failedTests);
+    }
+
     failedTests.forEach((failedTest) => {
         const error = failedTest.error;
-        //TODO fix me - issue on the log of the file location - it is not correct
-        const titlePath = failedTest.testData.title;
-        const title = `${titlePath[2]} > ${titlePath[3]} > ${titlePath[4]} ───────────────`;
+        const titlePath = failedTest.titlePath;
+        const title = `${titlePath[2]} > ${titlePath[3]} > ${titlePath[4]} ─────────────── ${failedTest.testData.retries} retries + 1`;
         log(Color.text(`${++counter}) ${title}`).red().valueOf());
         log(`${error.message}`);
         if (error.value !== undefined) {
@@ -57,4 +62,8 @@ export const logTestError = (failedTests: TestCaseError[]) => {
         log(`\t${Color.text("at").gray().valueOf()} ${fileLocationStyle}`);
         log(lineBreak);
     });
+
+    if(isRetried) {
+
+    }
 };

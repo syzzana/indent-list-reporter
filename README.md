@@ -17,3 +17,5 @@ and also by the indentation level, whether if the test is a suite or a test, and
 
 ## [Getting Started](docs/GettingStarted.md)
 
+//TODO: add the missing parts, and mentions that this is a fun project with a lot 
+// of room for imporvement and contributions are welcome.

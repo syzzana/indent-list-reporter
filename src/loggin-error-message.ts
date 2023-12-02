@@ -40,8 +40,7 @@ export const highlightErrorIndicator = (codeSnippet: string): string => {
  */
 export const logTestError = (failedTests: TestCaseError[], isRetried: boolean) => {
     let counter = 0;
-
-    if(isRetried) {
+    if(isRetried || process.env.CI) {
        failedTests = filterOutDuplicateFailedTestsOnRetry(failedTests);
     }
 
@@ -62,8 +61,4 @@ export const logTestError = (failedTests: TestCaseError[], isRetried: boolean) =
         log(`\t${Color.text("at").gray().valueOf()} ${fileLocationStyle}`);
         log(lineBreak);
     });
-
-    if(isRetried) {
-
-    }
 };

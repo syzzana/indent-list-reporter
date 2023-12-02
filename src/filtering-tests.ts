@@ -80,11 +80,11 @@ export const filterUniqueSpecsBySpecName = (allTests: TestsPerSpecFile[], areRet
         spec.setSuiteTests(uniqueSuites);
     });
 
-    if(areRetried) {
+    if (areRetried) {
         const uniqueSuites = uniqueSpecFiles.map((suite) => {
             suite.getSuiteTests().map((suiteTestCases) => {
-                const testCasesError : TestCaseError[] = suiteTestCases.getTestCases().map((testCase) => {
-                    const testCaseError : TestCaseError = {
+                const testCasesError: TestCaseError[] = suiteTestCases.getTestCases().map((testCase) => {
+                    const testCaseError: TestCaseError = {
                         error: testCase.error,
                         testData: testCase,
                         titlePath: testCase.titlePath
@@ -103,13 +103,3 @@ export const filterUniqueSpecsBySpecName = (allTests: TestsPerSpecFile[], areRet
 
     return uniqueSpecFiles;
 };
-
-//TODO do I need to get the retry value from configuration file in here somehow?
-// const filterOutDuplicateFailedTestCasesOnRetry = uniqueSpecs.forEach(spec => {
-//     spec.getSuiteTests().map((suite) => {
-//         const testCases = suite.getTestCases();
-//         const filteredTestCases = filterOutDuplicateFailedTestsOnRetry(testCases);
-//         suite.setTestCases(filteredTestCases);
-//         return suite;
-//     })
-// });

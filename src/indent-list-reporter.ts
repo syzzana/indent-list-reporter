@@ -3,17 +3,17 @@ import { SuiteTestCases, TestCaseData, TestCaseError, TestsPerSpecFile } from ".
 import {
   getFileNameOrParentSuite,
   howToReadTestResults,
-  log,
-  logTestError,
   logSummary,
-  logTestResults,
-  StatusCounter, lineBreak, logFilteredFailedTests,
+  StatusCounter,
 } from "./test-results";
 import { filterOutDuplicateFailedTests, filterUniqueSpecsBySpecName } from "./filtering-tests";
 import color from "colors";
 import { TestStatus } from "@playwright/test";
 import { TestError } from "playwright/types/testReporter";
 import Color from "../color-text/Color";
+import {log, logFailedTestsOnlyOnceOnRetry, logTestResults} from "./loggin-results";
+import { lineBreak } from "../color-text/styling-terminal";
+import { logTestError } from "./loggin-error-message";
 
 const defaultListTestsWithColors: IndentListReporterOptions = {
  ignoreColors: false,
@@ -130,7 +130,7 @@ class IndentListReporter implements Reporter {
     }
     logSummary(result.duration, statusCounter);
     log(lineBreak)
-    logFilteredFailedTests(filterOutDuplicateFailedTests(this.failedTests), this.retries)
+    logFailedTestsOnlyOnceOnRetry(filterOutDuplicateFailedTests(this.failedTests), this.retries)
   }
 
   increaseTestStatusCounter(test: TestStatus) {

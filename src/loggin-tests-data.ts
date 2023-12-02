@@ -84,7 +84,7 @@ export const logTestCaseData = (count: number, test: TestCaseData) => {
     let title: string;
     if (test.status === "failed") {
         if(test.retries) {
-            title = Color.text(test.title).red().valueOf() + Color.text(` (${test.retries} retries)`).magenta().valueOf();
+            title = Color.text(test.title).red().valueOf() + Color.text(` (${test.retries} retries + 1 (by default))`).magenta().valueOf();
         } else {
             title = Color.text(test.title).red().valueOf();
         }

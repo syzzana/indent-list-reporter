@@ -19,7 +19,7 @@
     "reporter"
   ],
   "author": "Syzana Bicaj",
-  "license": "Apache-2.0",
+  "license": "MIT",
   "dependencies": {
     "@playwright/test": "^1.39.0",
     "@types/node": "^20.6.1",

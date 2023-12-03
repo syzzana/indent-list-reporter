@@ -96,10 +96,6 @@ I am open to any suggestions on how to improve this project, your input is very 
 I am also open to any suggestions on how to improve the code, as I am still learning TypeScript and NodeJS.
 Also, open to any suggestion on best practices on open-source projects, documentation, etc.
 
-
-## CONTRIBUTING 
-If you want to contribute to this project, please read the [CONTRIBUTING.md]() file. #toBeAdded
-
 ## LICENSE
 This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 
@@ -107,11 +103,7 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 - [Playwright](https://playwright.dev/) for the awesome tool and documentation.
 
 ## CONTACT
-- [LinkedIn](todo add link here)
-- [Twitter](todo add link here
-- [GitHub](todo add link here)
-- [Email](mailto: add email here)
-- [Discord](todo add link here)
-- [Buy me a coffee](todo add link here)
-- [PayPal](todo add link here)
+- [LinkedIn](https://www.linkedin.com/in/syzanakajtazaj)
+- [GitHub](https://github.com/syzzana)
+- [Buy me a coffee](https://www.buymeacoffee.com/syzzana)
 

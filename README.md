@@ -29,7 +29,7 @@ Playwright [here](https://playwright.dev/docs/test-reporters/#custom-reporters).
     npm install indent-list-reporter --save-dev
     ```
 
-### Configuration
+### Usage
 #### With default options 
 The default options are:
 ```json
@@ -84,4 +84,34 @@ The background color is not yet configurable. For now the default background col
       //...
     });
 ```
+
+## ISSUES 
+If you find any issues, please report them [here](https://github.com/syzzana/indent-list-reporter/issues)
+Feel free to open any issues or feature requests, and I will try to address them as soon as possible. 
+
+## NOTE
+This is my first open-source project, and it might miss a lot of feature or have a lot of bugs(definitely).
+You can find [here](https://github.com/syzzana/indent-list-reporter/issues) the list of issues and features that I am currently working on. 
+I am open to any suggestions on how to improve this project, your input is very valuable to me.
+I am also open to any suggestions on how to improve the code, as I am still learning TypeScript and NodeJS.
+Also, open to any suggestion on best practices on open-source projects, documentation, etc.
+
+
+## CONTRIBUTING 
+If you want to contribute to this project, please read the [CONTRIBUTING.md]() file. #toBeAdded
+
+## LICENSE
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+
+## ACKNOWLEDGEMENTS
+- [Playwright](https://playwright.dev/) for the awesome tool and documentation.
+
+## CONTACT
+- [LinkedIn](todo add link here)
+- [Twitter](todo add link here
+- [GitHub](todo add link here)
+- [Email](mailto: add email here)
+- [Discord](todo add link here)
+- [Buy me a coffee](todo add link here)
+- [PayPal](todo add link here)
 

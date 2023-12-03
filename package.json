@@ -16,7 +16,7 @@
     "pretest": "npm run compile"
   },
   "keywords": [
-    "reporter", "playwright reporter", "custom reporter", "playwright custom reporter"
+    "reporter", "playwright reporter", "custom reporter", "playwright custom reporter",
     "playwright list reporter"
   ],
   "author": "Syzana Bicaj",

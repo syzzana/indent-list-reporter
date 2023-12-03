@@ -85,6 +85,9 @@ The background color is not yet configurable. For now the default background col
     });
 ```
 
+#### See how it looks
+![alt text](./docs/test-results-on-terminal-ci.png)
+
 ## ISSUES 
 If you find any issues, please report them [here](https://github.com/syzzana/indent-list-reporter/issues)
 Feel free to open any issues or feature requests, and I will try to address them as soon as possible. 

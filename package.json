@@ -16,9 +16,14 @@
     "pretest": "npm run compile"
   },
   "keywords": [
-    "reporter"
+    "reporter", "playwright reporter", "custom reporter", "playwright custom reporter"
+    "playwright list reporter"
   ],
   "author": "Syzana Bicaj",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/syzzana/indent-list-reporter.git"
+  },
   "license": "MIT",
   "dependencies": {
     "@playwright/test": "^1.39.0",

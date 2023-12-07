@@ -104,7 +104,7 @@ This project is licensed under the [MIT License](https://opensource.org/licenses
 
 ## ACKNOWLEDGEMENTS
 - [Playwright](https://playwright.dev/) for the awesome tool and documentation.
-
+- [Playwright Solutions](https://playwrightsolutions.com) for the awesome content and explination of examples. 
 ## CONTACT
 - [LinkedIn](https://www.linkedin.com/in/syzanakajtazaj)
 - [GitHub](https://github.com/syzzana)

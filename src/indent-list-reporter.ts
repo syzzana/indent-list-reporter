@@ -17,10 +17,11 @@ const defaultListTestsWithColors: IndentListReporterOptions = {
         suiteDescriptionColor: "cyan",
     },
 };
+export type ColorsAvailable = "black" | "red" | "green" | "yellow" | "blue" | "magenta" | "cyan" | "white" | "gray";
 
 interface ListTestsWithColors {
-    specFileNameColor: string;
-    suiteDescriptionColor: string;
+    specFileNameColor: ColorsAvailable;
+    suiteDescriptionColor: ColorsAvailable;
     isDimmed?: boolean;
 }
 

@@ -1,6 +1,6 @@
 export default class Color {
     private colors: string[] = [];
-    private text: string;
+    private readonly text: string;
 
     /*
      *  Foreground Colors

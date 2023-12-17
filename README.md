@@ -41,6 +41,11 @@ The default options are:
   }
 }
 ```
+The available colors are: 
+```typescript
+export type ColorsAvailable = "black" | "red" | "green" | "yellow" | "blue" | "magenta" | "cyan" | "white" | "gray";
+```
+
 Add 'indent-list-reporter' to your playwright.config.ts file in the reporter array, like in the example below:
 ```typescript
     import { 'indent-list-reporter' } from 'indent-list-reporter';

@@ -5,6 +5,7 @@ import {TestCaseData, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile"
 import {lineBreak, setIconAndColorPerTestStatus} from "../color-text/styling-terminal";
 import {filterOutDuplicateFailedTestsOnRetry} from "./filtering-tests";
 import {logTestError} from "./loggin-error-message";
+import {ColorsAvailable} from "./indent-list-reporter";
 
 /**
  * Log the results of the function
@@ -33,7 +34,7 @@ export const log = (...data: any[]) => {
  */
 export const logSpecFileName = (specFileName: string) => {
     const reporterOptions = getReporterOptions(defineConfig.reporter);
-    const specFileNameColor = reporterOptions?.baseColors?.specFileNameColor
+    const specFileNameColor: ColorsAvailable = reporterOptions?.baseColors?.specFileNameColor
         ? reporterOptions.baseColors.specFileNameColor
         : undefined;
     if (reporterOptions?.ignoreColors) {
@@ -64,7 +65,7 @@ export const logSuiteDescription = (suiteName: string) => {
     if (reporterOptions?.ignoreColors) {
         log(`  ${suiteName}`);
     } else if (suiteDescriptionColor !== undefined) {
-        log(`  ${Color.text(suiteName)[suiteDescriptionColor]().valueOf()}`);
+        log(`  ${Color.text(suiteName)[suiteDescriptionColor]().underscore().valueOf()}`);
     } else {
         log(`  ${Color.text(suiteName).cyan().underscore().valueOf()}`);
     }

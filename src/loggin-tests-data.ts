@@ -82,6 +82,10 @@ export const logTestCaseData = (count: number, test: TestCaseData) => {
     const status = setIconAndColorPerTestStatus(test.status);
     const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
     const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
+    const reporterOptions = getReporterOptions(defineConfig.reporter);
+    const testCaseTitleColor = reporterOptions?.baseColors?.testCaseTitleColor
+        ? reporterOptions.baseColors.testCaseTitleColor
+        : undefined;
     let title: string;
     if (test.status === "failed") {
         if(test.retries) {
@@ -92,7 +96,13 @@ export const logTestCaseData = (count: number, test: TestCaseData) => {
     } else if (test.status === "skipped") {
         title = Color.text(test.title).yellow().valueOf();
     } else {
-        title = Color.text(test.title).white().valueOf();
+        if (reporterOptions?.ignoreColors) {
+            title = test.title;
+        } else if (testCaseTitleColor !== undefined) {
+            title = Color.text(test.title)[testCaseTitleColor]().valueOf();
+        } else {
+            title = Color.text(test.title).white().valueOf();
+        }
     }
 
     const rowAndCol = `${Color.text(`[${test.line}:${test.column}]`).gray().valueOf()}`;

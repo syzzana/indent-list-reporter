@@ -12,6 +12,7 @@ export default defineConfig({
         baseColors: {
             specFileNameColor: "magenta",
             suiteDescriptionColor: "magenta",
+            testCaseTitleColor: "blue",
         },
     }], ['json', { outputFile: 'test-results.json' }]],
     use: {

@@ -10,13 +10,13 @@ test("verify reporter is indent-list-reporter locally", () => {
     expect(reporter).toStrictEqual([true, 0]);
 });
 
-test("verify we get repoter options for indent-list-reporter locally", () => {
+test("verify we get reporter options for indent-list-reporter locally", () => {
     const reporterOptions = getReporterOptions([
         ["./src/indent-list-reporter.ts", {baseColors: {specFileNameColor: "red"}}],
     ]);
     expect(reporterOptions).toStrictEqual({baseColors: {specFileNameColor: "red"}});
 });
-test("verify we get repoter options for indent-list-reporter", () => {
+test("verify we get reporter options for indent-list-reporter", () => {
     const reporterOptions = getReporterOptions([["indent-list-reporter", {baseColors: {specFileNameColor: "red"}}]]);
     expect(reporterOptions).toStrictEqual({baseColors: {specFileNameColor: "red"}});
 });
@@ -26,7 +26,7 @@ test("verify we get undefined reporter options, when we do not have any", () => 
     expect(reporterOptions).toBeUndefined();
 });
 
-test("verify we do not get repoter options for reporter who is not indent-list-reporter", () => {
+test("verify we do not get reporter options for reporter who is not indent-list-reporter", () => {
     const reporterOptions = getReporterOptions([["i-am-not-your-reporter", {randomObj: {attributes: "red"}}]]);
     expect(reporterOptions).toBeUndefined();
 });

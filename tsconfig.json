@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
+    "allowJs": true,
     "lib": [
       "ES2022"
     ],
@@ -17,6 +18,6 @@
   ],
   "exclude": [
     "node_modules",
-    "dist/**/*"
+    "playwright/playwright.config.ts",
   ]
 }

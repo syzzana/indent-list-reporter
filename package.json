@@ -6,7 +6,7 @@
   "type": "module",
   "homepage": "https://github.com/syzzana/indent-list-reporter/blob/main/README.md",
   "scripts": {
-    "test": "npx playwright test",
+    "test": "cd ./playwright && npx playwright test",
     "test:debug": "npx playwright test --debug",
     "jest": "jest",
     "compile": "tsc",

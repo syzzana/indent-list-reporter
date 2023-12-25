@@ -32,12 +32,13 @@ Playwright [here](https://playwright.dev/docs/test-reporters/#custom-reporters).
 ### Usage
 #### With default options 
 The default options are:
-```json
+```typescript
 {
-  "ignoreColors": false,
-  "baseColors": {
-    "specFileNameColor": "cyan",
-    "suiteDescriptionColor": "cyan"
+  ignoreColors: false, 
+  baseColors: {
+    specFileNameColor: "cyan",
+    suiteDescriptionColor: "cyan",
+    testCaseTitleColor: "white"
   }
 }
 ```
@@ -83,7 +84,8 @@ The background color is not yet configurable. For now the default background col
       reporter: [['indent-list-reporter'], {
         baseColors: {
           specFileNameColor: "red",
-          suiteDescriptionColor: "green"
+          suiteDescriptionColor: "green",
+          testCaseTitleColor: "blue"
         }
       }],
       //...

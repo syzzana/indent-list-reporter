@@ -2,7 +2,6 @@ import {TestCase, TestResult, Reporter, FullResult, Suite, FullConfig} from "@pl
 import {SuiteTestCases, TestCaseData, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile";
 import {getFileNameOrParentSuite, howToReadTestResults, logSummary, StatusCounter} from "./general-tests-info";
 import {filterUniqueSpecsBySpecName} from "./filtering-tests";
-import color from "colors";
 import {TestStatus} from "@playwright/test";
 import {TestError} from "playwright/types/testReporter";
 import Color from "../color-text/Color";
@@ -63,10 +62,10 @@ class IndentListReporter implements Reporter {
         howToReadTestResults();
         log(`${Color.text("TEST RESULTS:").cyan().bgBlack().valueOf()}`);
         const number = suite.allTests().length;
-        const numberOfTests = color.white(number.toString());
-        const numberOfWorkers = color.white(config.workers.valueOf().toString());
+        const numberOfTests = Color.text(number.toString()).white().valueOf();
+        const numberOfWorkers = Color.text(config.workers.valueOf().toString()).white().valueOf();
         const testInfo = `Running ${numberOfTests} tests using ${numberOfWorkers} workers\n`;
-        console.log(color.gray(testInfo));
+        console.log(Color.text(testInfo).gray().valueOf());
     }
 
 

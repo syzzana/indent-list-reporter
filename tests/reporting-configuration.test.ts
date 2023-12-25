@@ -21,7 +21,7 @@ test("verify we get repoter options for indent-list-reporter", () => {
     expect(reporterOptions).toStrictEqual({baseColors: {specFileNameColor: "red"}});
 });
 
-test("verify we get undefied reporter options, when we do not have any", () => {
+test("verify we get undefined reporter options, when we do not have any", () => {
     const reporterOptions = getReporterOptions([["indent-list-reporter"]]);
     expect(reporterOptions).toBeUndefined();
 });

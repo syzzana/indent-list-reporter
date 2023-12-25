@@ -18,6 +18,6 @@
   ],
   "exclude": [
     "node_modules",
-    "playwright/playwright.config.*",
+    "playwright/playwright.config.ts",
   ]
 }

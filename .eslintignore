@@ -6,6 +6,7 @@ dist/
 
 # IDE
 .idea
+README.md
 
 # System Files
 .DS_Store

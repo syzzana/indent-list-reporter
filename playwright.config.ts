@@ -7,12 +7,12 @@ export default defineConfig({
     forbidOnly: !!process.env.CI,
     retries: process.env.CI ? 0 : 3,
     workers: process.env.CI ? 1 : undefined,
-    reporter: [["../src/indent-list-reporter.ts", {
+    reporter: [["./src/indent-list-reporter.ts", {
         ignoreColors: false,
         baseColors: {
-            specFileNameColor: "magenta",
-            suiteDescriptionColor: "magenta",
-            testCaseTitleColor: "blue",
+            specFileNameColor: "blue",
+            suiteDescriptionColor: "blue",
+            testCaseTitleColor: "white",
         },
     }], ['json', { outputFile: 'test-results.json' }]],
     use: {

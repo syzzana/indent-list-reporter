@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logFailedTestsOnlyOnceOnRetry = exports.logTestResults = exports.logTestCaseData = exports.logSuiteDescription = exports.logSpecFileName = exports.log = void 0;
-const playwright_config_1 = __importDefault(require("../playwright/playwright.config"));
+const playwright_config_1 = __importDefault(require("../playwright.config"));
 const Color_1 = __importDefault(require("./color-text/Color"));
 const reporter_configuration_1 = require("./reporter-configuration");
 const styling_terminal_1 = require("./color-text/styling-terminal");

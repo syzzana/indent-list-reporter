@@ -1,4 +1,4 @@
-import defineConfig from "../playwright/playwright.config";
+import defineConfig from "../playwright.config";
 import Color from "./color-text/Color";
 import {getReporterOptions} from "./reporter-configuration";
 import {TestCaseData, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile";

@@ -1,8 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.getReporterOptions = exports.isIndentedListReporter = void 0;
 /**
  * Checks if the reporter is indent-list-reporter
  * @param configuredReporters
  */
-export const isIndentedListReporter = (configuredReporters) => {
+const isIndentedListReporter = (configuredReporters) => {
     let isIndentedListReporter = false;
     configuredReporters.forEach((reporter, index) => {
         // or ./src/.. is for local testing before publishing the plugin in npm
@@ -12,13 +15,15 @@ export const isIndentedListReporter = (configuredReporters) => {
     });
     return isIndentedListReporter;
 };
+exports.isIndentedListReporter = isIndentedListReporter;
 /**
  * Returns the reporter options
  * @param reporters
  */
-export const getReporterOptions = (reporters) => {
-    const reporterIndex = isIndentedListReporter(reporters);
-    if (isIndentedListReporter(reporters)) {
+const getReporterOptions = (reporters) => {
+    const reporterIndex = (0, exports.isIndentedListReporter)(reporters);
+    if ((0, exports.isIndentedListReporter)(reporters)) {
         return reporters[reporterIndex[1]][1];
     }
 };
+exports.getReporterOptions = getReporterOptions;

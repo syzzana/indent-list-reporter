@@ -1,9 +1,9 @@
 import { SuiteTestCases, TestsPerSpecFile } from "./TestsPerSpecFile";
 import { getFileNameOrParentSuite, howToReadTestResults, logSummary } from "./general-tests-info";
 import { filterUniqueSpecsBySpecName } from "./filtering-tests";
-import Color from "../color-text/Color";
+import Color from "./color-text/Color";
 import { log, logTestResults } from "./loggin-tests-data";
-import { lineBreak } from "../color-text/styling-terminal";
+import { lineBreak } from "./color-text/styling-terminal";
 import { logTestError } from "./loggin-error-message";
 const defaultListTestsWithColors = {
     ignoreColors: false,

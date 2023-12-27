@@ -1,5 +1,5 @@
-import Color from "../color-text/Color";
-import {lineBreak} from "../color-text/styling-terminal";
+import Color from "./color-text/Color";
+import {lineBreak} from "./color-text/styling-terminal";
 import {log} from "./loggin-tests-data";
 
 export interface StatusCounter {

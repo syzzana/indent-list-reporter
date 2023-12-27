@@ -1,10 +1,24 @@
-import { SuiteTestCases, TestsPerSpecFile } from "./TestsPerSpecFile";
-import { getFileNameOrParentSuite, howToReadTestResults, logSummary } from "./general-tests-info";
-import { filterUniqueSpecsBySpecName } from "./filtering-tests";
-import Color from "../color-text/Color";
-import { log, logTestResults } from "./loggin-tests-data";
-import { lineBreak } from "../color-text/styling-terminal";
-import { logTestError } from "./loggin-error-message";
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const TestsPerSpecFile_1 = require("./TestsPerSpecFile");
+const general_tests_info_1 = require("./general-tests-info");
+const filtering_tests_1 = require("./filtering-tests");
+const Color_1 = __importDefault(require("./color-text/Color"));
+const loggin_tests_data_1 = require("./loggin-tests-data");
+const styling_terminal_1 = require("./color-text/styling-terminal");
+const loggin_error_message_1 = require("./loggin-error-message");
 const defaultListTestsWithColors = {
     ignoreColors: false,
     baseColors: {
@@ -14,20 +28,19 @@ const defaultListTestsWithColors = {
     },
 };
 class IndentListReporter {
-    options;
-    allTests = [];
-    passed = 0;
-    failed = 0;
-    skipped = 0;
-    interrupted = 0;
-    timedOut = 0;
-    retries = 0;
-    failedTests = [];
     /**
      * Constructor to pass on custom options for the reporter
      * @param options
      */
     constructor(options) {
+        this.allTests = [];
+        this.passed = 0;
+        this.failed = 0;
+        this.skipped = 0;
+        this.interrupted = 0;
+        this.timedOut = 0;
+        this.retries = 0;
+        this.failedTests = [];
         if (!options) {
             this.options = defaultListTestsWithColors;
         }
@@ -39,17 +52,17 @@ class IndentListReporter {
         return true;
     }
     onBegin(config, suite) {
-        howToReadTestResults();
-        log(`${Color.text("TEST RESULTS:").cyan().bgBlack().valueOf()}`);
+        (0, general_tests_info_1.howToReadTestResults)();
+        (0, loggin_tests_data_1.log)(`${Color_1.default.text("TEST RESULTS:").cyan().bgBlack().valueOf()}`);
         const number = suite.allTests().length;
-        const numberOfTests = Color.text(number.toString()).white().valueOf();
-        const numberOfWorkers = Color.text(config.workers.valueOf().toString()).white().valueOf();
+        const numberOfTests = Color_1.default.text(number.toString()).white().valueOf();
+        const numberOfWorkers = Color_1.default.text(config.workers.valueOf().toString()).white().valueOf();
         const testInfo = `Running ${numberOfTests} tests using ${numberOfWorkers} workers\n`;
-        console.log(Color.text(testInfo).gray().valueOf());
+        console.log(Color_1.default.text(testInfo).gray().valueOf());
     }
     onTestEnd(test, result) {
-        const currentFileName = getFileNameOrParentSuite(test.titlePath(), false, true);
-        const currentParentSuite = getFileNameOrParentSuite(test.titlePath(), true, false);
+        const currentFileName = (0, general_tests_info_1.getFileNameOrParentSuite)(test.titlePath(), false, true);
+        const currentParentSuite = (0, general_tests_info_1.getFileNameOrParentSuite)(test.titlePath(), true, false);
         const testCase = {
             id: test.id,
             title: test.title,
@@ -60,8 +73,8 @@ class IndentListReporter {
             retries: test.retries
         };
         this.retries = result.retry;
-        const testsPerSpecFile = new TestsPerSpecFile(currentFileName);
-        const suiteTestCases = new SuiteTestCases(currentParentSuite);
+        const testsPerSpecFile = new TestsPerSpecFile_1.TestsPerSpecFile(currentFileName);
+        const suiteTestCases = new TestsPerSpecFile_1.SuiteTestCases(currentParentSuite);
         suiteTestCases.addTestCase(testCase);
         testsPerSpecFile.addTestCases(suiteTestCases);
         this.allTests.push(testsPerSpecFile);
@@ -83,19 +96,21 @@ class IndentListReporter {
             console.log(e);
         }
     }
-    async onExit() {
-        await Promise.resolve();
+    onExit() {
+        return __awaiter(this, void 0, void 0, function* () {
+            yield Promise.resolve();
+        });
     }
     onStdErr(chunk, test, result) {
-        log(chunk.toString());
+        (0, loggin_tests_data_1.log)(chunk.toString());
     }
     onStdOut(chunk, test, result) {
-        log(chunk.toString());
+        (0, loggin_tests_data_1.log)(chunk.toString());
     }
     onEnd(result) {
-        const myTests = filterUniqueSpecsBySpecName(this.allTests, this.retries > 0);
+        const myTests = (0, filtering_tests_1.filterUniqueSpecsBySpecName)(this.allTests, this.retries > 0);
         //TODO filter out duplicate failed tests on retry here or maybe inside filterUniqueSpecsBySpecName
-        logTestResults(myTests);
+        (0, loggin_tests_data_1.logTestResults)(myTests);
         const statusCounter = {
             passed: this.passed,
             failed: this.failed,
@@ -104,11 +119,11 @@ class IndentListReporter {
             timedOut: this.timedOut,
         };
         if (this.failedTests.length > 0) {
-            log(Color.text("FAILED TESTS:").red().bgBlack().valueOf());
-            logTestError(this.failedTests, this.retries > 0);
+            (0, loggin_tests_data_1.log)(Color_1.default.text("FAILED TESTS:").red().bgBlack().valueOf());
+            (0, loggin_error_message_1.logTestError)(this.failedTests, this.retries > 0);
         }
-        logSummary(result.duration, statusCounter);
-        log(lineBreak);
+        (0, general_tests_info_1.logSummary)(result.duration, statusCounter);
+        (0, loggin_tests_data_1.log)(styling_terminal_1.lineBreak);
     }
     //TODO: fix the counter for failed on retries
     increaseTestStatusCounter(test) {
@@ -129,4 +144,4 @@ class IndentListReporter {
         }
     }
 }
-export default IndentListReporter;
+exports.default = IndentListReporter;

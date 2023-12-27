@@ -1,8 +1,8 @@
 import defineConfig from "../playwright/playwright.config";
-import Color from "../color-text/Color";
+import Color from "./color-text/Color";
 import {getReporterOptions} from "./reporter-configuration";
 import {TestCaseData, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile";
-import {lineBreak, setIconAndColorPerTestStatus} from "../color-text/styling-terminal";
+import {lineBreak, setIconAndColorPerTestStatus} from "./color-text/styling-terminal";
 import {filterOutDuplicateFailedTestsOnRetry} from "./filtering-tests";
 import {logTestError} from "./loggin-error-message";
 import {ColorsAvailable} from "./indent-list-reporter";

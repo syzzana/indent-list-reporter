@@ -4,9 +4,9 @@ import {getFileNameOrParentSuite, howToReadTestResults, logSummary, StatusCounte
 import {filterUniqueSpecsBySpecName} from "./filtering-tests";
 import {TestStatus} from "@playwright/test";
 import {TestError} from "playwright/types/testReporter";
-import Color from "../color-text/Color";
+import Color from "./color-text/Color";
 import {log, logTestResults} from "./loggin-tests-data";
-import {lineBreak} from "../color-text/styling-terminal";
+import {lineBreak} from "./color-text/styling-terminal";
 import {logTestError} from "./loggin-error-message";
 
 const defaultListTestsWithColors: IndentListReporterOptions = {

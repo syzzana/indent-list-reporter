@@ -1,6 +1,7 @@
-export class SuiteTestCases {
-    suiteDescription;
-    tests;
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.TestsPerSpecFile = exports.SuiteTestCases = void 0;
+class SuiteTestCases {
     constructor(suiteDescription) {
         this.suiteDescription = suiteDescription;
         this.tests = [];
@@ -21,9 +22,8 @@ export class SuiteTestCases {
         this.tests.push(test);
     }
 }
-export class TestsPerSpecFile {
-    specName;
-    suiteTests;
+exports.SuiteTestCases = SuiteTestCases;
+class TestsPerSpecFile {
     constructor(specName) {
         this.specName = specName;
         this.suiteTests = [];
@@ -44,3 +44,4 @@ export class TestsPerSpecFile {
         this.suiteTests.push(testCase);
     }
 }
+exports.TestsPerSpecFile = TestsPerSpecFile;

@@ -2,20 +2,17 @@
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
-    "lib": [
-      "ES2022"
-    ],
-    "module": "ES2022",
     "moduleResolution": "node",
-    "target": "ES2022",
+    "target": "es2015",
+    "module": "commonjs",
     "outDir": "dist",
     "rootDir": ".",
-    "skipLibCheck": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
   },
-  "include": [
-    "src/**/*.ts",
-    "color-text/**/*"
-  ],
+  "include": ["src/**/*.ts"],
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "display": "Recommended with some changes",
   "exclude": [
     "node_modules",
     "playwright/playwright.config.ts",

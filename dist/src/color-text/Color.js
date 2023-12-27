@@ -1,40 +1,8 @@
-export default class Color {
-    colors = [];
-    text;
-    /*
-     *  Foreground Colors
-     */
-    static Black = "\x1b[30m";
-    static Red = "\x1b[31m";
-    static Green = "\x1b[32m";
-    static Yellow = "\x1b[33m";
-    static Blue = "\x1b[34m";
-    static Magenta = "\x1b[35m";
-    static Cyan = "\x1b[36m";
-    static White = "\x1b[37m";
-    static Gray = "\x1b[90m";
-    /*
-     *  Background Colors
-     */
-    static BgBlack = "\x1b[40m";
-    static BgRed = "\x1b[41m";
-    static BgGreen = "\x1b[42m";
-    static BgYellow = "\x1b[43m";
-    static BgBlue = "\x1b[44m";
-    static BgMagenta = "\x1b[45m";
-    static BgCyan = "\x1b[46m";
-    static BgWhite = "\x1b[47m";
-    /*
-     * Text Effects
-     */
-    static Bright = "\x1b[1m";
-    static Dim = "\x1b[2m";
-    static Underscore = "\x1b[4m";
-    static Blink = "\x1b[5m";
-    static Reverse = "\x1b[7m";
-    static Hidden = "\x1b[8m";
-    static Bold = "\x1b[1m";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class Color {
     constructor(text) {
+        this.colors = [];
         this.text = text;
     }
     addColor(color) {
@@ -119,3 +87,37 @@ export default class Color {
         return this.colors.reduce((text, color) => `${color}${text}`, this.text) + reset;
     }
 }
+/*
+ *  Foreground Colors
+ */
+Color.Black = "\x1b[30m";
+Color.Red = "\x1b[31m";
+Color.Green = "\x1b[32m";
+Color.Yellow = "\x1b[33m";
+Color.Blue = "\x1b[34m";
+Color.Magenta = "\x1b[35m";
+Color.Cyan = "\x1b[36m";
+Color.White = "\x1b[37m";
+Color.Gray = "\x1b[90m";
+/*
+ *  Background Colors
+ */
+Color.BgBlack = "\x1b[40m";
+Color.BgRed = "\x1b[41m";
+Color.BgGreen = "\x1b[42m";
+Color.BgYellow = "\x1b[43m";
+Color.BgBlue = "\x1b[44m";
+Color.BgMagenta = "\x1b[45m";
+Color.BgCyan = "\x1b[46m";
+Color.BgWhite = "\x1b[47m";
+/*
+ * Text Effects
+ */
+Color.Bright = "\x1b[1m";
+Color.Dim = "\x1b[2m";
+Color.Underscore = "\x1b[4m";
+Color.Blink = "\x1b[5m";
+Color.Reverse = "\x1b[7m";
+Color.Hidden = "\x1b[8m";
+Color.Bold = "\x1b[1m";
+exports.default = Color;

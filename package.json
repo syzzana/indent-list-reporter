@@ -1,6 +1,6 @@
 {
   "name": "indent-list-reporter",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Playwright list reporter for terminal with colors and indentation'",
   "main": "./dist/src/indent-list-reporter.js",
   "type": "commonjs",

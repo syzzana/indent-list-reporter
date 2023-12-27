@@ -15,6 +15,6 @@
   "display": "Recommended with some changes",
   "exclude": [
     "node_modules",
-    "playwright/playwright.config.ts",
+    "playwright.config.ts",
   ]
 }

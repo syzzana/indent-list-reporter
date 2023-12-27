@@ -2,6 +2,12 @@
 
 Playwright list reporter with colorful terminal output and indentation
 
+## IMPORTANT: 
+  This is a work in progress, the color options are not yet configurable after you download the package. 
+  I am working on making the colors configurable after you download the package. 
+  The options are being read for now from my playwright.config.ts file inside the project. 
+  WIP will be done soon. 
+  Thank you for your patience.
 #### Purpose:
 
 - I wanted to have a reporter that displays the tests in a hierarchical format with indentation and colorful terminal

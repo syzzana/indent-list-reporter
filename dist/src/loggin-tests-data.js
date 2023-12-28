@@ -4,12 +4,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.logFailedTestsOnlyOnceOnRetry = exports.logTestResults = exports.logTestCaseData = exports.logSuiteDescription = exports.logSpecFileName = exports.log = void 0;
-const playwright_config_1 = __importDefault(require("../playwright.config"));
 const Color_1 = __importDefault(require("./color-text/Color"));
 const reporter_configuration_1 = require("./reporter-configuration");
 const styling_terminal_1 = require("./color-text/styling-terminal");
 const filtering_tests_1 = require("./filtering-tests");
 const loggin_error_message_1 = require("./loggin-error-message");
+const path_1 = __importDefault(require("path"));
+//TODO continue to add tyoe for myreporteroptions too 
+const doesModuleExist = (moduleName) => {
+    try {
+        require.resolve((process.cwd(), moduleName));
+        return true;
+    }
+    catch (e) {
+        return false;
+    }
+};
+const isPlaywrightConfigJSOrTS = doesModuleExist("playwright.config.ts") ? "playwright.config.ts" : "playwright.config.js";
+/**
+ * Get the config from playwright.config.ts
+ */
+const regExp = new RegExp(/^playwright\.config\.(ts|js)$/);
+const defineConfig = require(path_1.default.resolve((process.cwd(), isPlaywrightConfigJSOrTS)));
 /**
  * Log the results of the function
  * Resuses the console.log function
@@ -37,10 +53,14 @@ exports.log = log;
  */
 const logSpecFileName = (specFileName) => {
     var _a;
-    const reporterOptions = (0, reporter_configuration_1.getReporterOptions)(playwright_config_1.default.reporter);
+    // @ts-ignore
+    const reporterOptions = (0, reporter_configuration_1.getReporterOptions)(defineConfig.reporter);
+    // @ts-ignore
     const specFileNameColor = ((_a = reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.baseColors) === null || _a === void 0 ? void 0 : _a.specFileNameColor)
+        // @ts-ignore
         ? reporterOptions.baseColors.specFileNameColor
         : undefined;
+    // @ts-ignore
     if (reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.ignoreColors) {
         (0, exports.log)(`${specFileName}:`);
     }
@@ -65,7 +85,8 @@ exports.logSpecFileName = logSpecFileName;
  */
 const logSuiteDescription = (suiteName) => {
     var _a;
-    const reporterOptions = (0, reporter_configuration_1.getReporterOptions)(playwright_config_1.default.reporter);
+    // @ts-ignore
+    const reporterOptions = (0, reporter_configuration_1.getReporterOptions)(defineConfig.reporter);
     const suiteDescriptionColor = ((_a = reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.baseColors) === null || _a === void 0 ? void 0 : _a.suiteDescriptionColor)
         ? reporterOptions.baseColors.suiteDescriptionColor
         : undefined;
@@ -92,7 +113,8 @@ const logTestCaseData = (count, test) => {
     const status = (0, styling_terminal_1.setIconAndColorPerTestStatus)(test.status);
     const duration = Color_1.default.text(`(${test.duration}ms)`).gray().dim().valueOf();
     const counter = `${Color_1.default.text(`${count}.`).gray().valueOf()}`;
-    const reporterOptions = (0, reporter_configuration_1.getReporterOptions)(playwright_config_1.default.reporter);
+    // @ts-ignore
+    const reporterOptions = (0, reporter_configuration_1.getReporterOptions)(defineConfig.reporter);
     const testCaseTitleColor = ((_a = reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.baseColors) === null || _a === void 0 ? void 0 : _a.testCaseTitleColor)
         ? reporterOptions.baseColors.testCaseTitleColor
         : undefined;

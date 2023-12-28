@@ -14,7 +14,6 @@
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Recommended with some changes",
   "exclude": [
-    "node_modules",
-    "playwright.config.ts",
+    "node_modules"
   ]
 }

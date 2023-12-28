@@ -1,5 +1,4 @@
 import {defineConfig} from "@playwright/test";
-
 export default defineConfig({
     testDir: "playwright-tests",
     testMatch: "playwright-tests/**/*",
@@ -11,10 +10,10 @@ export default defineConfig({
         ignoreColors: false,
         baseColors: {
             specFileNameColor: "blue",
-            suiteDescriptionColor: "blue",
+            suiteDescriptionColor: "magenta",
             testCaseTitleColor: "white",
         },
-    }], ['json', { outputFile: 'test-results.json' }]],
+    }]],
     use: {
         ignoreHTTPSErrors: true,
         trace: "off",

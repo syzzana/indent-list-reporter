@@ -7,7 +7,7 @@ exports.getReporterOptions = exports.isIndentedListReporter = void 0;
  */
 const isIndentedListReporter = (configuredReporters) => {
     let isIndentedListReporter = false;
-    configuredReporters.forEach((reporter, index) => {
+    configuredReporters === null || configuredReporters === void 0 ? void 0 : configuredReporters.forEach((reporter, index) => {
         // or ./src/.. is for local testing before publishing the plugin in npm
         if (reporter[0] === "indent-list-reporter" || reporter[0] === "./src/indent-list-reporter.ts") {
             isIndentedListReporter = [true, index];

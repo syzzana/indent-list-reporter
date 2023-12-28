@@ -1,4 +1,4 @@
-import defineConfig from "../playwright.config"; //TODO: read from clients root directory
+import {PlaywrightTestConfig} from "@playwright/test";
 import Color from "./color-text/Color";
 import {getReporterOptions} from "./reporter-configuration";
 import {TestCaseData, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile";
@@ -6,6 +6,23 @@ import {lineBreak, setIconAndColorPerTestStatus} from "./color-text/styling-term
 import {filterOutDuplicateFailedTestsOnRetry} from "./filtering-tests";
 import {logTestError} from "./loggin-error-message";
 import {ColorsAvailable} from "./indent-list-reporter";
+
+export const doesModuleExist = (moduleName: string) => {
+    try {
+        require.resolve((`${process.cwd()}/${moduleName}`));
+        return true;
+    } catch (e) {
+        return false;
+    }
+}
+
+const isPlaywrightConfigJSOrTS = doesModuleExist("playwright.config.ts") ? "playwright.config.ts" : "playwright.config.js";
+
+/**
+ * Get the config from playwright.config.ts
+ */
+const userPlaywrightConfigFile = `${process.cwd()}/${isPlaywrightConfigJSOrTS}`;
+const defineConfig: PlaywrightTestConfig =require(userPlaywrightConfigFile);
 
 /**
  * Log the results of the function
@@ -33,11 +50,15 @@ export const log = (...data: any[]) => {
  * @param specFileName
  */
 export const logSpecFileName = (specFileName: string) => {
-    const reporterOptions = getReporterOptions(defineConfig.reporter);
-    const specFileNameColor: ColorsAvailable = reporterOptions?.baseColors?.specFileNameColor
-        ? reporterOptions.baseColors.specFileNameColor
-        : undefined;
-    if (reporterOptions?.ignoreColors) {
+    // @ts-ignore
+    const reporterOptions = getReporterOptions(defineConfig.default.reporter);
+    let specFileNameColor: ColorsAvailable;
+    if (reporterOptions !== undefined) {
+        specFileNameColor = reporterOptions?.baseColors?.specFileNameColor
+            ? reporterOptions.baseColors.specFileNameColor
+            : undefined;
+    }
+    if (reporterOptions?.ignoreColors === true) {
         log(`${specFileName}:`);
     } else if (specFileNameColor !== undefined) {
         log(`${Color.text(specFileName)[specFileNameColor]().valueOf()}:`);
@@ -58,10 +79,14 @@ export const logSpecFileName = (specFileName: string) => {
  * @param suiteName
  */
 export const logSuiteDescription = (suiteName: string) => {
-    const reporterOptions = getReporterOptions(defineConfig.reporter);
-    const suiteDescriptionColor = reporterOptions?.baseColors?.suiteDescriptionColor
-        ? reporterOptions.baseColors.suiteDescriptionColor
-        : undefined;
+    // @ts-ignore
+    const reporterOptions = getReporterOptions(defineConfig.default.reporter);
+    let suiteDescriptionColor: ColorsAvailable;
+    if (reporterOptions !== undefined) {
+        suiteDescriptionColor = reporterOptions?.baseColors?.suiteDescriptionColor
+            ? reporterOptions.baseColors.suiteDescriptionColor
+            : undefined;
+    }
     if (reporterOptions?.ignoreColors) {
         log(`  ${suiteName}`);
     } else if (suiteDescriptionColor !== undefined) {
@@ -82,13 +107,17 @@ export const logTestCaseData = (count: number, test: TestCaseData) => {
     const status = setIconAndColorPerTestStatus(test.status);
     const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
     const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
-    const reporterOptions = getReporterOptions(defineConfig.reporter);
-    const testCaseTitleColor = reporterOptions?.baseColors?.testCaseTitleColor
-        ? reporterOptions.baseColors.testCaseTitleColor
-        : undefined;
+    // @ts-ignore
+    const reporterOptions = getReporterOptions(defineConfig.default.reporter);
+    let testCaseTitleColor: ColorsAvailable;
+    if (reporterOptions !== undefined) {
+        testCaseTitleColor = reporterOptions?.baseColors?.testCaseTitleColor
+            ? reporterOptions.baseColors.testCaseTitleColor
+            : undefined;
+    }
     let title: string;
     if (test.status === "failed") {
-        if(test.retries) {
+        if (test.retries) {
             title = Color.text(test.title).red().valueOf() + Color.text(` (${test.retries} retries + 1 (by default))`).magenta().valueOf();
         } else {
             title = Color.text(test.title).red().valueOf();

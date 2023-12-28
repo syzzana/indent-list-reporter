@@ -10,7 +10,7 @@ export default defineConfig({
         ignoreColors: false,
         baseColors: {
             specFileNameColor: "blue",
-            suiteDescriptionColor: "blue",
+            suiteDescriptionColor: "magenta",
             testCaseTitleColor: "white",
         },
     }]],

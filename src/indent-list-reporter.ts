@@ -26,7 +26,7 @@ interface ListTestsWithColors {
     isDimmed?: boolean;
 }
 
-export type MyReporterOptions = ['indent-list-reporter'] | ['indent-list-reporter', IndentListReporterOptions];
+export type MyReporterOptions = ['indent-list-reporter' | './src/indent-list-reporter.ts'] | ['indent-list-reporter' | './src/indent-list-reporter.ts', IndentListReporterOptions];
 interface IndentListReporterOptions {
     ignoreColors: boolean;
     baseColors: ListTestsWithColors;

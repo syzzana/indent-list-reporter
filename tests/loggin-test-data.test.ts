@@ -11,7 +11,7 @@ test("check module does not exist", () => {
 });
 
 test("check we can import config data from playwright.config.ts", async () => {
-    const userPlaywrightConfigFile = require((`${process.cwd()}/playwright.config.ts`));  
+    const userPlaywrightConfigFile = await import(`${process.cwd()}/playwright.config.ts`);  
     expect(userPlaywrightConfigFile).toBeDefined();
     expect(userPlaywrightConfigFile.default.reporter[0][1]).toBeDefined();
     expect(userPlaywrightConfigFile.default.reporter[0][1].baseColors.specFileNameColor).toBe("blue");

@@ -22,7 +22,7 @@ const isPlaywrightConfigJSOrTS = doesModuleExist("playwright.config.ts") ? "play
  * Get the config from playwright.config.ts
  */
 const userPlaywrightConfigFile = `${process.cwd()}/${isPlaywrightConfigJSOrTS}`;
-const defineConfig: PlaywrightTestConfig =require(userPlaywrightConfigFile);
+const defineConfig: PlaywrightTestConfig = await import(userPlaywrightConfigFile)
 
 /**
  * Log the results of the function

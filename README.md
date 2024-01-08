@@ -32,9 +32,9 @@ Playwright [here](https://playwright.dev/docs/test-reporters/#custom-reporters).
 ## Getting Started
 ### Installation
     
-    ```
-    npm install indent-list-reporter --save-dev
-    ```
+```bash
+npm install indent-list-reporter --save-dev
+```
 
 ### Usage
 #### With default options 
@@ -54,9 +54,8 @@ The available colors are:
 export type ColorsAvailable = "black" | "red" | "green" | "yellow" | "blue" | "magenta" | "cyan" | "white" | "gray";
 ```
 
-Add 'indent-list-reporter' to your playwright.config.ts file in the reporter array, like in the example below:
+Add the customer reporter to your playwright.config.ts file in the reporter array, like in the example below:
 ```typescript
-    import { 'indent-list-reporter' } from 'indent-list-reporter';
     export default defaultConfig({
       //...
       reporter: [['indent-list-reporter']],
@@ -69,7 +68,6 @@ Example #1:
 If you want to ignore all colors, you can pass the `ignoreColors: true` option to the reporter.
 This will show the tests with white foreground color. 
 ```typescript
-    import { 'indent-list-reporter' } from 'indent-list-reporter';
     export default defaultConfig({
       //...
       reporter: [['indent-list-reporter'], {
@@ -85,16 +83,20 @@ This will change the colors of the reporter to the ones you specify.
 The background color is not yet configurable. For now the default background color of your terminal will be used.
 
 ```typescript
-    import { 'indent-list-reporter' } from 'indent-list-reporter';
     export default defaultConfig({
       //...
-      reporter: [['indent-list-reporter'], {
-        baseColors: {
-          specFileNameColor: "red",
-          suiteDescriptionColor: "green",
-          testCaseTitleColor: "blue"
-        }
-      }],
+      reporter: [[
+          "indent-list-reporter",
+          {
+            ignoreColors: false,
+            baseColors: {
+              specFileNameColor: "cyan",
+              suiteDescriptionColor: "cyan",
+              testCaseTitleColor: "white",
+            },
+          },
+        ],
+      ],
       //...
     });
 ```

@@ -16,7 +16,10 @@
     "pretest": "npm run compile"
   },
   "keywords": [
-    "reporter", "playwright reporter", "custom reporter", "playwright custom reporter",
+    "reporter",
+    "playwright reporter",
+    "custom reporter",
+    "playwright custom reporter",
     "playwright list reporter"
   ],
   "author": "Syzana Bicaj",
@@ -37,7 +40,7 @@
     "typescript": "^5.2.2"
   },
   "devDependencies": {
-    "@types/jest": "^29.5.10",
+    "@types/jest": "^27.0.2",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.1"
   }

@@ -3,7 +3,7 @@
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "moduleResolution": "node",
-    "target": "ES2017",
+    "target": "ES2022",
     "module": "ESNext",
     "outDir": "dist",
     "rootDir": ".",

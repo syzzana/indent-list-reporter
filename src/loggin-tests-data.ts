@@ -19,7 +19,7 @@ export const doesModuleExist = (moduleName: string) => {
 const isPlaywrightConfigJSOrTS = doesModuleExist("playwright.config.ts") ? "playwright.config.ts" : "playwright.config.js";
 
 /**
- * Get the config from playwright.config.ts
+ * Get the config from playwright.config.ts   
  */
 const userPlaywrightConfigFile = `${process.cwd()}/${isPlaywrightConfigJSOrTS}`;
 const defineConfig: PlaywrightTestConfig = await import(userPlaywrightConfigFile)
@@ -49,7 +49,7 @@ export const log = (...data: any[]) => {
  * `
  * @param specFileName
  */
-export const logSpecFileName = (specFileName: string) => {
+export const logSpecFileName = async (specFileName: string) => {
     // @ts-ignore
     const reporterOptions = getReporterOptions(defineConfig.default.reporter);
     let specFileNameColor: ColorsAvailable;

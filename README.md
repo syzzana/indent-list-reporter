@@ -3,8 +3,8 @@
 Playwright list reporter with colorful terminal output and indentation
 
 #### IMPORTANT NOTE: 
-Version 1.0.7 is with commonjs module system.  
-Version 1.0.8 is with esm module system. 
+Version 1.0.8 is with commonjs module system.  
+Next Version will be with esm module system. 
 
 #### Purpose:
 

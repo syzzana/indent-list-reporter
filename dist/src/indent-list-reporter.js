@@ -14,20 +14,19 @@ const defaultListTestsWithColors = {
     },
 };
 class IndentListReporter {
-    options;
-    allTests = [];
-    passed = 0;
-    failed = 0;
-    skipped = 0;
-    interrupted = 0;
-    timedOut = 0;
-    retries = 0;
-    failedTests = [];
     /**
      * Constructor to pass on custom options for the reporter
      * @param options
      */
     constructor(options) {
+        this.allTests = [];
+        this.passed = 0;
+        this.failed = 0;
+        this.skipped = 0;
+        this.interrupted = 0;
+        this.timedOut = 0;
+        this.retries = 0;
+        this.failedTests = [];
         if (!options) {
             this.options = defaultListTestsWithColors;
         }

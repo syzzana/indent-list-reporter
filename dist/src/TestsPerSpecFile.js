@@ -1,6 +1,4 @@
 export class SuiteTestCases {
-    suiteDescription;
-    tests;
     constructor(suiteDescription) {
         this.suiteDescription = suiteDescription;
         this.tests = [];
@@ -22,8 +20,6 @@ export class SuiteTestCases {
     }
 }
 export class TestsPerSpecFile {
-    specName;
-    suiteTests;
     constructor(specName) {
         this.specName = specName;
         this.suiteTests = [];

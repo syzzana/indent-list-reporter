@@ -2,9 +2,10 @@
 
 Playwright list reporter with colorful terminal output and indentation
 
-## IMPORTANT: 
+#### IMPORTANT NOTE: 
   Version 1.0.8 is with commonjs module system.
-  Next version I am trying to use esm module system.
+  Version 1.0.9 with es2017 module, and jest unit tests were migrated to vitest
+
 #### Purpose:
 
 - I wanted to have a reporter that displays the tests in a hierarchical format with indentation and colorful terminal

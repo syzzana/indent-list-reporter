@@ -31,7 +31,7 @@ jobs:
           node-version: "18.x"
       - name: Install dependencies
         run: npm install
-      - name: Run Jest Unit tests
-        run: npm run jest
+      - name: Run Vitest Unit tests
+        run: npm run vitest
       - name: Run Playwright E2E tests with Dummy values
         run: npx playwright test

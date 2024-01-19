@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 class Color {
     constructor(text) {
         this.colors = [];
@@ -120,4 +118,4 @@ Color.Blink = "\x1b[5m";
 Color.Reverse = "\x1b[7m";
 Color.Hidden = "\x1b[8m";
 Color.Bold = "\x1b[1m";
-exports.default = Color;
+export default Color;

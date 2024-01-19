@@ -1,4 +1,5 @@
 import {defineConfig} from "@playwright/test";
+//TODO fix: SyntaxError: Cannot use import statement outside a module if client's module is set to es2022
 export default defineConfig({
     testDir: "playwright-tests",
     testMatch: "playwright-tests/**/*",
@@ -11,7 +12,7 @@ export default defineConfig({
         baseColors: {
             specFileNameColor: "blue",
             suiteDescriptionColor: "magenta",
-            testCaseTitleColor: "white",
+            testCaseTitleColor: "magenta",
         },
     }]],
     use: {

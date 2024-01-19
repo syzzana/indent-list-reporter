@@ -1,15 +1,9 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.logFailedTestsOnlyOnceOnRetry = exports.logTestResults = exports.logTestCaseData = exports.logSuiteDescription = exports.logSpecFileName = exports.log = exports.doesModuleExist = void 0;
-const Color_1 = __importDefault(require("./color-text/Color"));
-const reporter_configuration_1 = require("./reporter-configuration");
-const styling_terminal_1 = require("./color-text/styling-terminal");
-const filtering_tests_1 = require("./filtering-tests");
-const loggin_error_message_1 = require("./loggin-error-message");
-const doesModuleExist = (moduleName) => {
+import Color from "./color-text/Color";
+import { getReporterOptions } from "./reporter-configuration";
+import { lineBreak, setIconAndColorPerTestStatus } from "./color-text/styling-terminal";
+import { filterOutDuplicateFailedTestsOnRetry } from "./filtering-tests";
+import { logTestError } from "./loggin-error-message";
+export const doesModuleExist = (moduleName) => {
     try {
         require.resolve((`${process.cwd()}/${moduleName}`));
         return true;
@@ -18,23 +12,21 @@ const doesModuleExist = (moduleName) => {
         return false;
     }
 };
-exports.doesModuleExist = doesModuleExist;
-const isPlaywrightConfigJSOrTS = (0, exports.doesModuleExist)("playwright.config.ts") ? "playwright.config.ts" : "playwright.config.js";
+const isPlaywrightConfigJSOrTS = doesModuleExist("playwright.config.ts") ? "playwright.config.ts" : "playwright.config.js";
 /**
  * Get the config from playwright.config.ts
  */
 const userPlaywrightConfigFile = `${process.cwd()}/${isPlaywrightConfigJSOrTS}`;
-const defineConfig = require(userPlaywrightConfigFile);
+const defineConfig = await import(userPlaywrightConfigFile);
 /**
  * Log the results of the function
  * Resuses the console.log function
  * We just simplified the name of the method to log
  * @param data
  */
-const log = (...data) => {
+export const log = (...data) => {
     console.log(...data);
 };
-exports.log = log;
 /**
  * Log the name of the spec file only once
  * Example output:
@@ -50,10 +42,10 @@ exports.log = log;
  * `
  * @param specFileName
  */
-const logSpecFileName = (specFileName) => {
+export const logSpecFileName = async (specFileName) => {
     var _a;
     // @ts-ignore
-    const reporterOptions = (0, reporter_configuration_1.getReporterOptions)(defineConfig.default.reporter);
+    const reporterOptions = getReporterOptions(defineConfig.default.reporter);
     let specFileNameColor;
     if (reporterOptions !== undefined) {
         specFileNameColor = ((_a = reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.baseColors) === null || _a === void 0 ? void 0 : _a.specFileNameColor)
@@ -61,16 +53,15 @@ const logSpecFileName = (specFileName) => {
             : undefined;
     }
     if ((reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.ignoreColors) === true) {
-        (0, exports.log)(`${specFileName}:`);
+        log(`${specFileName}:`);
     }
     else if (specFileNameColor !== undefined) {
-        (0, exports.log)(`${Color_1.default.text(specFileName)[specFileNameColor]().valueOf()}:`);
+        log(`${Color.text(specFileName)[specFileNameColor]().valueOf()}:`);
     }
     else {
-        (0, exports.log)(`${Color_1.default.text(specFileName).cyan().valueOf()}:`);
+        log(`${Color.text(specFileName).cyan().valueOf()}:`);
     }
 };
-exports.logSpecFileName = logSpecFileName;
 /**
  * Log the name of the suite only once
  * Example output:
@@ -82,10 +73,10 @@ exports.logSpecFileName = logSpecFileName;
  * `
  * @param suiteName
  */
-const logSuiteDescription = (suiteName) => {
+export const logSuiteDescription = (suiteName) => {
     var _a;
     // @ts-ignore
-    const reporterOptions = (0, reporter_configuration_1.getReporterOptions)(defineConfig.default.reporter);
+    const reporterOptions = getReporterOptions(defineConfig.default.reporter);
     let suiteDescriptionColor;
     if (reporterOptions !== undefined) {
         suiteDescriptionColor = ((_a = reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.baseColors) === null || _a === void 0 ? void 0 : _a.suiteDescriptionColor)
@@ -93,16 +84,15 @@ const logSuiteDescription = (suiteName) => {
             : undefined;
     }
     if (reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.ignoreColors) {
-        (0, exports.log)(`  ${suiteName}`);
+        log(`  ${suiteName}`);
     }
     else if (suiteDescriptionColor !== undefined) {
-        (0, exports.log)(`  ${Color_1.default.text(suiteName)[suiteDescriptionColor]().underscore().valueOf()}`);
+        log(`  ${Color.text(suiteName)[suiteDescriptionColor]().underscore().valueOf()}`);
     }
     else {
-        (0, exports.log)(`  ${Color_1.default.text(suiteName).cyan().underscore().valueOf()}`);
+        log(`  ${Color.text(suiteName).cyan().underscore().valueOf()}`);
     }
 };
-exports.logSuiteDescription = logSuiteDescription;
 /**
  * Log the test case data
  * Example output:
@@ -110,13 +100,13 @@ exports.logSuiteDescription = logSuiteDescription;
  * @param count
  * @param test
  */
-const logTestCaseData = (count, test) => {
+export const logTestCaseData = (count, test) => {
     var _a;
-    const status = (0, styling_terminal_1.setIconAndColorPerTestStatus)(test.status);
-    const duration = Color_1.default.text(`(${test.duration}ms)`).gray().dim().valueOf();
-    const counter = `${Color_1.default.text(`${count}.`).gray().valueOf()}`;
+    const status = setIconAndColorPerTestStatus(test.status);
+    const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
+    const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
     // @ts-ignore
-    const reporterOptions = (0, reporter_configuration_1.getReporterOptions)(defineConfig.default.reporter);
+    const reporterOptions = getReporterOptions(defineConfig.default.reporter);
     let testCaseTitleColor;
     if (reporterOptions !== undefined) {
         testCaseTitleColor = ((_a = reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.baseColors) === null || _a === void 0 ? void 0 : _a.testCaseTitleColor)
@@ -126,59 +116,56 @@ const logTestCaseData = (count, test) => {
     let title;
     if (test.status === "failed") {
         if (test.retries) {
-            title = Color_1.default.text(test.title).red().valueOf() + Color_1.default.text(` (${test.retries} retries + 1 (by default))`).magenta().valueOf();
+            title = Color.text(test.title).red().valueOf() + Color.text(` (${test.retries} retries + 1 (by default))`).magenta().valueOf();
         }
         else {
-            title = Color_1.default.text(test.title).red().valueOf();
+            title = Color.text(test.title).red().valueOf();
         }
     }
     else if (test.status === "skipped") {
-        title = Color_1.default.text(test.title).yellow().valueOf();
+        title = Color.text(test.title).yellow().valueOf();
     }
     else {
         if (reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.ignoreColors) {
             title = test.title;
         }
         else if (testCaseTitleColor !== undefined) {
-            title = Color_1.default.text(test.title)[testCaseTitleColor]().valueOf();
+            title = Color.text(test.title)[testCaseTitleColor]().valueOf();
         }
         else {
-            title = Color_1.default.text(test.title).white().valueOf();
+            title = Color.text(test.title).white().valueOf();
         }
     }
-    const rowAndCol = `${Color_1.default.text(`[${test.line}:${test.column}]`).gray().valueOf()}`;
-    (0, exports.log)(`   ${counter} ${status} ${title} ${rowAndCol}${duration}`);
+    const rowAndCol = `${Color.text(`[${test.line}:${test.column}]`).gray().valueOf()}`;
+    log(`   ${counter} ${status} ${title} ${rowAndCol}${duration}`);
 };
-exports.logTestCaseData = logTestCaseData;
 /**
  * Log the test results of all the run tests
  * @param allTests
  */
-const logTestResults = (allTests) => {
+export const logTestResults = (allTests) => {
     let testCounter = 0;
     allTests.forEach((specFile) => {
-        (0, exports.logSpecFileName)(specFile.getSpecName());
+        logSpecFileName(specFile.getSpecName());
         specFile.getSuiteTests().forEach((suite) => {
-            (0, exports.logSuiteDescription)(suite.getSuiteDescription());
+            logSuiteDescription(suite.getSuiteDescription());
             suite.getTestCases().forEach((test) => {
                 //TODO: filter getTests() here failed tests that were retried and failed again
                 testCounter++;
-                (0, exports.logTestCaseData)(testCounter, test);
+                logTestCaseData(testCounter, test);
             });
         });
     });
-    (0, exports.log)(styling_terminal_1.lineBreak);
+    log(lineBreak);
 };
-exports.logTestResults = logTestResults;
 /**
  * Log the failed tests only once when they were retried
  * @param failedTests
  * @param retries
  */
-const logFailedTestsOnlyOnceOnRetry = (failedTests, retries) => {
+export const logFailedTestsOnlyOnceOnRetry = (failedTests, retries) => {
     if (retries > 0) {
-        const filteredFailedTests = (0, filtering_tests_1.filterOutDuplicateFailedTestsOnRetry)(failedTests);
-        (0, loggin_error_message_1.logTestError)(filteredFailedTests, retries > 0);
+        const filteredFailedTests = filterOutDuplicateFailedTestsOnRetry(failedTests);
+        logTestError(filteredFailedTests, retries > 0);
     }
 };
-exports.logFailedTestsOnlyOnceOnRetry = logFailedTestsOnlyOnceOnRetry;

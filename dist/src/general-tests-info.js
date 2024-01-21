@@ -1,15 +1,6 @@
 import Color from "./color-text/Color";
-import {lineBreak} from "./color-text/styling-terminal.ts";
-import {log} from "./loggin-tests-data.ts";
-
-export interface StatusCounter {
-    passed: number;
-    failed: number;
-    skipped: number;
-    interrupted: number;
-    timedOut: number;
-}
-
+import { lineBreak } from "./color-text/styling-terminal.ts";
+import { log } from "./loggin-tests-data.ts";
 /**
  * Log information to the reader
  * on how to read/understand the test results
@@ -25,15 +16,13 @@ export const howToReadTestResults = () => {
     log(`${passed}, ${skipped}, ${failed}, ${interrupted}, ${timedOut}`);
     log(lineBreak);
 };
-
 /**
  * Log the summary of the test results
  * @param durationInMs
  * @param statusCounter
  */
-export const logSummary = (durationInMs: number, statusCounter: StatusCounter) => {
+export const logSummary = (durationInMs, statusCounter) => {
     log(Color.text("SUMMARY:").bgBlack().cyan().valueOf());
-
     if (statusCounter.passed != 0) {
         log(Color.text(`  ${statusCounter.passed} passed`).green().valueOf());
     }
@@ -49,19 +38,16 @@ export const logSummary = (durationInMs: number, statusCounter: StatusCounter) =
     if (statusCounter.timedOut != 0) {
         log(Color.text(`  ${statusCounter.timedOut} timedOut`).red().valueOf());
     }
-
     log("---------");
     logTestsDuration(Math.round(durationInMs));
 };
-
 /**
  * Log overall the tests duration in ms
  * @param durationInMS
  */
-export const logTestsDuration = (durationInMS: number) => {
+export const logTestsDuration = (durationInMS) => {
     log(Color.text(`Duration: (${durationInMS}ms)`).magenta().valueOf());
 };
-
 /**
  * Get fileName or parentSuite of a test case
  * Example: fileName = "authentication/login.spec.ts", parentSuite = "Login"
@@ -69,7 +55,7 @@ export const logTestsDuration = (durationInMS: number) => {
  * @param parentSuite
  * @param fileName
  */
-export const getFileNameOrParentSuite = (titlePath: string[], parentSuite?: boolean, fileName?: boolean) => {
+export const getFileNameOrParentSuite = (titlePath, parentSuite, fileName) => {
     if (parentSuite) {
         return titlePath[3];
     }

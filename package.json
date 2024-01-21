@@ -6,7 +6,7 @@
   "type": "module",
   "homepage": "https://github.com/syzzana/indent-list-reporter/blob/main/README.md",
   "scripts": {
-    "build": "babel src --out-dir dist",
+    "build": "babel src --out-dir dist --extensions \".ts,.js\" --copy-files",
     "test": "npx playwright test",
     "test:debug": "npx playwright test --debug",
     "vitest": "vitest",

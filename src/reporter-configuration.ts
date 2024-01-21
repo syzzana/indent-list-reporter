@@ -1,5 +1,5 @@
 import { ReporterDescription } from "playwright/test";
-import { MyReporterOptions } from "./indent-list-reporter.js";
+import { MyReporterOptions } from "./indent-list-reporter.ts";
 
 /**
  * Checks if the reporter is indent-list-reporter

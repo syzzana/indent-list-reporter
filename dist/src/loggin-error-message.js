@@ -1,49 +1,43 @@
-import {Location} from "playwright/types/testReporter";
 import Color from "./color-text/Color.ts";
-import {lineBreak} from "./color-text/styling-terminal.ts";
-import {TestCaseError} from "./TestsPerSpecFile.ts";
-import {log} from "./loggin-tests-data.ts";
+import { lineBreak } from "./color-text/styling-terminal.ts";
+import { log } from "./loggin-tests-data.ts";
 import { filterOutDuplicateFailedTestsOnRetry } from "./filtering-tests.ts";
-
 /**
  * Style the error file location
  * @param errorLocation
  */
-export const styleErrorFileLocation = (errorLocation: Location): any => {
+export const styleErrorFileLocation = (errorLocation) => {
     const file = errorLocation.file;
     const line = errorLocation.line;
     const column = errorLocation.column;
     return Color.text(`${file}:${line}:${column}`).blue().underscore().valueOf();
 };
-
 /**
  * Highlight the error indicator in the code snippet
  * @param codeSnippet
  */
-export const highlightErrorIndicator = (codeSnippet: string): string => {
+export const highlightErrorIndicator = (codeSnippet) => {
     const lines = codeSnippet.split("\n");
     const styledLines = lines.map((line) => {
         if (line.includes("^")) {
             return Color.text(line).red().valueOf();
-        } else {
+        }
+        else {
             return line;
         }
     });
-
     return styledLines.join("\n");
 };
-
 /**
  * Log the test error message,
  * with a code snippet and a file location link
  * @param codeSnippet
  */
-export const logTestError = (failedTests: TestCaseError[], isRetried: boolean) => {
+export const logTestError = (failedTests, isRetried) => {
     let counter = 0;
-    if(isRetried || process.env.CI) {
-       failedTests = filterOutDuplicateFailedTestsOnRetry(failedTests);
+    if (isRetried || process.env.CI) {
+        failedTests = filterOutDuplicateFailedTestsOnRetry(failedTests);
     }
-
     failedTests.forEach((failedTest) => {
         const error = failedTest.error;
         const titlePath = failedTest.titlePath;

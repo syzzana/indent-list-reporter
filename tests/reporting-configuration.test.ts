@@ -1,4 +1,4 @@
-import {isIndentedListReporter, getReporterOptions} from "../src/reporter-configuration.js";
+import {isIndentedListReporter, getReporterOptions} from "../src/reporter-configuration.ts";
 import { expect, test } from 'vitest'
 
 test("verify reporter is indent-list-reporter", () => {

@@ -1,4 +1,4 @@
-import {doesModuleExist} from "../src/loggin-tests-data.js";
+import {doesModuleExist} from "../src/loggin-tests-data.ts";
 import {test, expect} from 'vitest';
 test("check module exists", () => {
   const myModule = doesModuleExist("playwright.config.ts");  

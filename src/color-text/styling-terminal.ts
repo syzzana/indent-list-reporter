@@ -1,5 +1,5 @@
 import {TestStatus} from "playwright/test";
-import Color from "./Color";
+import Color from "./Color.js";
 
 /**
  * Line break

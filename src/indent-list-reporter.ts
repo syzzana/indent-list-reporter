@@ -1,13 +1,13 @@
 import {TestCase, TestResult, Reporter, FullResult, Suite, FullConfig} from "@playwright/test/reporter";
 import {SuiteTestCases, TestCaseData, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile";
 import {getFileNameOrParentSuite, howToReadTestResults, logSummary, StatusCounter} from "./general-tests-info";
-import {filterUniqueSpecsBySpecName} from "./filtering-tests";
+import {filterUniqueSpecsBySpecName} from "./filtering-tests.js";
 import {TestStatus} from "@playwright/test";
 import {TestError} from "playwright/types/testReporter";
-import Color from "./color-text/Color";
-import {log, logTestResults} from "./loggin-tests-data";
-import {lineBreak} from "./color-text/styling-terminal";
-import {logTestError} from "./loggin-error-message";
+import Color from "./color-text/Color.js";
+import {log, logTestResults} from "./loggin-tests-data.js";
+import {lineBreak} from "./color-text/styling-terminal.js";
+import {logTestError} from "./loggin-error-message.js";
 
 const defaultListTestsWithColors: IndentListReporterOptions = {
     ignoreColors: false,

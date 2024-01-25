@@ -1,12 +1,11 @@
 {
   "name": "indent-list-reporter",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Playwright list reporter for terminal with colors and indentation'",
   "main": "./dist/src/indent-list-reporter.js",
   "type": "module",
   "homepage": "https://github.com/syzzana/indent-list-reporter/blob/main/README.md",
   "scripts": {
-    "build": "babel src --out-dir dist --extensions \".ts,.js\" --copy-files",
     "test": "npx playwright test",
     "test:debug": "npx playwright test --debug",
     "vitest": "vitest",
@@ -41,10 +40,6 @@
     "typescript": "^5.2.2"
   },
   "devDependencies": {
-    "@babel/cli": "^7.23.4",
-    "@babel/core": "^7.23.7",
-    "@babel/preset-env": "^7.23.8",
-    "@babel/preset-typescript": "^7.23.3",
     "@types/jest": "^27.0.2",
     "jest": "^29.7.0",
     "ts-jest": "^29.1.1",

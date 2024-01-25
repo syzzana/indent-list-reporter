@@ -14,6 +14,7 @@ export default defineConfig({
             suiteDescriptionColor: "magenta",
             testCaseTitleColor: "magenta",
         },
+        environment: "RC",
     }]],
     use: {
         ignoreHTTPSErrors: true,

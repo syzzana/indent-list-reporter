@@ -1,20 +1,11 @@
 import Color from "./color-text/Color";
-import {lineBreak} from "./color-text/styling-terminal";
-import {log} from "./loggin-tests-data";
-
-export interface StatusCounter {
-    passed: number;
-    failed: number;
-    skipped: number;
-    interrupted: number;
-    timedOut: number;
-}
-
+import { lineBreak } from "./color-text/styling-terminal";
+import { log } from "./loggin-tests-data";
 /**
  * Log information to the reader
  * on how to read/understand the test results
  */
-export const howToReadTestResults = (environment: string) => {
+export const howToReadTestResults = (environment) => {
     log(lineBreak);
     log(`${Color.text("How to read test results:").cyan().valueOf()}`);
     const passed = `${Color.text("✓").bold().green().valueOf()}=passed`;
@@ -26,18 +17,16 @@ export const howToReadTestResults = (environment: string) => {
     log(lineBreak);
     log('TEST ENV:');
     if (environment !== undefined) {
-        log(environment)
+        log(environment);
     }
 };
-
 /**
  * Log the summary of the test results
  * @param durationInMs
  * @param statusCounter
  */
-export const logSummary = (durationInMs: number, statusCounter: StatusCounter) => {
+export const logSummary = (durationInMs, statusCounter) => {
     log(Color.text("SUMMARY:").bgBlack().cyan().valueOf());
-
     if (statusCounter.passed != 0) {
         log(Color.text(`  ${statusCounter.passed} passed`).green().valueOf());
     }
@@ -53,19 +42,16 @@ export const logSummary = (durationInMs: number, statusCounter: StatusCounter) =
     if (statusCounter.timedOut != 0) {
         log(Color.text(`  ${statusCounter.timedOut} timedOut`).red().valueOf());
     }
-
     log("---------");
     logTestsDuration(Math.round(durationInMs));
 };
-
 /**
  * Log overall the tests duration in ms
  * @param durationInMS
  */
-export const logTestsDuration = (durationInMS: number) => {
+export const logTestsDuration = (durationInMS) => {
     log(Color.text(`Duration: (${durationInMS}ms)`).magenta().valueOf());
 };
-
 /**
  * Get fileName or parentSuite of a test case
  * Example: fileName = "authentication/login.spec.ts", parentSuite = "Login"
@@ -73,7 +59,7 @@ export const logTestsDuration = (durationInMS: number) => {
  * @param parentSuite
  * @param fileName
  */
-export const getFileNameOrParentSuite = (titlePath: string[], parentSuite?: boolean, fileName?: boolean) => {
+export const getFileNameOrParentSuite = (titlePath, parentSuite, fileName) => {
     if (parentSuite) {
         return titlePath[3];
     }

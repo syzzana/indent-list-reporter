@@ -1,16 +1,12 @@
-import {TestCase, TestResult, Reporter, FullResult, Suite, FullConfig} from "@playwright/test/reporter";
-import {SuiteTestCases, TestCaseData, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile";
-import {getFileNameOrParentSuite, howToReadTestResults, logSummary, StatusCounter} from "./general-tests-info";
-import {filterUniqueSpecsBySpecName} from "./filtering-tests";
-import {TestStatus} from "@playwright/test";
-import {TestError} from "playwright/types/testReporter";
+import { SuiteTestCases, TestsPerSpecFile } from "./TestsPerSpecFile";
+import { getFileNameOrParentSuite, howToReadTestResults, logSummary } from "./general-tests-info";
+import { filterUniqueSpecsBySpecName } from "./filtering-tests";
 import Color from "./color-text/Color";
-import {log, logTestResults} from "./loggin-tests-data";
-import {lineBreak} from "./color-text/styling-terminal";
-import {logTestError} from "./loggin-error-message";
-
-const defaultListTestsWithColors: IndentListReporterOptions = {
-    ignoreColors: false, 
+import { log, logTestResults } from "./loggin-tests-data";
+import { lineBreak } from "./color-text/styling-terminal";
+import { logTestError } from "./loggin-error-message";
+const defaultListTestsWithColors = {
+    ignoreColors: false,
     baseColors: {
         specFileNameColor: "cyan",
         suiteDescriptionColor: "cyan",
@@ -18,50 +14,32 @@ const defaultListTestsWithColors: IndentListReporterOptions = {
     },
     environment: "dev",
 };
-export type ColorsAvailable = "black" | "red" | "green" | "yellow" | "blue" | "magenta" | "cyan" | "white" | "gray";
-
-interface ListTestsWithColors {
-    specFileNameColor: ColorsAvailable;
-    suiteDescriptionColor: ColorsAvailable;
-    testCaseTitleColor?: ColorsAvailable;
-    isDimmed?: boolean;
-}
-
-export type MyReporterOptions = ['indent-list-reporter' | './src/indent-list-reporter.ts'] | ['indent-list-reporter' | './src/indent-list-reporter.ts', IndentListReporterOptions];
-interface IndentListReporterOptions {
-    ignoreColors: boolean;
-    baseColors: ListTestsWithColors;
-    environment?: string;
-}
-
-class IndentListReporter implements Reporter {
-    private options: IndentListReporterOptions;
-    allTests: TestsPerSpecFile[] = [];
+class IndentListReporter {
+    options;
+    allTests = [];
     passed = 0;
     failed = 0;
     skipped = 0;
     interrupted = 0;
     timedOut = 0;
     retries = 0;
-    failedTests: TestCaseError[] = [];
-
+    failedTests = [];
     /**
      * Constructor to pass on custom options for the reporter
      * @param options
      */
-    constructor(options: IndentListReporterOptions) {
+    constructor(options) {
         if (!options) {
             this.options = defaultListTestsWithColors;
-        } else {
+        }
+        else {
             this.options = options;
         }
     }
-
     printsToStdio() {
         return true;
     }
-
-    onBegin(config: FullConfig, suite: Suite) {
+    onBegin(config, suite) {
         howToReadTestResults(this.options.environment);
         log(`${Color.text("TEST RESULTS:").cyan().bgBlack().valueOf()}`);
         const number = suite.allTests().length;
@@ -70,12 +48,10 @@ class IndentListReporter implements Reporter {
         const testInfo = `Running ${numberOfTests} tests using ${numberOfWorkers} workers\n`;
         console.log(Color.text(testInfo).gray().valueOf());
     }
-
-
-    onTestEnd(test: TestCase, result: TestResult) {
+    onTestEnd(test, result) {
         const currentFileName = getFileNameOrParentSuite(test.titlePath(), false, true);
         const currentParentSuite = getFileNameOrParentSuite(test.titlePath(), true, false);
-        const testCase: TestCaseData = {
+        const testCase = {
             id: test.id,
             title: test.title,
             line: test.location.line,
@@ -92,7 +68,7 @@ class IndentListReporter implements Reporter {
         this.allTests.push(testsPerSpecFile);
         this.increaseTestStatusCounter(result.status);
         if (result.status === "failed") {
-            const testCaseError: TestCaseError = {
+            const testCaseError = {
                 error: result.error,
                 testData: testCase,
                 titlePath: test.titlePath(),
@@ -100,32 +76,28 @@ class IndentListReporter implements Reporter {
             this.failedTests.push(testCaseError);
         }
     }
-
-    onError(error: TestError) {
+    onError(error) {
         try {
             throw new Error(`ERROR: ${error.message}`);
-        } catch (e) {
+        }
+        catch (e) {
             console.log(e);
         }
     }
-
-    async onExit(): Promise<void> {
+    async onExit() {
         await Promise.resolve();
     }
-
-    onStdErr(chunk: Buffer | string, test: void | TestCase, result: void | TestResult) {
+    onStdErr(chunk, test, result) {
         log(chunk.toString());
     }
-
-    onStdOut(chunk: Buffer | string, test: void | TestCase, result: void | TestResult) {
+    onStdOut(chunk, test, result) {
         log(chunk.toString());
     }
-
-    onEnd(result: FullResult) {
+    onEnd(result) {
         const myTests = filterUniqueSpecsBySpecName(this.allTests, this.retries > 0);
         //TODO filter out duplicate failed tests on retry here or maybe inside filterUniqueSpecsBySpecName
         logTestResults(myTests);
-        const statusCounter: StatusCounter = {
+        const statusCounter = {
             passed: this.passed,
             failed: this.failed,
             skipped: this.skipped,
@@ -139,21 +111,23 @@ class IndentListReporter implements Reporter {
         logSummary(result.duration, statusCounter);
         log(lineBreak);
     }
-
     //TODO: fix the counter for failed on retries
-    increaseTestStatusCounter(test: TestStatus) {
+    increaseTestStatusCounter(test) {
         if (test === "passed") {
             this.passed++;
-        } else if (test === "failed") {
+        }
+        else if (test === "failed") {
             this.failed++;
-        } else if (test === "timedOut") {
+        }
+        else if (test === "timedOut") {
             this.timedOut++;
-        } else if (test === "skipped") {
+        }
+        else if (test === "skipped") {
             this.skipped++;
-        } else if (test === "interrupted") {
+        }
+        else if (test === "interrupted") {
             this.interrupted++;
         }
     }
 }
-
 export default IndentListReporter;

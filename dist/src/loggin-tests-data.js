@@ -1,8 +1,8 @@
-import Color from "./color-text/Color";
-import { getReporterOptions } from "./reporter-configuration";
-import { lineBreak, setIconAndColorPerTestStatus } from "./color-text/styling-terminal";
-import { filterOutDuplicateFailedTestsOnRetry } from "./filtering-tests";
-import { logTestError } from "./loggin-error-message";
+import Color from "./color-text/Color.js";
+import { getReporterOptions } from "./reporter-configuration.js";
+import { lineBreak, setIconAndColorPerTestStatus } from "./color-text/styling-terminal.js";
+import { filterOutDuplicateFailedTestsOnRetry } from "./filtering-tests.js";
+import { logTestError } from "./loggin-error-message.js";
 export const doesModuleExist = (moduleName) => {
     try {
         require.resolve((`${process.cwd()}/${moduleName}`));

@@ -1,10 +1,10 @@
-import { SuiteTestCases, TestsPerSpecFile } from "./TestsPerSpecFile";
-import { getFileNameOrParentSuite, howToReadTestResults, logSummary } from "./general-tests-info";
-import { filterUniqueSpecsBySpecName } from "./filtering-tests";
-import Color from "./color-text/Color";
-import { log, logTestResults } from "./loggin-tests-data";
-import { lineBreak } from "./color-text/styling-terminal";
-import { logTestError } from "./loggin-error-message";
+import { SuiteTestCases, TestsPerSpecFile } from "./TestsPerSpecFile.js";
+import { getFileNameOrParentSuite, howToReadTestResults, logSummary } from "./general-tests-info.js";
+import { filterUniqueSpecsBySpecName } from "./filtering-tests.js";
+import Color from "./color-text/Color.js";
+import { log, logTestResults } from "./loggin-tests-data.js";
+import { lineBreak } from "./color-text/styling-terminal.js";
+import { logTestError } from "./loggin-error-message.js";
 const defaultListTestsWithColors = {
     ignoreColors: false,
     baseColors: {
@@ -12,6 +12,7 @@ const defaultListTestsWithColors = {
         suiteDescriptionColor: "cyan",
         testCaseTitleColor: "white",
     },
+    environment: "dev",
 };
 class IndentListReporter {
     /**
@@ -38,7 +39,7 @@ class IndentListReporter {
         return true;
     }
     onBegin(config, suite) {
-        howToReadTestResults();
+        howToReadTestResults(this.options.environment);
         log(`${Color.text("TEST RESULTS:").cyan().bgBlack().valueOf()}`);
         const number = suite.allTests().length;
         const numberOfTests = Color.text(number.toString()).white().valueOf();

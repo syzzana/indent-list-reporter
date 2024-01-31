@@ -1,7 +1,7 @@
-import Color from "./color-text/Color";
-import { lineBreak } from "./color-text/styling-terminal";
-import { log } from "./loggin-tests-data";
-import { filterOutDuplicateFailedTestsOnRetry } from "./filtering-tests";
+import Color from "./color-text/Color.js";
+import { lineBreak } from "./color-text/styling-terminal.js";
+import { log } from "./loggin-tests-data.js";
+import { filterOutDuplicateFailedTestsOnRetry } from "./filtering-tests.js";
 /**
  * Style the error file location
  * @param errorLocation

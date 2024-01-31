@@ -10,12 +10,13 @@ import {lineBreak} from "./color-text/styling-terminal";
 import {logTestError} from "./loggin-error-message";
 
 const defaultListTestsWithColors: IndentListReporterOptions = {
-    ignoreColors: false,
+    ignoreColors: false, 
     baseColors: {
         specFileNameColor: "cyan",
         suiteDescriptionColor: "cyan",
         testCaseTitleColor: "white",
     },
+    environment: "dev",
 };
 export type ColorsAvailable = "black" | "red" | "green" | "yellow" | "blue" | "magenta" | "cyan" | "white" | "gray";
 
@@ -30,6 +31,7 @@ export type MyReporterOptions = ['indent-list-reporter' | './src/indent-list-rep
 interface IndentListReporterOptions {
     ignoreColors: boolean;
     baseColors: ListTestsWithColors;
+    environment?: string;
 }
 
 class IndentListReporter implements Reporter {
@@ -60,7 +62,7 @@ class IndentListReporter implements Reporter {
     }
 
     onBegin(config: FullConfig, suite: Suite) {
-        howToReadTestResults();
+        howToReadTestResults(this.options.environment);
         log(`${Color.text("TEST RESULTS:").cyan().bgBlack().valueOf()}`);
         const number = suite.allTests().length;
         const numberOfTests = Color.text(number.toString()).white().valueOf();

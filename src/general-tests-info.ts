@@ -14,7 +14,7 @@ export interface StatusCounter {
  * Log information to the reader
  * on how to read/understand the test results
  */
-export const howToReadTestResults = () => {
+export const howToReadTestResults = (environment: string) => {
     log(lineBreak);
     log(`${Color.text("How to read test results:").cyan().valueOf()}`);
     const passed = `${Color.text("✓").bold().green().valueOf()}=passed`;
@@ -24,6 +24,10 @@ export const howToReadTestResults = () => {
     const timedOut = `⏰ =timedOut`;
     log(`${passed}, ${skipped}, ${failed}, ${interrupted}, ${timedOut}`);
     log(lineBreak);
+    log('TEST ENV:');
+    if (environment !== undefined) {
+        log(environment)
+    }
 };
 
 /**

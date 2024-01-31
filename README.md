@@ -44,6 +44,7 @@ The default options are:
     suiteDescriptionColor: "cyan",
     testCaseTitleColor: "white"
   }
+  environment: 'dev'
 }
 ```
 The available colors are: 
@@ -91,6 +92,7 @@ The background color is not yet configurable. For now the default background col
               suiteDescriptionColor: "cyan",
               testCaseTitleColor: "white",
             },
+            environment: "dev",
           },
         ],
       ],

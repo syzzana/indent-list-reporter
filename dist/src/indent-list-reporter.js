@@ -1,10 +1,10 @@
-import { SuiteTestCases, TestsPerSpecFile } from "./TestsPerSpecFile";
-import { getFileNameOrParentSuite, howToReadTestResults, logSummary } from "./general-tests-info";
-import { filterUniqueSpecsBySpecName } from "./filtering-tests";
-import Color from "./color-text/Color";
-import { log, logTestResults } from "./loggin-tests-data";
-import { lineBreak } from "./color-text/styling-terminal";
-import { logTestError } from "./loggin-error-message";
+import { SuiteTestCases, TestsPerSpecFile } from "./TestsPerSpecFile.js";
+import { getFileNameOrParentSuite, howToReadTestResults, logSummary } from "./general-tests-info.js";
+import { filterUniqueSpecsBySpecName } from "./filtering-tests.js";
+import Color from "./color-text/Color.js";
+import { log, logTestResults } from "./loggin-tests-data.js";
+import { lineBreak } from "./color-text/styling-terminal.js";
+import { logTestError } from "./loggin-error-message.js";
 const defaultListTestsWithColors = {
     ignoreColors: false,
     baseColors: {
@@ -15,20 +15,19 @@ const defaultListTestsWithColors = {
     environment: "dev",
 };
 class IndentListReporter {
-    options;
-    allTests = [];
-    passed = 0;
-    failed = 0;
-    skipped = 0;
-    interrupted = 0;
-    timedOut = 0;
-    retries = 0;
-    failedTests = [];
     /**
      * Constructor to pass on custom options for the reporter
      * @param options
      */
     constructor(options) {
+        this.allTests = [];
+        this.passed = 0;
+        this.failed = 0;
+        this.skipped = 0;
+        this.interrupted = 0;
+        this.timedOut = 0;
+        this.retries = 0;
+        this.failedTests = [];
         if (!options) {
             this.options = defaultListTestsWithColors;
         }

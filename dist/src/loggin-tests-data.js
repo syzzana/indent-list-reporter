@@ -13,14 +13,15 @@ export const doesModuleExist = (moduleName) => {
         return false;
     }
 };
-const isPlaywrightConfigJSOrTS = doesModuleExist("playwright.config.ts") ? "playwright.config.ts" : "playwright.config.js";
+export const isPlaywrightConfigJSOrTS = doesModuleExist("playwright.config.ts") ? "playwright.config.ts" : "playwright.config.js";
 /**
  * Get the config from playwright.config.ts
  */
-const userPlaywrightConfigFile = `${process.cwd()}/${isPlaywrightConfigJSOrTS}`;
+export const userPlaywrightConfigFile = `${process.cwd()}/${isPlaywrightConfigJSOrTS}`;
+export const playwrightConfigDetails = await import(userPlaywrightConfigFile);
 const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
 const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
-const defineConfig = await import(whichPlatForm);
+const userPlaywrightConfigFile = await import(whichPlatForm);
 /**
  * Log the results of the function
  * Resuses the console.log function
@@ -47,7 +48,7 @@ export const log = (...data) => {
  */
 export const logSpecFileName = async (specFileName) => {
     // @ts-ignore
-    const reporterOptions = getReporterOptions(defineConfig.default.reporter);
+    const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let specFileNameColor;
     if (reporterOptions !== undefined) {
         specFileNameColor = reporterOptions?.baseColors?.specFileNameColor
@@ -77,7 +78,7 @@ export const logSpecFileName = async (specFileName) => {
  */
 export const logSuiteDescription = (suiteName) => {
     // @ts-ignore
-    const reporterOptions = getReporterOptions(defineConfig.default.reporter);
+    const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let suiteDescriptionColor;
     if (reporterOptions !== undefined) {
         suiteDescriptionColor = reporterOptions?.baseColors?.suiteDescriptionColor
@@ -106,7 +107,7 @@ export const logTestCaseData = (count, test) => {
     const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
     const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
     // @ts-ignore
-    const reporterOptions = getReporterOptions(defineConfig.default.reporter);
+    const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let testCaseTitleColor;
     if (reporterOptions !== undefined) {
         testCaseTitleColor = reporterOptions?.baseColors?.testCaseTitleColor

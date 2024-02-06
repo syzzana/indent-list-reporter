@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "allowSyntheticDefaultImports": true,
+    "allowArbitraryExtensions": true,
     "module": "NodeNext",
     "moduleResolution": "nodenext",
     "target": "esnext",

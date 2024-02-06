@@ -43,16 +43,15 @@ export const log = (...data) => {
  * @param specFileName
  */
 export const logSpecFileName = async (specFileName) => {
-    var _a;
     // @ts-ignore
     const reporterOptions = getReporterOptions(defineConfig.default.reporter);
     let specFileNameColor;
     if (reporterOptions !== undefined) {
-        specFileNameColor = ((_a = reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.baseColors) === null || _a === void 0 ? void 0 : _a.specFileNameColor)
+        specFileNameColor = reporterOptions?.baseColors?.specFileNameColor
             ? reporterOptions.baseColors.specFileNameColor
             : undefined;
     }
-    if ((reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.ignoreColors) === true) {
+    if (reporterOptions?.ignoreColors === true) {
         log(`${specFileName}:`);
     }
     else if (specFileNameColor !== undefined) {
@@ -74,16 +73,15 @@ export const logSpecFileName = async (specFileName) => {
  * @param suiteName
  */
 export const logSuiteDescription = (suiteName) => {
-    var _a;
     // @ts-ignore
     const reporterOptions = getReporterOptions(defineConfig.default.reporter);
     let suiteDescriptionColor;
     if (reporterOptions !== undefined) {
-        suiteDescriptionColor = ((_a = reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.baseColors) === null || _a === void 0 ? void 0 : _a.suiteDescriptionColor)
+        suiteDescriptionColor = reporterOptions?.baseColors?.suiteDescriptionColor
             ? reporterOptions.baseColors.suiteDescriptionColor
             : undefined;
     }
-    if (reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.ignoreColors) {
+    if (reporterOptions?.ignoreColors) {
         log(`  ${suiteName}`);
     }
     else if (suiteDescriptionColor !== undefined) {
@@ -101,7 +99,6 @@ export const logSuiteDescription = (suiteName) => {
  * @param test
  */
 export const logTestCaseData = (count, test) => {
-    var _a;
     const status = setIconAndColorPerTestStatus(test.status);
     const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
     const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
@@ -109,7 +106,7 @@ export const logTestCaseData = (count, test) => {
     const reporterOptions = getReporterOptions(defineConfig.default.reporter);
     let testCaseTitleColor;
     if (reporterOptions !== undefined) {
-        testCaseTitleColor = ((_a = reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.baseColors) === null || _a === void 0 ? void 0 : _a.testCaseTitleColor)
+        testCaseTitleColor = reporterOptions?.baseColors?.testCaseTitleColor
             ? reporterOptions.baseColors.testCaseTitleColor
             : undefined;
     }
@@ -126,7 +123,7 @@ export const logTestCaseData = (count, test) => {
         title = Color.text(test.title).yellow().valueOf();
     }
     else {
-        if (reporterOptions === null || reporterOptions === void 0 ? void 0 : reporterOptions.ignoreColors) {
+        if (reporterOptions?.ignoreColors) {
             title = test.title;
         }
         else if (testCaseTitleColor !== undefined) {

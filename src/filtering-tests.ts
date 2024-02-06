@@ -1,4 +1,4 @@
-import {SuiteTestCases, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile";
+import {SuiteTestCases, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile.js";
 
 /**
  * Filter out duplicate suites

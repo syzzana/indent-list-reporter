@@ -1,11 +1,11 @@
 import {PlaywrightTestConfig} from "@playwright/test";
-import Color from "./color-text/Color";
-import {getReporterOptions} from "./reporter-configuration";
-import {TestCaseData, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile";
-import {lineBreak, setIconAndColorPerTestStatus} from "./color-text/styling-terminal";
-import {filterOutDuplicateFailedTestsOnRetry} from "./filtering-tests";
-import {logTestError} from "./loggin-error-message";
-import {ColorsAvailable} from "./indent-list-reporter";
+import Color from "./color-text/Color.js";
+import {getReporterOptions} from "./reporter-configuration.js";
+import {TestCaseData, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile.js";
+import {lineBreak, setIconAndColorPerTestStatus} from "./color-text/styling-terminal.js";
+import {filterOutDuplicateFailedTestsOnRetry} from "./filtering-tests.js";
+import {logTestError} from "./loggin-error-message.js";
+import {ColorsAvailable} from "./indent-list-reporter.js";
 
 export const doesModuleExist = (moduleName: string) => {
     try {

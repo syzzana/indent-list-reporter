@@ -1,6 +1,6 @@
 {
   "name": "indent-list-reporter",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "description": "Playwright list reporter for terminal with colors and indentation'",
   "main": "./dist/src/indent-list-reporter.js",
   "type": "module",
@@ -29,7 +29,7 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@playwright/test": "^1.39.0",
+    "@playwright/test": "^1.41.2",
     "@types/node": "^20.6.1",
     "@typescript-eslint/eslint-plugin": "^6.9.1",
     "@typescript-eslint/parser": "^6.9.1",

@@ -1,6 +1,6 @@
-import Color from "./color-text/Color";
-import {lineBreak} from "./color-text/styling-terminal";
-import {log} from "./loggin-tests-data";
+import Color from "./color-text/Color.js";
+import {lineBreak} from "./color-text/styling-terminal.js";
+import {log} from "./loggin-tests-data.js";
 
 export interface StatusCounter {
     passed: number;

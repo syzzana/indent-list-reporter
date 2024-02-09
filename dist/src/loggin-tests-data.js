@@ -3,6 +3,7 @@ import { getReporterOptions } from "./reporter-configuration.js";
 import { lineBreak, setIconAndColorPerTestStatus } from "./color-text/styling-terminal.js";
 import { filterOutDuplicateFailedTestsOnRetry } from "./filtering-tests.js";
 import { logTestError } from "./loggin-error-message.js";
+import { adaptFilePathImportForWindows, isWindows } from "./utils/utils.js";
 export const doesModuleExist = (moduleName) => {
     try {
         require.resolve((`${process.cwd()}/${moduleName}`));
@@ -17,7 +18,9 @@ const isPlaywrightConfigJSOrTS = doesModuleExist("playwright.config.ts") ? "play
  * Get the config from playwright.config.ts
  */
 const userPlaywrightConfigFile = `${process.cwd()}/${isPlaywrightConfigJSOrTS}`;
-const defineConfig = await import(userPlaywrightConfigFile);
+const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
+const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
+const defineConfig = await import(whichPlatForm);
 /**
  * Log the results of the function
  * Resuses the console.log function

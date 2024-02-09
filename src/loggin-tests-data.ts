@@ -6,6 +6,7 @@ import {lineBreak, setIconAndColorPerTestStatus} from "./color-text/styling-term
 import {filterOutDuplicateFailedTestsOnRetry} from "./filtering-tests.js";
 import {logTestError} from "./loggin-error-message.js";
 import {ColorsAvailable} from "./indent-list-reporter.js";
+import { adaptFilePathImportForWindows, isWindows } from "./utils/utils.js";
 
 export const doesModuleExist = (moduleName: string) => {
     try {
@@ -22,7 +23,9 @@ const isPlaywrightConfigJSOrTS = doesModuleExist("playwright.config.ts") ? "play
  * Get the config from playwright.config.ts   
  */
 const userPlaywrightConfigFile = `${process.cwd()}/${isPlaywrightConfigJSOrTS}`;
-const defineConfig: PlaywrightTestConfig = await import(userPlaywrightConfigFile)
+const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
+const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
+const defineConfig: PlaywrightTestConfig = await import(whichPlatForm)
 
 /**
  * Log the results of the function

@@ -7,3 +7,4 @@ package-lock.json
 .DS_Store
 /test-results
 test-results.json
+/dist

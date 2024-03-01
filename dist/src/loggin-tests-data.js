@@ -18,10 +18,9 @@ export const isPlaywrightConfigJSOrTS = doesModuleExist("playwright.config.ts") 
  * Get the config from playwright.config.ts
  */
 export const userPlaywrightConfigFile = `${process.cwd()}/${isPlaywrightConfigJSOrTS}`;
-export const playwrightConfigDetails = await import(userPlaywrightConfigFile);
-const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
-const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
-const userPlaywrightConfigFile = await import(whichPlatForm);
+export const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
+export const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
+export const playwrightConfigDetails = await import(whichPlatForm);
 /**
  * Log the results of the function
  * Resuses the console.log function

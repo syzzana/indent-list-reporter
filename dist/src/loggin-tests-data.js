@@ -4,32 +4,25 @@ import { lineBreak, setIconAndColorPerTestStatus } from "./color-text/styling-te
 import { filterOutDuplicateFailedTestsOnRetry } from "./filtering-tests.js";
 import { logTestError } from "./loggin-error-message.js";
 import { adaptFilePathImportForWindows, isWindows } from "./utils/utils.js";
-export const doesModuleExist = (moduleName) => {
+// Dynamically determine the Playwright config file's extension (.ts or .js)
+export const getPlaywrightConfigFile = async () => {
+    const tsConfigPath = `${process.cwd()}/playwright.config.ts`;
+    const jsConfigPath = `${process.cwd()}/playwright.config.js`;
     try {
-        require.resolve((`${process.cwd()}/${moduleName}`));
-        return true;
+        await import(tsConfigPath);
+        return tsConfigPath;
     }
-    catch (e) {
-        return false;
+    catch {
+        return jsConfigPath; // Fallback to .js if .ts import fails
     }
 };
-export const isPlaywrightConfigJSOrTS = doesModuleExist("playwright.config.ts") ? "playwright.config.ts" : "playwright.config.js";
 /**
  * Get the config from playwright.config.ts
  */
-export const userPlaywrightConfigFile = `${process.cwd()}/${isPlaywrightConfigJSOrTS}`;
+export const userPlaywrightConfigFile = await getPlaywrightConfigFile();
 export const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
 export const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
 export const playwrightConfigDetails = await import(whichPlatForm);
-/**
- * Log the results of the function
- * Resuses the console.log function
- * We just simplified the name of the method to log
- * @param data
- */
-export const log = (...data) => {
-    console.log(...data);
-};
 /**
  * Log the name of the spec file only once
  * Example output:
@@ -45,7 +38,12 @@ export const log = (...data) => {
  * `
  * @param specFileName
  */
-export const logSpecFileName = async (specFileName) => {
+// This function is now async due to dynamic import
+export const logSpecFileName = async (specFileName, playwrightConfigDetails) => {
+    // const userPlaywrightConfigFile = await getPlaywrightConfigFile();
+    // const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
+    // const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
+    // const defineConfig = await import(whichPlatForm);
     // @ts-ignore
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let specFileNameColor;
@@ -65,6 +63,15 @@ export const logSpecFileName = async (specFileName) => {
     }
 };
 /**
+ * Log the results of the function
+ * Resuses the console.log function
+ * We just simplified the name of the method to log
+ * @param data
+ */
+export const log = (...data) => {
+    console.log(...data);
+};
+/**
  * Log the name of the suite only once
  * Example output:
  * `
@@ -75,7 +82,7 @@ export const logSpecFileName = async (specFileName) => {
  * `
  * @param suiteName
  */
-export const logSuiteDescription = (suiteName) => {
+export const logSuiteDescription = (suiteName, playwrightConfigDetails) => {
     // @ts-ignore
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let suiteDescriptionColor;
@@ -101,7 +108,7 @@ export const logSuiteDescription = (suiteName) => {
  * @param count
  * @param test
  */
-export const logTestCaseData = (count, test) => {
+export const logTestCaseData = (count, test, playwrightConfigDetails) => {
     const status = setIconAndColorPerTestStatus(test.status);
     const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
     const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
@@ -146,13 +153,13 @@ export const logTestCaseData = (count, test) => {
 export const logTestResults = (allTests) => {
     let testCounter = 0;
     allTests.forEach((specFile) => {
-        logSpecFileName(specFile.getSpecName());
+        logSpecFileName(specFile.getSpecName(), playwrightConfigDetails);
         specFile.getSuiteTests().forEach((suite) => {
-            logSuiteDescription(suite.getSuiteDescription());
+            logSuiteDescription(suite.getSuiteDescription(), playwrightConfigDetails);
             suite.getTestCases().forEach((test) => {
                 //TODO: filter getTests() here failed tests that were retried and failed again
                 testCounter++;
-                logTestCaseData(testCounter, test);
+                logTestCaseData(testCounter, test, playwrightConfigDetails);
             });
         });
     });

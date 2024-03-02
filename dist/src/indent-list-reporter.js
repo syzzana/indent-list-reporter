@@ -15,7 +15,6 @@ const defaultListTestsWithColors = {
     environment: "dev",
 };
 class IndentListReporter {
-    options;
     allTests = [];
     passed = 0;
     failed = 0;
@@ -24,6 +23,7 @@ class IndentListReporter {
     timedOut = 0;
     retries = 0;
     failedTests = [];
+    options;
     /**
      * Constructor to pass on custom options for the reporter
      * @param options
@@ -40,6 +40,7 @@ class IndentListReporter {
         return true;
     }
     onBegin(config, suite) {
+        console.log("AI Solution 3.0");
         howToReadTestResults(this.options.environment);
         log(`${Color.text("TEST RESULTS:").cyan().bgBlack().valueOf()}`);
         const number = suite.allTests().length;

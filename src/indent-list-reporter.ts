@@ -2,7 +2,7 @@ import {TestCase, TestResult, Reporter, FullResult, Suite, FullConfig} from "@pl
 import {SuiteTestCases, TestCaseData, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile.js";
 import {getFileNameOrParentSuite, howToReadTestResults, logSummary, StatusCounter} from "./general-tests-info.js";
 import {filterUniqueSpecsBySpecName} from "./filtering-tests.js";
-import {TestStatus} from "@playwright/test";
+import { TestStatus} from "@playwright/test";
 import {TestError} from "playwright/types/testReporter";
 import Color from "./color-text/Color.js";
 import {log, logTestResults} from "./loggin-tests-data.js";
@@ -10,7 +10,7 @@ import {lineBreak} from "./color-text/styling-terminal.js";
 import {logTestError} from "./loggin-error-message.js";
 
 const defaultListTestsWithColors: IndentListReporterOptions = {
-    ignoreColors: false, 
+    ignoreColors: false,
     baseColors: {
         specFileNameColor: "cyan",
         suiteDescriptionColor: "cyan",
@@ -27,7 +27,10 @@ interface ListTestsWithColors {
     isDimmed?: boolean;
 }
 
-export type MyReporterOptions = ['indent-list-reporter' | './src/indent-list-reporter.ts'] | ['indent-list-reporter' | './src/indent-list-reporter.ts', IndentListReporterOptions];
+export type MyReporterOptions =
+    ['indent-list-reporter' | './src/indent-list-reporter.ts']
+    | ['indent-list-reporter' | './src/indent-list-reporter.ts', IndentListReporterOptions];
+
 interface IndentListReporterOptions {
     ignoreColors: boolean;
     baseColors: ListTestsWithColors;
@@ -35,7 +38,6 @@ interface IndentListReporterOptions {
 }
 
 class IndentListReporter implements Reporter {
-    private options: IndentListReporterOptions;
     allTests: TestsPerSpecFile[] = [];
     passed = 0;
     failed = 0;
@@ -44,6 +46,7 @@ class IndentListReporter implements Reporter {
     timedOut = 0;
     retries = 0;
     failedTests: TestCaseError[] = [];
+    private options: IndentListReporterOptions;
 
     /**
      * Constructor to pass on custom options for the reporter

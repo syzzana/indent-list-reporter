@@ -8,33 +8,27 @@ import {logTestError} from "./loggin-error-message.js";
 import {ColorsAvailable} from "./indent-list-reporter.js";
 import { adaptFilePathImportForWindows, isWindows } from "./utils/utils.js";
 
-export const doesModuleExist = (moduleName: string) => {
-    try {
-        require.resolve((`${process.cwd()}/${moduleName}`));
-        return true;
-    } catch (e) {
-        return false;
-    }
-}
+// Dynamically determine the Playwright config file's extension (.ts or .js)
+export const getPlaywrightConfigFile = async () => {
+    const tsConfigPath = `${process.cwd()}/playwright.config.ts`;
+    const jsConfigPath = `${process.cwd()}/playwright.config.js`;
 
-export const isPlaywrightConfigJSOrTS = doesModuleExist("playwright.config.ts") ? "playwright.config.ts" : "playwright.config.js";
+    try {
+        await import(tsConfigPath);
+        return tsConfigPath;
+    } catch {
+        return jsConfigPath; // Fallback to .js if .ts import fails
+    }
+};
 
 /**
- * Get the config from playwright.config.ts   
+ * Get the config from playwright.config.ts
  */
-export const userPlaywrightConfigFile = `${process.cwd()}/${isPlaywrightConfigJSOrTS}`;
+export const userPlaywrightConfigFile = await getPlaywrightConfigFile();
 export const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
 export const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
 export const playwrightConfigDetails: PlaywrightTestConfig = await import(whichPlatForm)
-/**
- * Log the results of the function
- * Resuses the console.log function
- * We just simplified the name of the method to log
- * @param data
- */
-export const log = (...data: any[]) => {
-    console.log(...data);
-};
+
 
 /**
  * Log the name of the spec file only once
@@ -51,7 +45,8 @@ export const log = (...data: any[]) => {
  * `
  * @param specFileName
  */
-export const logSpecFileName = async (specFileName: string) => {
+// This function is now async due to dynamic import
+export const logSpecFileName = async (specFileName: string, playwrightConfigDetails: PlaywrightTestConfig) => {
     // @ts-ignore
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let specFileNameColor: ColorsAvailable;
@@ -70,6 +65,16 @@ export const logSpecFileName = async (specFileName: string) => {
 };
 
 /**
+ * Log the results of the function
+ * Resuses the console.log function
+ * We just simplified the name of the method to log
+ * @param data
+ */
+export const log = (...data: any[]) => {
+    console.log(...data);
+};
+
+/**
  * Log the name of the suite only once
  * Example output:
  * `
@@ -80,7 +85,7 @@ export const logSpecFileName = async (specFileName: string) => {
  * `
  * @param suiteName
  */
-export const logSuiteDescription = (suiteName: string) => {
+export const logSuiteDescription = (suiteName: string, playwrightConfigDetails: PlaywrightTestConfig) => {
     // @ts-ignore
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let suiteDescriptionColor: ColorsAvailable;
@@ -105,7 +110,7 @@ export const logSuiteDescription = (suiteName: string) => {
  * @param count
  * @param test
  */
-export const logTestCaseData = (count: number, test: TestCaseData) => {
+export const logTestCaseData = (count: number, test: TestCaseData, playwrightConfigDetails: PlaywrightTestConfig) => {
     const status = setIconAndColorPerTestStatus(test.status);
     const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
     const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
@@ -148,13 +153,13 @@ export const logTestResults = (allTests: TestsPerSpecFile[]) => {
     let testCounter = 0;
 
     allTests.forEach((specFile) => {
-        logSpecFileName(specFile.getSpecName());
+        logSpecFileName(specFile.getSpecName(), playwrightConfigDetails);
         specFile.getSuiteTests().forEach((suite) => {
-            logSuiteDescription(suite.getSuiteDescription());
+            logSuiteDescription(suite.getSuiteDescription(), playwrightConfigDetails);
             suite.getTestCases().forEach((test) => {
                 //TODO: filter getTests() here failed tests that were retried and failed again
                 testCounter++;
-                logTestCaseData(testCounter, test);
+                logTestCaseData(testCounter, test, playwrightConfigDetails);
             });
         });
     });

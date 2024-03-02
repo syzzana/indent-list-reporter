@@ -1,19 +1,20 @@
-import {doesModuleExist, isPlaywrightConfigJSOrTS, playwrightConfigDetails, userPlaywrightConfigFile} from "../src/loggin-tests-data";
+import {getPlaywrightConfigFile, userPlaywrightConfigFile} from "../src/loggin-tests-data";
 
 import {test, expect} from 'vitest';
-test("check module exists", () => {
-  const myModule = doesModuleExist("playwright.config.ts");  
-  expect(myModule).toBe(true);
+test("check module exists", async () => {
+  const myModule = await getPlaywrightConfigFile();
+  expect(myModule).toContain("playwright.config.ts");
 })
 
-test("check module does not exist", () => {
-    const myModule = doesModuleExist("playwright.config.js");  
-    expect(myModule).toBe(false);
+test("check module does not exist", async () => {
+    const myModule = await getPlaywrightConfigFile();
+    expect(myModule).not.toContain("playwright.config.js");
 });
 
 test("check we can import config data from playwright.config.ts on repo file", async () => {
     expect(userPlaywrightConfigFile).toContain("indent-list-reporter/playwright.config.ts");
-    expect(isPlaywrightConfigJSOrTS).toBe("playwright.config.ts");
+    let playwrightConfigDetails = await import(`${process.cwd()}/playwright.config.ts`);
+    let playwrightConfigDetailsJS = await import(`${process.cwd()}/playwright.config.js`);
     expect(playwrightConfigDetails).toBeDefined()
 })
 

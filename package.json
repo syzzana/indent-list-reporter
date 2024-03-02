@@ -1,8 +1,8 @@
 {
   "name": "indent-list-reporter",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "description": "Playwright list reporter for terminal with colors and indentation'",
-  "main": "./dist/src/indent-list-reporter.ts",
+  "main": "./dist/src/indent-list-reporter.js",
   "type": "module",
   "homepage": "https://github.com/syzzana/indent-list-reporter/blob/main/README.md",
   "scripts": {

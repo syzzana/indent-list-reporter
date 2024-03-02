@@ -40,7 +40,6 @@ class IndentListReporter {
         return true;
     }
     onBegin(config, suite) {
-        console.log("AI Solution 3.0");
         howToReadTestResults(this.options.environment);
         log(`${Color.text("TEST RESULTS:").cyan().bgBlack().valueOf()}`);
         const number = suite.allTests().length;

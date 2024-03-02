@@ -40,10 +40,6 @@ export const playwrightConfigDetails = await import(whichPlatForm);
  */
 // This function is now async due to dynamic import
 export const logSpecFileName = async (specFileName, playwrightConfigDetails) => {
-    // const userPlaywrightConfigFile = await getPlaywrightConfigFile();
-    // const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
-    // const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
-    // const defineConfig = await import(whichPlatForm);
     // @ts-ignore
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let specFileNameColor;

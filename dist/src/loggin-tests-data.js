@@ -3,26 +3,7 @@ import { getReporterOptions } from "./reporter-configuration.js";
 import { lineBreak, setIconAndColorPerTestStatus } from "./color-text/styling-terminal.js";
 import { filterOutDuplicateFailedTestsOnRetry } from "./filtering-tests.js";
 import { logTestError } from "./loggin-error-message.js";
-import { adaptFilePathImportForWindows, isWindows } from "./utils/utils.js";
-// Dynamically determine the Playwright config file's extension (.ts or .js)
-export const getPlaywrightConfigFile = async () => {
-    const tsConfigPath = `${process.cwd()}/playwright.config.ts`;
-    const jsConfigPath = `${process.cwd()}/playwright.config.js`;
-    try {
-        await import(tsConfigPath);
-        return tsConfigPath;
-    }
-    catch {
-        return jsConfigPath; // Fallback to .js if .ts import fails
-    }
-};
-/**
- * Get the config from playwright.config.ts
- */
-export const userPlaywrightConfigFile = await getPlaywrightConfigFile();
-export const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
-export const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
-export const playwrightConfigDetails = await import(whichPlatForm);
+import { playwrightConfigDetails } from "./indent-list-reporter.js";
 /**
  * Log the name of the spec file only once
  * Example output:
@@ -39,9 +20,9 @@ export const playwrightConfigDetails = await import(whichPlatForm);
  * @param specFileName
  */
 // This function is now async due to dynamic import
-export const logSpecFileName = async (specFileName, playwrightConfigDetails) => {
+export const logSpecFileName = async (specFileName) => {
     // @ts-ignore
-    const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
+    const reporterOptions = await getReporterOptions(playwrightConfigDetails.default.reporter);
     let specFileNameColor;
     if (reporterOptions !== undefined) {
         specFileNameColor = reporterOptions?.baseColors?.specFileNameColor
@@ -78,7 +59,7 @@ export const log = (...data) => {
  * `
  * @param suiteName
  */
-export const logSuiteDescription = (suiteName, playwrightConfigDetails) => {
+export const logSuiteDescription = (suiteName) => {
     // @ts-ignore
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let suiteDescriptionColor;
@@ -104,7 +85,7 @@ export const logSuiteDescription = (suiteName, playwrightConfigDetails) => {
  * @param count
  * @param test
  */
-export const logTestCaseData = (count, test, playwrightConfigDetails) => {
+export const logTestCaseData = (count, test) => {
     const status = setIconAndColorPerTestStatus(test.status);
     const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
     const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
@@ -149,13 +130,13 @@ export const logTestCaseData = (count, test, playwrightConfigDetails) => {
 export const logTestResults = (allTests) => {
     let testCounter = 0;
     allTests.forEach((specFile) => {
-        logSpecFileName(specFile.getSpecName(), playwrightConfigDetails);
+        logSpecFileName(specFile.getSpecName());
         specFile.getSuiteTests().forEach((suite) => {
-            logSuiteDescription(suite.getSuiteDescription(), playwrightConfigDetails);
+            logSuiteDescription(suite.getSuiteDescription());
             suite.getTestCases().forEach((test) => {
                 //TODO: filter getTests() here failed tests that were retried and failed again
                 testCounter++;
-                logTestCaseData(testCounter, test, playwrightConfigDetails);
+                logTestCaseData(testCounter, test);
             });
         });
     });

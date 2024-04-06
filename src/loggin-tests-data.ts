@@ -6,30 +6,10 @@ import {lineBreak, setIconAndColorPerTestStatus} from "./color-text/styling-term
 import {filterOutDuplicateFailedTestsOnRetry} from "./filtering-tests.js";
 import {logTestError} from "./loggin-error-message.js";
 import {ColorsAvailable} from "./indent-list-reporter.js";
-import { adaptFilePathImportForWindows, isWindows } from "./utils/utils.js";
+import { loadPlaywrightConfig } from "./utils/load-playwright-configuration.js";
+// import {playwrightConfigDetails} from "./indent-list-reporter.js";
 
-// Dynamically determine the Playwright config file's extension (.ts or .js)
-export const getPlaywrightConfigFile = async () => {
-    const tsConfigPath = `${process.cwd()}/playwright.config.ts`;
-    const jsConfigPath = `${process.cwd()}/playwright.config.js`;
-
-    try {
-        await import(tsConfigPath);
-        return tsConfigPath;
-    } catch {
-        return jsConfigPath; // Fallback to .js if .ts import fails
-    }
-};
-
-/**
- * Get the config from playwright.config.ts
- */
-export const userPlaywrightConfigFile = await getPlaywrightConfigFile();
-export const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
-export const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
-export const playwrightConfigDetails: PlaywrightTestConfig = await import(whichPlatForm)
-
-
+const playwrightConfigDetails = loadPlaywrightConfig();
 /**
  * Log the name of the spec file only once
  * Example output:
@@ -46,9 +26,9 @@ export const playwrightConfigDetails: PlaywrightTestConfig = await import(whichP
  * @param specFileName
  */
 // This function is now async due to dynamic import
-export const logSpecFileName = async (specFileName: string, playwrightConfigDetails: PlaywrightTestConfig) => {
-    // @ts-ignore
-    const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
+export const logSpecFileName = async (specFileName: string) => {
+    //@ts-ignore
+    const reporterOptions = await getReporterOptions(playwrightConfigDetails.default.reporter);
     let specFileNameColor: ColorsAvailable;
     if (reporterOptions !== undefined) {
         specFileNameColor = reporterOptions?.baseColors?.specFileNameColor
@@ -85,9 +65,9 @@ export const log = (...data: any[]) => {
  * `
  * @param suiteName
  */
-export const logSuiteDescription = (suiteName: string, playwrightConfigDetails: PlaywrightTestConfig) => {
+export const logSuiteDescription = (suiteName: string) => {
     // @ts-ignore
-    const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
+    const reporterOptions = getReporterOptions(playwrightConfigDetails.reporter);
     let suiteDescriptionColor: ColorsAvailable;
     if (reporterOptions !== undefined) {
         suiteDescriptionColor = reporterOptions?.baseColors?.suiteDescriptionColor
@@ -110,12 +90,12 @@ export const logSuiteDescription = (suiteName: string, playwrightConfigDetails: 
  * @param count
  * @param test
  */
-export const logTestCaseData = (count: number, test: TestCaseData, playwrightConfigDetails: PlaywrightTestConfig) => {
+export const logTestCaseData = (count: number, test: TestCaseData) => {
     const status = setIconAndColorPerTestStatus(test.status);
     const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
     const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
     // @ts-ignore
-    const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
+    const reporterOptions = getReporterOptions(playwrightConfigDetails.reporter);
     let testCaseTitleColor: ColorsAvailable;
     if (reporterOptions !== undefined) {
         testCaseTitleColor = reporterOptions?.baseColors?.testCaseTitleColor
@@ -153,13 +133,13 @@ export const logTestResults = (allTests: TestsPerSpecFile[]) => {
     let testCounter = 0;
 
     allTests.forEach((specFile) => {
-        logSpecFileName(specFile.getSpecName(), playwrightConfigDetails);
+        logSpecFileName(specFile.getSpecName());
         specFile.getSuiteTests().forEach((suite) => {
-            logSuiteDescription(suite.getSuiteDescription(), playwrightConfigDetails);
+            logSuiteDescription(suite.getSuiteDescription());
             suite.getTestCases().forEach((test) => {
                 //TODO: filter getTests() here failed tests that were retried and failed again
                 testCounter++;
-                logTestCaseData(testCounter, test, playwrightConfigDetails);
+                logTestCaseData(testCounter, test);
             });
         });
     });

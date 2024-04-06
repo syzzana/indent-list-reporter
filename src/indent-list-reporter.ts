@@ -2,12 +2,21 @@ import {TestCase, TestResult, Reporter, FullResult, Suite, FullConfig} from "@pl
 import {SuiteTestCases, TestCaseData, TestCaseError, TestsPerSpecFile} from "./TestsPerSpecFile.js";
 import {getFileNameOrParentSuite, howToReadTestResults, logSummary, StatusCounter} from "./general-tests-info.js";
 import {filterUniqueSpecsBySpecName} from "./filtering-tests.js";
-import { TestStatus} from "@playwright/test";
+import {PlaywrightTestConfig, TestStatus} from "@playwright/test";
 import {TestError} from "playwright/types/testReporter";
 import Color from "./color-text/Color.js";
 import {log, logTestResults} from "./loggin-tests-data.js";
 import {lineBreak} from "./color-text/styling-terminal.js";
 import {logTestError} from "./loggin-error-message.js";
+import {loadPlaywrightConfig} from "./utils/load-playwright-configuration.js";
+import os from "node:os"
+
+/**
+ * Get the config from playwright.config.ts
+ */
+//export const userPlaywrightConfigFile = await getPlaywrightConfigFile();
+//export const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
+//export const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
 
 const defaultListTestsWithColors: IndentListReporterOptions = {
     ignoreColors: false,
@@ -108,7 +117,7 @@ class IndentListReporter implements Reporter {
         try {
             throw new Error(`ERROR: ${error.message}`);
         } catch (e) {
-            console.log(e);
+            log(e.message);
         }
     }
 

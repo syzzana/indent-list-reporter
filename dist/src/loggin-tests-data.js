@@ -3,25 +3,7 @@ import { getReporterOptions } from "./reporter-configuration.js";
 import { lineBreak, setIconAndColorPerTestStatus } from "./color-text/styling-terminal.js";
 import { filterOutDuplicateFailedTestsOnRetry } from "./filtering-tests.js";
 import { logTestError } from "./loggin-error-message.js";
-import { adaptFilePathImportForWindows, isWindows } from "./utils/utils.js";
-// Dynamically determine the Playwright config file's extension (.ts or .js)
-export const getPlaywrightConfigFile = async () => {
-    const tsConfigPath = `${process.cwd()}/*.config.ts`;
-    const jsConfigPath = `${process.cwd()}/*.config.js`;
-    try {
-        await import(tsConfigPath);
-        return tsConfigPath;
-    }
-    catch {
-        return jsConfigPath; // Fallback to .js if .ts import fails
-    }
-};
-/**
- * Get the config from playwright.config.ts
- */
-export const userPlaywrightConfigFile = await getPlaywrightConfigFile();
-export const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
-export const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
+import { whichPlatForm } from "./get-playwright-config-file.js";
 export const playwrightConfigDetails = await import(whichPlatForm);
 /**
  * Log the name of the spec file only once
@@ -61,7 +43,7 @@ export const logSpecFileName = async (specFileName, playwrightConfigDetails) => 
 };
 /**
  * Log the results of the function
- * Resuses the console.log function
+ * Reuses the console.log function
  * We just simplified the name of the method to log
  * @param data
  */

@@ -27,7 +27,7 @@ export const loadPlaywrightConfig = () :PlaywrightTestConfig => {
         console.error('Trying to load the Playwright config:', error.message);
         // Handle the error appropriately.
         // It might be returning a default configuration, throwing an error, etc.
-       throw error; // Example: re-throwing the error.
+       throw error.message; // Example: re-throwing the error.
     }
 };
 

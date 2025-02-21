@@ -27,7 +27,7 @@ const playwrightConfigDetails = loadPlaywrightConfig();
  */
 // This function is now async due to dynamic import
 export const logSpecFileName = async (specFileName: string) => {
-    //@ts-ignore
+    //@ts-expect-error
     const reporterOptions = await getReporterOptions(playwrightConfigDetails.default.reporter);
     let specFileNameColor: ColorsAvailable;
     if (reporterOptions !== undefined) {
@@ -66,7 +66,7 @@ export const log = (...data: any[]) => {
  * @param suiteName
  */
 export const logSuiteDescription = (suiteName: string) => {
-    // @ts-ignore
+    //@ts-ignore
     const reporterOptions = getReporterOptions(playwrightConfigDetails.reporter);
     let suiteDescriptionColor: ColorsAvailable;
     if (reporterOptions !== undefined) {

@@ -9,8 +9,7 @@ test("check module exists", async () => {
 test("load playwright config", async () => {
     const config = loadPlaywrightConfig();
     expect(config).toBeDefined();
-    console.log(config.reporter[0][1].baseColors.specFileNameColor);
-});
+})
 
 test("check module does not exist", async () => {
     // const myModule = await getPlaywrightConfigFile();

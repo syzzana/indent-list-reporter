@@ -1,14 +1,12 @@
-// Existing utility functions remain unchanged.
 import os from "node:os";
-import { adaptFilePathImportForWindows } from "./utils.js";
+import fs from "fs";
+import { adaptFilePathImportForWindows, isWindows } from "./utils.js";
 // Dynamically determine the Playwright config file's extension (.ts or .js)
-// ...
-export const loadPlaywrightConfig = async () => {
-    //const tsConfigPath = `${process.cwd()}/playwright.config.ts`;
-    //const jsConfigPath = `${process.cwd()}/playwright.config.js`;
-    const userPlaywrightConfigFile = `${process.cwd()}/playwright.config.ts`;
+export const loadPlaywrightConfig = () => {
+    const isTsOrJsExtenstion = isPlaywrightConfigFileTsOrJs();
+    const userPlaywrightConfigFile = `${process.cwd()}/playwright.config.${isTsOrJsExtenstion}`;
     const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
-    let importPath; //= isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
+    let importPath = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
     if (os.platform().startsWith("win")) {
         importPath = convertImportFilePathForWindows;
     }
@@ -18,18 +16,33 @@ export const loadPlaywrightConfig = async () => {
     // Since 'whichPlatform' may already start with 'file://', check to avoid duplicating the prefix.
     // const importPath = whichPlatform.startsWith('file://') ? whichPlatform : `file://${whichPlatform}`;
     try {
-        const playwrightConfigDetails = await import(importPath);
+        // @ts-ignore
+        const playwrightConfigDetails = import(importPath);
         return playwrightConfigDetails;
     }
     catch (error) {
+        // @ts-ignore
         console.error('Trying to load the Playwright config:', error.message);
         // Handle the error appropriately.
         // It might be returning a default configuration, throwing an error, etc.
-        //  throw error; // Example: re-throwing the error.
+        throw error.message; // Example: re-throwing the error.
     }
 };
+export const isPlaywrightConfigFileTsOrJs = () => {
+    const tsConfigPath = `${process.cwd()}/playwright.config.ts`;
+    const jsConfigPath = `${process.cwd()}/playwright.config.js`;
+    let isTsOrJs;
+    if (fs.existsSync(tsConfigPath)) {
+        isTsOrJs = "ts";
+    }
+    if (fs.existsSync(jsConfigPath)) {
+        isTsOrJs = "js";
+    }
+    return isTsOrJs;
+};
 // Call the async function and handle the loaded configuration.
-// This could be inside an async context if you have one, like an async main function or an IIFE (Immediately Invoked Function Expression).
+// This could be inside an async context if you have one,
+// like an async main function or an IIFE (Immediately Invoked Function Expression).
 // (async () => {
 //     try {
 //         const config = await loadPlaywrightConfig();

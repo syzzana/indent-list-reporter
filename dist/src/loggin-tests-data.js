@@ -3,7 +3,9 @@ import { getReporterOptions } from "./reporter-configuration.js";
 import { lineBreak, setIconAndColorPerTestStatus } from "./color-text/styling-terminal.js";
 import { filterOutDuplicateFailedTestsOnRetry } from "./filtering-tests.js";
 import { logTestError } from "./loggin-error-message.js";
-import { playwrightConfigDetails } from "./indent-list-reporter.js";
+import { loadPlaywrightConfig } from "./utils/load-playwright-configuration.js";
+// import {playwrightConfigDetails} from "./indent-list-reporter.js";
+const playwrightConfigDetails = loadPlaywrightConfig();
 /**
  * Log the name of the spec file only once
  * Example output:
@@ -21,7 +23,7 @@ import { playwrightConfigDetails } from "./indent-list-reporter.js";
  */
 // This function is now async due to dynamic import
 export const logSpecFileName = async (specFileName) => {
-    // @ts-ignore
+    //@ts-ignore
     const reporterOptions = await getReporterOptions(playwrightConfigDetails.default.reporter);
     let specFileNameColor;
     if (reporterOptions !== undefined) {
@@ -60,8 +62,8 @@ export const log = (...data) => {
  * @param suiteName
  */
 export const logSuiteDescription = (suiteName) => {
-    // @ts-ignore
-    const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
+    //@ts-ignore
+    const reporterOptions = getReporterOptions(playwrightConfigDetails.reporter);
     let suiteDescriptionColor;
     if (reporterOptions !== undefined) {
         suiteDescriptionColor = reporterOptions?.baseColors?.suiteDescriptionColor
@@ -90,7 +92,7 @@ export const logTestCaseData = (count, test) => {
     const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
     const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
     // @ts-ignore
-    const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
+    const reporterOptions = getReporterOptions(playwrightConfigDetails.reporter);
     let testCaseTitleColor;
     if (reporterOptions !== undefined) {
         testCaseTitleColor = reporterOptions?.baseColors?.testCaseTitleColor

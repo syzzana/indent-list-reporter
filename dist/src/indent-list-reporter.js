@@ -5,15 +5,12 @@ import Color from "./color-text/Color.js";
 import { log, logTestResults } from "./loggin-tests-data.js";
 import { lineBreak } from "./color-text/styling-terminal.js";
 import { logTestError } from "./loggin-error-message.js";
-import { loadPlaywrightConfig } from "./utils/load-playwright-configuration.js";
-import os from "node:os";
 /**
  * Get the config from playwright.config.ts
  */
 //export const userPlaywrightConfigFile = await getPlaywrightConfigFile();
 //export const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
 //export const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
-export const playwrightConfigDetails = await loadPlaywrightConfig();
 const defaultListTestsWithColors = {
     ignoreColors: false,
     baseColors: {
@@ -49,7 +46,6 @@ class IndentListReporter {
         return true;
     }
     onBegin(config, suite) {
-        console.log("OS", os.platform().startsWith("win"));
         howToReadTestResults(this.options.environment);
         log(`${Color.text("TEST RESULTS:").cyan().bgBlack().valueOf()}`);
         const number = suite.allTests().length;
@@ -91,7 +87,7 @@ class IndentListReporter {
             throw new Error(`ERROR: ${error.message}`);
         }
         catch (e) {
-            console.log(e);
+            log(e.message);
         }
     }
     async onExit() {

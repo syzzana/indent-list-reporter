@@ -7,7 +7,6 @@
     "target": "esnext",
     "outDir": "dist",
     "rootDir": ".",
-    "noEmit": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

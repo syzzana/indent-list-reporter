@@ -9,11 +9,8 @@
     "test": "npx playwright test",
     "test:debug": "npx playwright test --debug",
     "vitest": "vitest",
-    "compile": "tsc",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "prepare": "npm run compile",
-    "pretest": "npm run compile"
+    "lint:fix": "eslint . --fix"
   },
   "keywords": [
     "reporter",

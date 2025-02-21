@@ -6,27 +6,9 @@ import {lineBreak, setIconAndColorPerTestStatus} from "./color-text/styling-term
 import {filterOutDuplicateFailedTestsOnRetry} from "./filtering-tests.js";
 import {logTestError} from "./loggin-error-message.js";
 import {ColorsAvailable} from "./indent-list-reporter.js";
-import { adaptFilePathImportForWindows, isWindows } from "./utils/utils.js";
+import {whichPlatForm} from "./get-playwright-config-file.js";
 
-// Dynamically determine the Playwright config file's extension (.ts or .js)
-export const getPlaywrightConfigFile = async () => {
-    const tsConfigPath = `${process.cwd()}/playwright.config.ts`;
-    const jsConfigPath = `${process.cwd()}/playwright.config.js`;
 
-    try {
-        await import(tsConfigPath);
-        return tsConfigPath;
-    } catch {
-        return jsConfigPath; // Fallback to .js if .ts import fails
-    }
-};
-
-/**
- * Get the config from playwright.config.ts
- */
-export const userPlaywrightConfigFile = await getPlaywrightConfigFile();
-export const convertImportFilePathForWindows = adaptFilePathImportForWindows(userPlaywrightConfigFile);
-export const whichPlatForm = isWindows ? convertImportFilePathForWindows : userPlaywrightConfigFile;
 export const playwrightConfigDetails: PlaywrightTestConfig = await import(whichPlatForm)
 
 
@@ -47,7 +29,8 @@ export const playwrightConfigDetails: PlaywrightTestConfig = await import(whichP
  */
 // This function is now async due to dynamic import
 export const logSpecFileName = async (specFileName: string, playwrightConfigDetails: PlaywrightTestConfig) => {
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-expect-error
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let specFileNameColor: ColorsAvailable;
     if (reporterOptions !== undefined) {
@@ -66,7 +49,7 @@ export const logSpecFileName = async (specFileName: string, playwrightConfigDeta
 
 /**
  * Log the results of the function
- * Resuses the console.log function
+ * Reuses the console.log function
  * We just simplified the name of the method to log
  * @param data
  */
@@ -86,7 +69,8 @@ export const log = (...data: any[]) => {
  * @param suiteName
  */
 export const logSuiteDescription = (suiteName: string, playwrightConfigDetails: PlaywrightTestConfig) => {
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let suiteDescriptionColor: ColorsAvailable;
     if (reporterOptions !== undefined) {
@@ -114,7 +98,8 @@ export const logTestCaseData = (count: number, test: TestCaseData, playwrightCon
     const status = setIconAndColorPerTestStatus(test.status);
     const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
     const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let testCaseTitleColor: ColorsAvailable;
     if (reporterOptions !== undefined) {

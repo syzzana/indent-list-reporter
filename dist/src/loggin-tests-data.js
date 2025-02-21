@@ -6,8 +6,8 @@ import { logTestError } from "./loggin-error-message.js";
 import { adaptFilePathImportForWindows, isWindows } from "./utils/utils.js";
 // Dynamically determine the Playwright config file's extension (.ts or .js)
 export const getPlaywrightConfigFile = async () => {
-    const tsConfigPath = `${process.cwd()}/playwright.config.ts`;
-    const jsConfigPath = `${process.cwd()}/playwright.config.js`;
+    const tsConfigPath = `${process.cwd()}/*.config.ts`;
+    const jsConfigPath = `${process.cwd()}/*.config.js`;
     try {
         await import(tsConfigPath);
         return tsConfigPath;
@@ -40,7 +40,8 @@ export const playwrightConfigDetails = await import(whichPlatForm);
  */
 // This function is now async due to dynamic import
 export const logSpecFileName = async (specFileName, playwrightConfigDetails) => {
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    //@ts-expect-error
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let specFileNameColor;
     if (reporterOptions !== undefined) {
@@ -79,7 +80,8 @@ export const log = (...data) => {
  * @param suiteName
  */
 export const logSuiteDescription = (suiteName, playwrightConfigDetails) => {
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let suiteDescriptionColor;
     if (reporterOptions !== undefined) {
@@ -108,7 +110,8 @@ export const logTestCaseData = (count, test, playwrightConfigDetails) => {
     const status = setIconAndColorPerTestStatus(test.status);
     const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
     const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
-    // @ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let testCaseTitleColor;
     if (reporterOptions !== undefined) {

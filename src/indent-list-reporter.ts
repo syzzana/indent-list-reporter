@@ -35,6 +35,7 @@ interface IndentListReporterOptions {
     ignoreColors: boolean;
     baseColors: ListTestsWithColors;
     environment?: string;
+    configFileName?: string;
 }
 
 class IndentListReporter implements Reporter {

@@ -116,10 +116,12 @@ class IndentListReporter implements Reporter {
         await Promise.resolve();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onStdErr(chunk: Buffer | string, test: void | TestCase, result: void | TestResult) {
         log(chunk.toString());
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     onStdOut(chunk: Buffer | string, test: void | TestCase, result: void | TestResult) {
         log(chunk.toString());
     }

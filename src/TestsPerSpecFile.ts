@@ -13,11 +13,11 @@ export interface TestCaseData {
     titlePath?: string[];
 }
 
-export type TestCaseError = {
+export interface TestCaseError {
     error: TestError;
     testData: TestCaseData;
     titlePath?: string[];
-};
+}
 
 export class SuiteTestCases {
     private suiteDescription: string;

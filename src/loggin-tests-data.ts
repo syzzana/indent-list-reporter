@@ -47,7 +47,7 @@ export const playwrightConfigDetails: PlaywrightTestConfig = await import(whichP
  */
 // This function is now async due to dynamic import
 export const logSpecFileName = async (specFileName: string, playwrightConfigDetails: PlaywrightTestConfig) => {
-    // @ts-ignore
+    // @ts-expect-error - getReporterOptions expects different config type
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let specFileNameColor: ColorsAvailable;
     if (reporterOptions !== undefined) {
@@ -86,7 +86,7 @@ export const log = (...data: any[]) => {
  * @param suiteName
  */
 export const logSuiteDescription = (suiteName: string, playwrightConfigDetails: PlaywrightTestConfig) => {
-    // @ts-ignore
+    // @ts-expect-error - getReporterOptions expects different config type
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let suiteDescriptionColor: ColorsAvailable;
     if (reporterOptions !== undefined) {
@@ -114,7 +114,7 @@ export const logTestCaseData = (count: number, test: TestCaseData, playwrightCon
     const status = setIconAndColorPerTestStatus(test.status);
     const duration = Color.text(`(${test.duration}ms)`).gray().dim().valueOf();
     const counter = `${Color.text(`${count}.`).gray().valueOf()}`;
-    // @ts-ignore
+    // @ts-expect-error - getReporterOptions expects different config type
     const reporterOptions = getReporterOptions(playwrightConfigDetails.default.reporter);
     let testCaseTitleColor: ColorsAvailable;
     if (reporterOptions !== undefined) {

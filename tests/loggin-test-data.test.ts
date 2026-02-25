@@ -13,10 +13,9 @@ test("check module does not exist", async () => {
 
 test("check we can import config data from playwright.config.ts on repo file", async () => {
     expect(userPlaywrightConfigFile).toContain("indent-list-reporter/playwright.config.ts");
-    let playwrightConfigDetails = await import(`${process.cwd()}/playwright.config.ts`);
-    let playwrightConfigDetailsJS = await import(`${process.cwd()}/playwright.config.js`);
-    expect(playwrightConfigDetails).toBeDefined()
-})
+    const playwrightConfigDetails = await import(`${process.cwd()}/playwright.config.ts`);
+    expect(playwrightConfigDetails).toBeDefined();
+});
 
 test("check we can import config data from playwright.config.ts", async () => {
     const userPlaywrightConfigFile = await import(`${process.cwd()}/playwright.config.ts`);  

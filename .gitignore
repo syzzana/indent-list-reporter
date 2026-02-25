@@ -3,7 +3,7 @@ node_modules/
 /test-results/
 /playwright-report/
 /playwright/.cache/
-package-lock.json
 .DS_Store
 /test-results
 test-results.json
+dist/
